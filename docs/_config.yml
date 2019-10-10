@@ -1,0 +1,6 @@
+theme: jekyll-theme-minimal
+title: Master of Pores
+description: Nextflow pipeline for analysis of Nanopore reads
+url: "https://biocorecrg.github.io/master_of_pores/" 
+logo: "https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/logo_small.png"
+
