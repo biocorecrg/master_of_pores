@@ -11,10 +11,6 @@ install:
   - sudo ln -s $PWD/nextflow /usr/local/bin/nextflow
 
 
-# Install the pipeline
-  - git clone --depth 1 https://github.com/biocorecrg/master_of_pores.git
-  - cd master_of_pores/preprocessing
- 
 # Run the pipeline
 script:
-   - travis_wait 30 nextflow run preprocessing.nf -with-docker
+   - travis_wait 30 nextflow run biocorecrg/master_of_pores -with-docker
