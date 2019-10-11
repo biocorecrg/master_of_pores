@@ -134,7 +134,7 @@ fast5_4_to_batches.collate(params.granularity).map {
 process baseCalling {
     tag {"${basecaller}-${folder_name}-${idfile}"}  
 
-    label (params.GPU == "ON" ? 'with_gpus': 'big_mem_cpus')
+    label (params.GPU == "ON" ? 'basecall_gpus': 'basecall_cpus')
 	
 	publishDir outputFast5, pattern: "*_out/workspace/*.fast5",  mode: 'copy', saveAs: { file -> if (params.multi5 == "YES")  "${folder_name}/${file.split('\\/')[-1]}"  }
 	publishDir outputTar, pattern: "*.tar",  mode: 'copy' 
