@@ -13,52 +13,35 @@
 
 
 # Nanopore analysis pipeline
-Nextflow pipeline for analysis of Nanopore reads (from RNA/cDNA/DNA). This project is in collaboration with [Eva Novoa's group](https://www.crg.eu/en/programmes-groups/novoa-lab).
+Nextflow pipeline for analysis of Nanopore reads (from RNA/cDNA/DNA). This project is in collaboration with [Eva Novoa's group](https://www.crg.eu/en/programmes-groups/novoa-lab). 
 
-## Docker image
-The docker images were generated starting from the Docker files in this repository and uploaded to DockerHub: [**Nanopore image**](https://hub.docker.com/r/biocorecrg/nanopore) [**Porechop image**](https://hub.docker.com/r/biocorecrg/porechop)
 
-Docker images can be converted to singularity images using the command:
-
-```bash
-singularity pull docker://biocorecrg/nanopore:0.8
-singularity pull docker://biocorecrg/porechop:0.1
-```
-
-**Singularity** version >= **2.6.1** is needed.
-
-You can create an environmental variable:
-```bash
-export RUN="singularity exec --cleanenv nanopore-0.8.simg"
-export PORECHOP="singularity exec --cleanenv porechop-0.1.simg"
-```
-
-and then use it like this:
+## Pre-requisites:
+For using the pipeline [Nextflow](https://www.nextflow.io/) and a linux container engine (either [Docker](https://www.docker.com/) or [Singularity](https://sylabs.io/guides/3.1/user-guide/cli/singularity_apps.html)) need to be installed:
 
 ```bash
-$RUN python --version
-
-Python 3.6.3
+curl -s https://get.nextflow.io | bash
 ```
 
-## The pipeline
 The pipeline can be cloned in this way:
 
 ```bash
-git clone https://github.com/biocorecrg/nanopore_analysis.git
+git clone https://github.com/biocorecrg/master_of_pores.git
 ```
 
-The pipeline is composed of two modules:
-- Preprocessing: 
-  - preprocessing.nf 
-- RNA modifications: (Future plan)
-  - to be decided
+Or you directly launched in this way:
+```bash
+nextflow run biocorecrg/master_of_pores -with-singularity
+``` 
+or
+```bash
+nextflow run biocorecrg/master_of_pores -with-docker
+``` 
 
-### preprocessing.nf
+
+### main.nf
 Input files are either multifast5 or single fast5 files containing reads from genomic DNA, cDNA or RNA sequencing. 
 It needs a reference sequence (genome or transcriptome).
-
-
 
 
   - baseCalling with **Albacore** or **Guppy**
@@ -66,17 +49,18 @@ It needs a reference sequence (genome or transcriptome).
   - tarFast5
   - QC with **MinIONQC.R**
   - **fastQC**
+  - Filtering **NanoFilt**.
   - mapping with **minimap2** or **graphmap**. **Samtools** is the used for conversion.
   - alnQC2 with custom script **bam2stats**.
   - alnQC2 with **NanoPlot**.
   - **multiQC** for the final report
   
 
-You can launch the pipeline in this way choosing either the parameter **-with-singularity** or **with-docker** depending on which containers you want to use:
+You can launch the pipeline choosing either the parameter **-with-singularity** or **with-docker** depending on which containers you want to use:
 
 ```bash
 
-nextflow run -bg preprocessing.nf -with-singularity
+nextflow run -bg main.nf -with-singularity
 
 N E X T F L O W  ~  version 19.01.0
 Launching `preprocessing.nf` [wise_colden] - revision: 6a828b7af6
@@ -116,14 +100,14 @@ email                     : luca.cozzuto@crg.eu
 You can change them by editing the **preproc.config** file or using the command line (each param name needs to have the characters **--** before): 
 
 ```bash
-nextflow run preprocessing.nf -with-singularity -bg --granularity 20 > log.txt
+nextflow run main.nf -with-singularity -bg --granularity 20 > log.txt
 ```
 
 To resume a previous execution that failed at a certain step or if you change a parameter that affects only some steps you can use the **Netxtlow** parameter **-resume** (only one dash!):
 
 
 ```bash
-nextflow run preprocessing.nf -with-singularity -bg -resume > log.txt
+nextflow run main.nf -with-singularity -bg -resume > log.txt
 
 ...
 
