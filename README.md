@@ -16,55 +16,58 @@
 Nextflow pipeline for analysis of Nanopore reads (from RNA/cDNA/DNA). This project is in collaboration with [Eva Novoa's group](https://www.crg.eu/en/programmes-groups/novoa-lab). 
 
 
-## Pre-requisites:
-For using the pipeline [Nextflow](https://www.nextflow.io/) and a linux container engine (either [Docker](https://www.docker.com/) or [Singularity](https://sylabs.io/guides/3.1/user-guide/cli/singularity_apps.html)) need to be installed:
+## Pre-requisites
+For using the pipeline [Nextflow](https://www.nextflow.io/) and a linux container engine (either [Docker](https://www.docker.com/) or [Singularity](https://sylabs.io/guides/3.1/user-guide/cli/singularity_apps.html)) need to be installed. 
+The pipeline can be run in Mac OSX and Linux operative systems.  
+
+### Installation
+For installing Nextflow:
 
 ```bash
 curl -s https://get.nextflow.io | bash
 ```
 
-The pipeline can be cloned in this way:
+The pipeline can be cloned in this way using **git**:
 
 ```bash
 git clone https://github.com/biocorecrg/master_of_pores.git
 ```
 
-Or directly launched in this way:
+Or it can be directly launched in this way using **singularity**
 
 ```bash
 nextflow run biocorecrg/master_of_pores -with-singularity
 ``` 
-or
+
+or using **Docker**:
+
 ```bash
 nextflow run biocorecrg/master_of_pores -with-docker
 ``` 
 
 
-### main.nf
+### Using the pipeline
 Input files are either multifast5 or single fast5 files containing reads from genomic DNA, cDNA or RNA sequencing. 
-It needs a reference sequence (genome or transcriptome).
+They will be basecalled and eventually demultiplexed and aligned to a reference sequence (genome or transcriptome).
 
-
-  - baseCalling with **Albacore** or **Guppy**
-  - demultiplexing (optional) with **Guppy** or **porechop** 
-  - tarFast5
+Steps:
+  - Basecalling with **Albacore** or **Guppy**
+  - Demultiplexing (optional) with **Guppy** or **Porechop** 
+  - Tar of fast5 files (in case they are single sequence fast5)
   - QC with **MinIONQC.R**
-  - **fastQC**
-  - Filtering **NanoFilt**.
-  - mapping with **minimap2** or **graphmap**. **Samtools** is the used for conversion.
-  - alnQC2 with custom script **bam2stats**.
-  - alnQC2 with **NanoPlot**.
-  - **multiQC** for the final report
+  - QC with **fastQC**
+  - Filtering with **NanoFilt**.
+  - Mapping with **minimap2** or **graphmap**. **Samtools** is the used for conversion.
+  - QC of aligned reads with custom script **bam2stats**.
+  - QC of aligned reads with **NanoPlot**.
+  - Final report with **multiQC**
   
 
 You can launch the pipeline choosing either the parameter **-with-singularity** or **with-docker** depending on which containers you want to use:
 
-```bash
-
-nextflow run -bg main.nf -with-singularity
-
-N E X T F L O W  ~  version 19.01.0
-Launching `preprocessing.nf` [wise_colden] - revision: 6a828b7af6
+```nextflow run biocorecrg/master_of_pores -with-docker
+N E X T F L O W  ~  version 0.31.1
+Launching `biocorecrg/master_of_pores` [pensive_boyd] - revision: fc7613225b [master]
 
 
 ╔╦╗┌─┐┌─┐┌┬┐┌─┐┬─┐  ┌─┐┌─┐  ╔═╗╔═╗╦═╗╔═╗╔═╗
@@ -77,25 +80,28 @@ BIOCORE@CRG Preprocessing of Nanopore data (gDNA, cDNA or RNA) - N F  ~  version
 
 kit                       : SQK-RNA001
 flowcell                  : FLO-MIN106
-fast5                     : ./data_2/RNAAB056712_wt2/*.fast5
+fast5                     : /Users/lcozzuto/.nextflow/assets/biocorecrg/master_of_pores/data/multifast/*.fast5
 multi5                    : YES
-reference                 : /nfs/software/bi/biocore_tools/git/nextflow/master_of_pores/anno/genome.fa.gz
+reference                 : /Users/lcozzuto/.nextflow/assets/biocorecrg/master_of_pores/anno/curlcake_constructs.fasta.gz
 
 seqtype                   : RNA
-output                    : out_RNAAB056712_wt2
-granularity               : 2
+output                    : /Users/lcozzuto/.nextflow/assets/biocorecrg/master_of_pores/output
+granularity               : 1
+qualityqc                 : 5
 
-basecaller                : guppy
+basecaller                : albacore
 basecaller_opt            : 
 GPU                       : OFF
 demultiplexing            :  
 demultiplexing_opt        :  
-barcodekit                : EXP-NBD104
+barcodekit                : 
+filter                    : nanofilt
+filter_opt                : -q 0 --headcrop 5 --tailcrop 3 --readtype 1D
 mapper                    : minimap2
 mapper_opt                : 
 map_type                  : spliced
 
-email                     : luca.cozzuto@crg.eu
+email                     : xxxxxx@xxxx.xx
 ```
 
 You can change them by editing the **preproc.config** file or using the command line (each param name needs to have the characters **--** before): 
@@ -123,11 +129,6 @@ nextflow run main.nf -with-singularity -bg -resume > log.txt
 
 -----------------------------------------------------
 
-# TODO
-## First module:
-* De-multiplexing
-* cDNA and RNA gene counts
-
 
 Currently the pipeline has the following steps:
 
@@ -135,16 +136,15 @@ Currently the pipeline has the following steps:
 1. **tarFast5**: it saves the fast5 files in a single archive using **tar**
 1. **QC**: performed using **MinIONQC.R**
 1. **fastQC**: QC on fastq files.
+1. **filtering**: Filtering of fastq files using **NanoFilt**. It is optional.
 1. **mapping**: it maps either to the transcriptome or to the genome (parameter **reftype**: **T** or **G**). Alignment is then converted into a sorted bam file using **samtools**. The mapping is performed using either **minimap2** or **graphmap** (parameter **mapping**: **minimap2** or **graphmap**). In case the input sequence is **RNA** (specified by **seqtype** parameter) the **U** are converted into **T** before the alignment.
 1. **alnQC**: quality control over aligned reads
+1. **alnQC**: quality control over aligned reads
 1. **alnQC2**: quality control over aligned reads
-
-
-
-
 1. **multiQC**: it collects data from different QC and groups them into a single report
 
-The pipeline accept both single fast5 reads or multi-fast5. You need to specify the format using the parameter **multi5**.
+The pipeline accept both single fast5 reads or multi-fast5. You need to specify the format using the parameter **multi5**
+The parameter **granularity** is related to the amount of input file to be analyzed in a single execution. In case you have single sequence fast5 you can use a value of 2000 or up to 4000. In case you have multi-fast5 file you can go for a value of 1 or in case you use **Guppy** with GPU support a better choice can be up to 30 per time depending on the amount of GPU-RAM available. 
 
 -----
 
