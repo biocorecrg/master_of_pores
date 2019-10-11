@@ -29,7 +29,8 @@ The pipeline can be cloned in this way:
 git clone https://github.com/biocorecrg/master_of_pores.git
 ```
 
-Or you directly launched in this way:
+Or directly launched in this way:
+
 ```bash
 nextflow run biocorecrg/master_of_pores -with-singularity
 ``` 
