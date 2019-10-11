@@ -22,5 +22,9 @@ module_order:
         info: 'This section of the report shows FastQC results on raw reads.'
 
  - alnQC:
-        name: "alnQC"
-        info: 'This section of the report shows alnQC results on aligned reads' 
+        name: "Alignment QC"
+        info: 'This section of the report shows QC results on aligned reads'
+
+ - nanoplot:
+       name: "Test"
+       info: "info" 
