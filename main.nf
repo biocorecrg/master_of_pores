@@ -214,7 +214,7 @@ process baseCalling {
 */
 if (demultiplexer == "porechop") {
 	process demultiplexing_with_porechop {
-		label 'porechop'
+		label 'basecall_cpus'
    	    tag {"${demultiplexer}-${fastq_file}"}  
 				
 		input:
