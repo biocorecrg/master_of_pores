@@ -1,4 +1,4 @@
-FROM nvidia/cuda:10.1-base-ubuntu18.04
+FROM nvidia/cuda:10.1-base-ubuntu18.04 
 
 MAINTAINER Leszek Pryszcz <l.p.pryszcz+docker@gmail.com>
 
@@ -36,4 +36,5 @@ RUN apt-get clean && apt-get update && apt-get install -y locales && rm -rf /var
 RUN locale-gen en_US.UTF-8
 
 ENV PATH "/project/ont-guppy_3.1.5_linux64/ont-guppy/bin/:${PATH}"
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda-10.1/compat/
 WORKDIR /
