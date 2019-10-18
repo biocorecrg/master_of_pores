@@ -4,6 +4,7 @@ bin/ont-guppy*
 bin/multi_to_single_fast5
 bin/single_to_multi_fast5
 bin/read_fast5_basecaller.py
+docker/basecall/programs
 log
 output
 work
