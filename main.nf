@@ -113,7 +113,7 @@ Channel
  */
 folder_info = params.fast5.tokenize("/")
 folder_name = folder_info[-2]
-albacorepath= file("$baseDir/bin/albacore")
+
 
 // Check config file for consistency
 if (basecaller != "guppy" && demultiplexer == "guppy") 
@@ -141,7 +141,6 @@ process baseCalling {
             
     input:
     set idfile, file(fast5) from fast5_4_basecall
-    file(albacorepath)
 
     output:
     file ("${idfile}_out/workspace/*.fast5") optional true
@@ -163,10 +162,8 @@ process baseCalling {
             infolder = "demulti"
         }
  	    """
-            export PYTHONPATH=\$PWD/albacore/
-
  	    ${demulti_cmd}
-		read_fast5_basecaller2.py ${basecaller_opt} --flowcell \"${params.flowcell}\" --kit \"${params.kit}\" --output_format fastq,fast5 \
+		read_fast5_basecaller.py ${basecaller_opt} --flowcell \"${params.flowcell}\" --kit \"${params.kit}\" --output_format fastq,fast5 \
 			--worker_threads ${task.cpus} -s ./${idfile}_out --disable_filtering --input ${infolder};
 		cat ${idfile}_out/workspace/*.fastq ${RNA_conv_cmd} >> ${idfile}.fastq
 		rm ${idfile}_out/workspace/*.fastq
@@ -451,7 +448,7 @@ process joinAlnQCs {
 */
 
 process alnQC2 {
-    publishDir outputQual, mode: 'copy'
+    publishDir outputQual, pattern: "${bamid}_plot/*", mode: 'copy'
     errorStrategy 'ignore'
     tag {bamid}  
    
