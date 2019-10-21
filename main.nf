@@ -132,80 +132,35 @@ fast5_4_to_batches.collate(params.granularity).map {
 */
 
 process baseCalling {
-    tag {"${basecaller}-${folder_name}-${idfile}"}  
 
-    label (params.GPU == "ON" ? 'basecall_gpus': 'basecall_cpus')
-	
-	publishDir outputFast5, pattern: "*_out/workspace/*.fast5",  mode: 'copy', saveAs: { file -> if (params.multi5 == "YES")  "${folder_name}/${file.split('\\/')[-1]}"  }
-	publishDir outputTar, pattern: "*.tar",  mode: 'copy' 
+   publishDir outputFast5, pattern: "*_out/workspace/*.fast5",  mode: 'copy', saveAs: { file -> if (params.multi5 == "YES")  "${folder_name}/${file.split('\\/')[-1]}"  }
+   publishDir outputTar, pattern: "*.tar",  mode: 'copy' 
             
-    input:
-    set idfile, file(fast5) from fast5_4_basecall
+   input:
+   set idfile, file(fast5) from fast5_4_basecall
 
-    output:
-    file ("${idfile}_out/workspace/*.fast5") optional true
-    file ("*.tar") optional true into fast5_files_for_tar
-    file ("${idfile}.*.gz") into fastq_files_for_demultiplexing
-    file ("${idfile}_out/sequencing_summary.txt") into seq_summaries
+   output:
+   file ("${idfile}_out/workspace/*.fast5") optional true
+   file ("*.tar") optional true into fast5_files_for_tar
+   file ("${idfile}.*.gz") into fastq_files_for_demultiplexing
+   file ("${idfile}_out/sequencing_summary.txt") into seq_summaries
 
-    script:
-	// conversion command if input is RNA - have to check if this is really needed
-	def RNA_conv_cmd = ""
-	if (params.seqtype == "RNA") {	RNA_conv_cmd = " | awk '{if (NR%4==2) gsub(\"U\",\"T\"); print}' " }   
-    def tar_cmd = "sleep 30; mkdir ${folder_name}_${idfile}_f5; mv *_out/workspace/*/*.fast5 ${folder_name}_${idfile}_f5; tar -cf ${folder_name}_${idfile}_f5.tar ${folder_name}_${idfile}_f5"
- 	
-    def infolder = "./"
-    if (basecaller == "albacore") {
-        def demulti_cmd = ""
-        if (params.multi5 == "YES") {
-        	demulti_cmd = "mkdir demulti; multi_to_single_fast5 -i ${infolder} -s demulti_tmp -t ${task.cpus}; rm demulti_tmp/filename_mapping.txt; mv demulti_tmp/*/*.fast5 demulti"
-            infolder = "demulti"
-        }
- 	    """
- 	    ${demulti_cmd}
-		read_fast5_basecaller.py ${basecaller_opt} --flowcell \"${params.flowcell}\" --kit \"${params.kit}\" --output_format fastq,fast5 \
-			--worker_threads ${task.cpus} -s ./${idfile}_out --disable_filtering --input ${infolder};
-		cat ${idfile}_out/workspace/*.fastq ${RNA_conv_cmd} >> ${idfile}.fastq
-		rm ${idfile}_out/workspace/*.fastq
-		gzip ${idfile}.fastq
-        ${tar_cmd}
-        """
-   } else if (basecaller == "guppy"){
- 		if (params.multi5 == "YES") { 
- 			tar_cmd = ""
- 		} 	
-        def gpu_cmd = ""
-        if (params.GPU == "ON") {
-            
-         	gpu_cmd = '-x "cuda:0"'
-        }
-        // Different command line in case guppy is also demultiplexer
-        if (demultiplexer == "guppy") {
-			"""
-				guppy_basecaller ${gpu_cmd} ${basecaller_opt} ${demultiplexer_opt} --flowcell ${params.flowcell} --kit ${params.kit} --num_barcode_threads ${task.cpus} --barcode_kits ${params.barcodekit} --trim_barcodes  --fast5_out --input ${infolder} --save_path ./${idfile}_out --cpu_threads_per_caller 1  --num_callers ${task.cpus} 
-				cd ${idfile}_out; 
-				if [ -d barcode01 ]; then
-					for d in barcode*; do echo \$d; cat \$d/*.fastq ${RNA_conv_cmd} > ../${idfile}.\$d.fastq; done;
-				fi
-				cat unclassified/*.fastq ${RNA_conv_cmd} > ../${idfile}.unclassified.fastq; cd ../
-				for i in *.fastq; do gzip \$i; done
-				${tar_cmd}
-			"""
-        }
-        else {
-			"""
-			guppy_basecaller ${gpu_cmd} --flowcell ${params.flowcell} --kit ${params.kit} --fast5_out ${basecaller_opt} --input ${infolder} --save_path ./${idfile}_out --cpu_threads_per_caller 1  --num_callers  ${task.cpus} 
+   script:
+   // conversion command if input is RNA - have to check if this is really needed
+   def RNA_conv_cmd = ""
+   if (params.seqtype == "RNA") {	RNA_conv_cmd = " | awk '{if (NR%4==2) gsub(\"U\",\"T\"); print}' " }   
+   def tar_cmd = "sleep 30; mkdir ${folder_name}_${idfile}_f5; mv *_out/workspace/*/*.fast5 ${folder_name}_${idfile}_f5; tar -cf ${folder_name}_${idfile}_f5.tar ${folder_name}_${idfile}_f5"
+ 
+   def infolder = "./"
+
+   """
+			guppy_basecaller -x "cuda:0" --flowcell ${params.flowcell} --kit ${params.kit} --fast5_out ${basecaller_opt} --input ${infolder} --save_path ./${idfile}_out --cpu_threads_per_caller 1  --num_callers  ${task.cpus} 
 			cat ${idfile}_out/*.fastq ${RNA_conv_cmd} >> ${idfile}.fastq
 			rm ${idfile}_out/*.fastq
 			gzip ${idfile}.fastq
 			${tar_cmd}
 			"""	
-		}	
-   } else {
-        """
- 		echo "nothing to do!"
-        """
-   }
+
 }
 
 
