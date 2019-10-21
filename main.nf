@@ -448,7 +448,7 @@ process joinAlnQCs {
 */
 
 process alnQC2 {
-    publishDir outputQual, pattern: "${bamid}_plot/*", mode: 'copy'
+    publishDir outputQual, pattern: "${bamid}_plot/", mode: 'copy'
     errorStrategy 'ignore'
     tag {bamid}  
    
