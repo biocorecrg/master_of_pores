@@ -457,7 +457,7 @@ process alnQC2 {
 
     output:
     file ("${bamid}_plot") optional true
-    file ("${bamid}_plot/PercentIdentityvsAverageBaseQuality_kde.png") optional true into qc2_for_multiqc
+    set file ("${bamid}_plot/PercentIdentityvsAverageBaseQuality_kde.png"), file ("${bamid}_plot/LengthvsQualityScatterPlot_dot.png") optional true into qc2_for_multiqc
     
     script:
     """
@@ -476,7 +476,7 @@ process multiQC {
     input:
     file("*") from QC_folders.collect()
     file("*") from fastqc_for_multiqc.collect()
-    file("nanoplot_mqc.png") from qc2_for_multiqc
+    set file("Percent_Identity_vs_Average_BaseQuality_mqc.png"), file("Length_vs_Quality_ScatterPlot_dot_mqc.png") from qc2_for_multiqc
     file(alnQC_for_multiQC)
     file(config_report)
     file(logo)
