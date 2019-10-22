@@ -87,9 +87,9 @@ outputFastq    = "${params.output}/fastq_files"
 outputFast5    = "${params.output}/fast5_files"
 outputTar      = "${params.output}/fast5_tar_files"
 outputQual     = "${params.output}/QC"
-outputMultiQC  = "${params.output}/Report"
-outputMapping  = "${params.output}/Aln"
-outputCounts   = "${params.output}/Counts"
+outputMultiQC  = "${params.output}/report"
+outputMapping  = "${params.output}/aln"
+outputCounts   = "${params.output}/counts"
 outputReport   = file("${outputMultiQC}/multiqc_report.html")
 
 /*
@@ -457,7 +457,7 @@ process alnQC2 {
 
     output:
     file ("${bamid}_plot") optional true
-    set file ("${bamid}_plot/PercentIdentityvsAverageBaseQuality_kde.png"), file ("${bamid}_plot/LengthvsQualityScatterPlot_dot.png") optional true into qc2_for_multiqc
+    set file ("${bamid}_plot/PercentIdentityvsAverageBaseQuality_kde.png"), file ("${bamid}_plot/LengthvsQualityScatterPlot_dot.png"), file ("${bamid}_plot/HistogramReadlength.png"), file ("${bamid}_plot/Weighted_HistogramReadlength.png")  optional true into qc2_for_multiqc
     
     script:
     """
@@ -476,7 +476,7 @@ process multiQC {
     input:
     file("*") from QC_folders.collect()
     file("*") from fastqc_for_multiqc.collect()
-    set file("Percent_Identity_vs_Average_BaseQuality_mqc.png"), file("Length_vs_Quality_ScatterPlot_dot_mqc.png") from qc2_for_multiqc
+    set file("Percent_identity_vs_Average_base_quality_mqc.png"), file("Length_vs_Quality_dot_mqc.png"), file("Read_length_distribution_mqc.png"), file("Weighted_read_length_distribution_mqc.png") from qc2_for_multiqc
     file(alnQC_for_multiQC)
     file(config_report)
     file(logo)

@@ -47,8 +47,6 @@ email                     : ${params.email}
 *************** Only required for nanopolish   *****************
 bam_sample               : ${params.bam_sample}
 bam_control              : ${params.bam_control}
-
-**************** Only required for nanopolish ******************
 fastq_sample             : ${params.fastq_sample}
 fastq_control            : ${params.fastq_control}
 
@@ -248,15 +246,17 @@ if (tailfinder == "tailfindr") {
     	file("${folder_name}.polya.estimation.tsv")
     
     	script:
-    	def reference_cmd = unzipBash(reference)
+    	def reference_cmd = unzipFile(reference, "reference.fa")
 		"""
+                ${reference_cmd}
 		#index bam
 		samtools index ${bam_file}
 		#index reads
 		nanopolish index -d ./ ${fastq_file}
 		# polya length estimation
-		nanopolish polya -r ${fastq_file} -g ${reference_cmd} -t ${task.cpus} -b ${bam_file} > ${folder_name}.polya.estimation.tsv
-		"""
+		nanopolish polya -r ${fastq_file} -g reference.fa -t ${task.cpus} -b ${bam_file} > ${folder_name}.polya.estimation.tsv
+		rm reference.fa
+                """
 	} 
 } else {
      println("skipping polyA analysis")
