@@ -393,7 +393,7 @@ process mapping {
 	    def mappars = (params.map_type == "spliced") ? "-x rnaseq" : ""
  	    mappars += " ${mapper_opt} "
         """
-        graphmap align -r ${reference} ${mappars} -d ${fastq_file} --rebuild-index -v 1 --double-index --mapq -1 -x sensitive -z 1 -K fastq --min-read-len 0 -A 7 -k 5 | samtools view -@ ${task.cpus} -F4 -hSb - > reads.mapped.bam
+        graphmap2 align -r ${reference} ${mappars} -d ${fastq_file} --rebuild-index -v 1 --double-index --mapq -1 -x sensitive -z 1 -K fastq --min-read-len 0 -A 7 -k 5 | samtools view -@ ${task.cpus} -F4 -hSb - > reads.mapped.bam
         samtools sort -@ ${task.cpus} -o ${idfile}.${mapper}.sorted.bam reads.mapped.bam
         rm reads.mapped.bam
         """
