@@ -374,7 +374,7 @@ process mapping {
     label 'big_mem_cpus'
 
     input:
-    file(refseq) from file(reference)
+    file(reference)
     set idfile, file (fastq_file) from fastq_files_for_mapping
     
     output:
@@ -390,16 +390,13 @@ process mapping {
         rm reads.mapped.bam
         """
    }
-   else if (mapper == "graphmap"){
+   else if (mapper == "graphmap2"){
 	    def mappars = (params.map_type == "spliced") ? "-x rnaseq" : ""
-        def reference_cmd = unzipFile(refseq, "reference.fa")
  	    mappars += " ${mapper_opt} "
         """
-        ${reference_cmd}
-        graphmap2 align -t ${task.cpus} -r reference.fa ${mappars} -d ${fastq_file} --rebuild-index -v 1 --double-index --mapq -1 -x sensitive -z 1 -K fastq --min-read-len 0 -A 7 -k 5 | samtools view -@ ${task.cpus} -F4 -hSb - > reads.mapped.bam
+        graphmap2 align -t ${task.cpus} -r ${reference} ${mappars} -d ${fastq_file}  | samtools view -@ ${task.cpus} -F4 -hSb - > reads.mapped.bam
         samtools sort -@ ${task.cpus} -o ${idfile}.${mapper}.sorted.bam reads.mapped.bam
         rm reads.mapped.bam
-        rm reference.fa
         """
    } else {
         """
@@ -519,17 +516,11 @@ else {
     }
 }
 
-def unzipFile(zipfile, filename) {
-    cmd = "ln -s ${zipfile} ${filename}"
-    filestring = zipfile.toString()
-    if (filestring[-3..-1] == ".gz") {
-    	cmd = "zcat ${zipfile} > ${filename}"
-    }
-    return cmd	
-}
-
 workflow.onComplete {
-    println "Pipeline BIOCORE@CRG Master of Pore completed at: $workflow.complete"
+    println "Pipeline BIOCORE@CRG Master of Pore completed!"
+    println "Started at  $workflow.start" 
+    println "Finished at $workflow.complete"
+    println "Time elapsed: $workflow.duration"
     println "Execution status: ${ workflow.success ? 'OK' : 'failed' }"
 }
 
