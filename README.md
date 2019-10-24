@@ -43,7 +43,7 @@ $ ln -s albacore/bin/multi_to_single_fast5
 $ ln -s albacore/bin/read_fast5_basecaller.py
 ```
 #### Guppy
-There are two version fo Guppy, one runs on CPUs and the other works on both CPUs and GPUs. The difference of speed between GPUs and GPU is more than 10 times.
+There are two version fo Guppy, one that runs on CPUs and the other works on both CPUs and GPUs. The difference of speed between GPUs and GPU is more than 10 times.
 
 ```bash
 cd master_of_pores/bin
@@ -88,12 +88,12 @@ BIOCORE@CRG Preprocessing of Nanopore data (gDNA, cDNA or RNA) - N F  ~  version
 
 kit                       : SQK-RNA001
 flowcell                  : FLO-MIN106
-fast5                     : /Users/lcozzuto/.nextflow/assets/biocorecrg/master_of_pores/data/multifast/*.fast5
+fast5                     : ./data/multifast/*.fast5
 multi5                    : YES
-reference                 : /Users/lcozzuto/.nextflow/assets/biocorecrg/master_of_pores/anno/curlcake_constructs.fasta.gz
+reference                 : ./anno/curlcake_constructs.fasta.gz
 
 seqtype                   : RNA
-output                    : /Users/lcozzuto/.nextflow/assets/biocorecrg/master_of_pores/output
+output                    : output
 granularity               : 1
 qualityqc                 : 5
 
@@ -109,7 +109,7 @@ mapper                    : minimap2
 mapper_opt                : 
 map_type                  : spliced
 
-email                     : xxxxxx@xxxx.xx
+email                     : ""
 ```
 
 You can change them by editing the **preproc.config** file or using the command line (each param name needs to have the characters **--** before): 
@@ -128,7 +128,6 @@ nextflow run main.nf -with-singularity -bg -resume > log.txt
 
 [warm up] executor > crg
 [e8/2e64bd] Cached process > baseCalling (RNA081120181_1)
-[cd/396b0b] Cached process > tarFast5 (RNA081120181_1)
 [b2/21f680] Cached process > QC (RNA081120181_1)
 [c8/3f5d17] Cached process > mapping (RNA081120181_1)
 ...
@@ -141,19 +140,18 @@ nextflow run main.nf -with-singularity -bg -resume > log.txt
 Currently the pipeline has the following steps:
 
 1. **baseCalling**: it converts fast5 files into a single fastq file using either **Albacore** or **Guppy** depending on the parameter **basecaller**.
-1. **tarFast5**: it saves the fast5 files in a single archive using **tar**
 1. **QC**: performed using **MinIONQC.R**
 1. **fastQC**: QC on fastq files.
 1. **filtering**: Filtering of fastq files using **NanoFilt**. It is optional.
 1. **mapping**: it maps either to the transcriptome or to the genome (parameter **reftype**: **T** or **G**). Alignment is then converted into a sorted bam file using **samtools**. The mapping is performed using either **minimap2** or **graphmap** (parameter **mapping**: **minimap2** or **graphmap**). In case the input sequence is **RNA** (specified by **seqtype** parameter) the **U** are converted into **T** before the alignment.
 1. **alnQC**: quality control over aligned reads
-1. **alnQC**: quality control over aligned reads
 1. **alnQC2**: quality control over aligned reads
 1. **multiQC**: it collects data from different QC and groups them into a single report
 
 The pipeline accept both single fast5 reads or multi-fast5. You need to specify the format using the parameter **multi5**
-The parameter **granularity** is related to the amount of input file to be analyzed in a single execution. In case you have single sequence fast5 you can use a value of 2000 or up to 4000. In case you have multi-fast5 file you can go for a value of 1 or in case you use **Guppy** with GPU support a better choice can be up to 30 per time depending on the amount of GPU-RAM available. 
+The parameter **granularity** is related to the amount of input file to be analyzed in a single execution. In case you have single sequence fast5 you can use a value of 2000 or up to 4000. In case you have multi-fast5 file you can go for a value of 1 or in case you use **Guppy** with GPU support a better choice can be up to 300 per time depending on the amount of GPU-RAM available. 
 
 -----
+## Pipeline workflow
 
 <img align="middle" src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/dag_graph.png" />
