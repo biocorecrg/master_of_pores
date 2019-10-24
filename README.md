@@ -1,7 +1,9 @@
 [![Docker Build Status](https://img.shields.io/docker/automated/biocorecrg/nanopore.svg)](https://cloud.docker.com/u/biocorecrg/repository/docker/biocorecrg/nanopore/builds)
-[![Singularity version](https://img.shields.io/badge/Singularity-v2.6.1-green.svg)](https://www.sylabs.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://zenodo.org/badge/179323639.svg)](https://zenodo.org/badge/latestdoi/179323639)
+[![Nextflow version](https://img.shields.io/badge/Nextflow-19.10.0-brightgreen)](https://www.nextflow.io/)
+[![Singularity version](https://img.shields.io/badge/Singularity-v2.6.1-green.svg)](https://www.sylabs.io/)
+[![Docker version](https://img.shields.io/badge/Docker-v19.03-blue)](https://www.docker.com/)
 
 
 # ![Nanopore analysis pipeline](https://github.com/biocorecrg/nanopore_analysis/blob/master/docs/logo_master.jpg) 
