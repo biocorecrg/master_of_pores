@@ -30,23 +30,32 @@ curl -s https://get.nextflow.io | bash
 The pipeline can be cloned in this way using **git**:
 
 ```bash
-git clone https://github.com/biocorecrg/master_of_pores.git
+git clone --depth 1 https://github.com/biocorecrg/master_of_pores.git
 ```
 
-Or it can be directly launched in this way using **singularity**
+Because of redistribution restriction of the basecallers **Albacore** and **Guppy** we cannot provide them inside the docker image, so you would need to download the binaries from the official website https://nanoporetech.com and place them inside the **master_of_pores/bin** folder.
+
+#### Albacore
+Download the whel file.
 
 ```bash
-nextflow run biocorecrg/master_of_pores -with-singularity
-``` 
-
-or using **Docker**:
+pip3 install --target=./albacore ont_albacore-2.1.7-cp36-cp36m-manylinux1_x86_64.whl
+$ ln -s albacore/bin/multi_to_single_fast5 
+$ ln -s albacore/bin/read_fast5_basecaller.py
+```
+#### Guppy
+There are two version fo Guppy, one runs on CPUs and the other works on both CPUs and GPUs. The difference of speed between GPUs and GPU is more than 10 times.
 
 ```bash
-nextflow run biocorecrg/master_of_pores -with-docker
-``` 
+cd master_of_pores/bin
+tar -zvxf ont-guppy_3.1.5_linux64.tar.gz
+ln -s ont-guppy_3.1.5_linux64/ont-guppy/bin/guppy_* .
+````
+In case you want to use the GPU you need to install the CUDA drivers:
+https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html 
 
+### Running the pipeline
 
-### Using the pipeline
 Input files are either multifast5 or single fast5 files containing reads from genomic DNA, cDNA or RNA sequencing. 
 They will be basecalled and eventually demultiplexed and aligned to a reference sequence (genome or transcriptome).
 
@@ -65,7 +74,7 @@ Steps:
 
 You can launch the pipeline choosing either the parameter **-with-singularity** or **with-docker** depending on which containers you want to use:
 
-```nextflow run biocorecrg/master_of_pores -with-docker
+```nextflow run main.nf -with-docker
 N E X T F L O W  ~  version 0.31.1
 Launching `biocorecrg/master_of_pores` [pensive_boyd] - revision: fc7613225b [master]
 
