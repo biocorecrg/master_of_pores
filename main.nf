@@ -163,6 +163,7 @@ process baseCalling {
         }
  	    """
  	    ${demulti_cmd}
+ 	    export PYTHONPATH=$baseDir/bin/albacore:\$PYTHONPATH
 		read_fast5_basecaller.py ${basecaller_opt} --flowcell \"${params.flowcell}\" --kit \"${params.kit}\" --output_format fastq,fast5 \
 			--worker_threads ${task.cpus} -s ./${idfile}_out --disable_filtering --input ${infolder};
 		cat ${idfile}_out/workspace/*.fastq ${RNA_conv_cmd} >> ${idfile}.fastq
@@ -373,7 +374,7 @@ process mapping {
     label 'big_mem_cpus'
 
     input:
-    file(reference)
+    file(refseq) from file(reference)
     set idfile, file (fastq_file) from fastq_files_for_mapping
     
     output:
@@ -391,7 +392,7 @@ process mapping {
    }
    else if (mapper == "graphmap"){
 	    def mappars = (params.map_type == "spliced") ? "-x rnaseq" : ""
-        def reference_cmd = unzipFile(reference, "reference.fa")
+        def reference_cmd = unzipFile(refseq, "reference.fa")
  	    mappars += " ${mapper_opt} "
         """
         ${reference_cmd}
