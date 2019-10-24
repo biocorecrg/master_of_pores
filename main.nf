@@ -392,8 +392,7 @@ process mapping {
    else if (mapper == "graphmap"){
 	    def mappars = (params.map_type == "spliced") ? "-x rnaseq" : ""
         def reference_cmd = unzipFile(reference, "reference.fa")
- 	    """
- 	    ${reference_cmd} 	    mappars += " ${mapper_opt} "
+ 	    mappars += " ${mapper_opt} "
         """
         ${reference_cmd}
         graphmap2 align -t ${task.cpus} -r reference.fa ${mappars} -d ${fastq_file} --rebuild-index -v 1 --double-index --mapq -1 -x sensitive -z 1 -K fastq --min-read-len 0 -A 7 -k 5 | samtools view -@ ${task.cpus} -F4 -hSb - > reads.mapped.bam
