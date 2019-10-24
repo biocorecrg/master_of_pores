@@ -156,4 +156,4 @@ The parameter **granularity** is related to the amount of input file to be analy
 
 -----
 
-<img align="middle" src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/preprocessing.png" />
+<img align="middle" src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/dag_graph.png" />
