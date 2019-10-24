@@ -116,8 +116,10 @@ folder_name = folder_info[-2]
 
 
 // Check config file for consistency
+if (demultiplexer != "" && barcodekit == "") 
+	exit 1, "Demultiplexing needs the definition of the barcodekit parameter"
 if (basecaller != "guppy" && demultiplexer == "guppy") 
-	exit 1, "Demultiplexing with guppy can be performed ONLY when the basecaller is guppy too!!!\nERROR ~ Please change the config file!!"
+	exit 1, "Demultiplexing with guppy can be performed ONLY when the basecaller is guppy too!!!"
 if (basecaller == "guppy" && demultiplexer == "guppy") 
 	log.info "Performing basecalling and demultiplexing at the same time with Guppy"	
 
