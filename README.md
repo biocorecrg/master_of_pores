@@ -14,7 +14,11 @@
 
 
 # Nanopore analysis pipeline
-Nextflow pipeline for analysis of Nanopore reads (from RNA/cDNA/DNA). This project is in collaboration with [Eva Novoa's group](https://www.crg.eu/en/programmes-groups/novoa-lab). 
+Nextflow pipeline for analysis of Nanopore reads (from RNA/cDNA/DNA). This project is in collaboration with [Eva Novoa's group](https://www.crg.eu/en/programmes-groups/novoa-lab). If you use this tool you can cite our pre-print:
+
+[Parallel and scalable workflow for the analysis of Oxford Nanopore direct RNA sequencing datasets
+Luca Cozzuto, Huanle Liu, Leszek P. Pryszcz, Toni Hermoso Pulido, Julia Ponomarenko, Eva Maria Novoa
+doi: https://doi.org/10.1101/818336](https://www.biorxiv.org/content/10.1101/818336v1)
 
 
 ## Pre-requisites
