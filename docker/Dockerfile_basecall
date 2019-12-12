@@ -18,6 +18,8 @@ WORKDIR /project
 #Installing ont_fast5_api
 RUN pip install ont-fast5-api
 
+# Install guppy's dependencies
+RUN apt update && apt install -y p7zip-full libidn11 libgssapi-krb5-2
 
 #Installing modules for Deeplexicon
 RUN pip install --upgrade setuptools

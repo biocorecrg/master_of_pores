@@ -15,7 +15,7 @@ ARG MINIONQC_VERSION=1.4.1
 ARG MINIMAP_VERSION=2.17
 ARG NANOPLOT_VERSION=1.26.3
 ARG FASTQC_VERSION=0.11.8
-#ARG ONTFAST5API_VERSION=1.4.4
+ARG ONTFAST5API_VERSION=1.4.4
 
 # Environment variables
 ENV POREQUAL_PATH=$PWD/POREquality/
@@ -73,7 +73,7 @@ RUN bash -c 'curl -k -L https://github.com/roblanf/minion_qc/releases/download/v
 RUN chmod +x /usr/local/bin/MinIONQC.R
 
 # Installing ont-fast5-api
-#RUN pip install ont-fast5-api==${ONTFAST5API_VERSION}
+RUN pip install ont-fast5-api==${ONTFAST5API_VERSION}
 
 #install Nanoplot
 RUN pip install pandas 

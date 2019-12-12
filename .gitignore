@@ -1,4 +1,5 @@
-bin/ont-guppy*
+NanoPreprocess/bin/guppy*
+NanoPreprocess/bin/ont-guppy*
 log
 output
 work
