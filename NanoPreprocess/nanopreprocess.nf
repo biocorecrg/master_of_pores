@@ -19,15 +19,18 @@ log.info """
 ╩ ╩┴ ┴└─┘ ┴ └─┘┴└─  └─┘└    ╩  ╚═╝╩╚═╚═╝╚═╝
                                                                                        
 ====================================================
-BIOCORE@CRG Preprocessing of Nanopore data (gDNA, cDNA or RNA) - N F  ~  version ${version}
+BIOCORE@CRG Preprocessing of Nanopore direct RNA - N F  ~  version ${version}
 ====================================================
 
 kit                       : ${params.kit}
 flowcell                  : ${params.flowcell}
 fast5                     : ${params.fast5}
 reference                 : ${params.reference}
+annotation                : ${params.annotation}
 
-seqtype                   : ${params.seqtype}
+ref_type                  : ${params.ref_type}
+seq_type                  : ${params.seq_type}
+
 output                    : ${params.output}
 qualityqc                 : ${params.qualityqc}
 granularity               : ${params.granularity}
@@ -37,12 +40,14 @@ basecaller_opt            : ${params.basecaller_opt}
 GPU                       : ${params.GPU}
 demultiplexing            : ${params.demultiplexing} 
 demultiplexing_opt        : ${params.demultiplexing_opt} 
-barcodekit                : ${params.barcodekit}
+
 filter                    : ${params.filter}
 filter_opt                : ${params.filter_opt}
 mapper                    : ${params.mapper}
 mapper_opt                : ${params.mapper_opt}
 map_type                  : ${params.map_type}
+
+counter_opt               : ${params.counter_opt}
 
 email                     : ${params.email}
 """
@@ -56,16 +61,14 @@ if (params.granularity == "") params.granularity = 1000000000
 if (params.GPU != "ON" && params.GPU != "OFF") exit 1, "Please specify ON or OFF in GPU processors are available"
 
 // check sequence type parameter
-if (params.seqtype != "gDNA" && params.seqtype != "cDNA" && params.seqtype != "RNA") exit 1, "Please specify the sequence type as RNA, cDNA or gDNA"
-
-
-if (params.seqtype == "gDNA") { 
-    log.info "seqType is gDNA: map_type is set to 'unspliced'"
-	params.map_type = "unspliced"
-} else {
-    log.info "seqType is ${params.seqtype}: map_type is ${params.map_type}"
+//if (params.seq_type != "gDNA" && params.seq_type != "cDNA" && params.seq_type != "RNA") exit 1, "Please specify the sequence type as RNA, cDNA or gDNA"
+//if (params.seq_type == "gDNA") { 
+//    log.info "seqType is gDNA: map_type is set to 'unspliced'"
+//	params.map_type = "unspliced"
+//} else {
+//    log.info "seqType is ${params.seq_type}: map_type is ${params.map_type}"
 	if (params.map_type != "unspliced" && params.map_type != "spliced") exit 1, "Mapping type NOT supported! Please choose either 'spliced' or 'unspliced'"
-}
+//}
 
 // check input files
 reference = file(params.reference)
@@ -82,6 +85,8 @@ demultiplexer 		= params.demultiplexing
 demultiplexer_opt   = params.demultiplexing_opt
 mapper      		= params.mapper
 mapper_opt   		= params.mapper_opt
+counter_opt   		= params.counter_opt 
+
 
 // Output folders
 outputFastq    = "${params.output}/fastq_files"
@@ -89,6 +94,7 @@ outputFast5    = "${params.output}/fast5_files"
 outputQual     = "${params.output}/QC_files"
 outputMultiQC  = "${params.output}/report"
 outputMapping  = "${params.output}/alignment"
+outputCounts   = "${params.output}/counts"
 outputReport   = file("${outputMultiQC}/multiqc_report.html")
 
 /*
@@ -114,12 +120,15 @@ folder_info = params.fast5.tokenize("/")
 folder_name = folder_info[-2]
 
 // Check config file for consistency
-if (demultiplexer == "guppy" && params.barcodekit == "") 
-	exit 1, "Demultiplexing with guppy needs the definition of the barcodekit parameter. Exiting"
-if (basecaller != "guppy" && demultiplexer == "guppy") 
-	exit 1, "Demultiplexing with guppy can be performed ONLY when the basecaller is guppy too. Exiting"
-if (basecaller == "guppy" && demultiplexer == "guppy") 
-	log.info "Performing basecalling and demultiplexing at the same time with Guppy."
+//if (demultiplexer == "guppy" && params.barcodekit == "") 
+//	exit 1, "Demultiplexing with guppy needs the definition of the barcodekit parameter. Exiting"
+//if (basecaller != "guppy" && demultiplexer == "guppy") 
+//	exit 1, "Demultiplexing with guppy can be performed ONLY when the basecaller is guppy too. Exiting"
+//if (basecaller == "guppy" && demultiplexer == "guppy") 
+//	log.info "Performing basecalling and demultiplexing at the same time with Guppy."
+if (demultiplexer != "" && demultiplexer != "deeplexicon")
+exit 1, "Demultiplexing of RNA can be performed only with deeplexicon. Current value is ${demultiplexer}"
+
 if (params.GPU == "YES" && basecaller != "guppy")
 	exit 1, "GPU can be used only with GUPPY basecaller!"
 
@@ -180,7 +189,7 @@ process baseCalling {
 	def RNA_conv_cmd = ""
  	def demulti_cmd = ""
     def infolder = "./"
-	if (params.seqtype == "RNA") {	RNA_conv_cmd = " | awk '{if (NR%4==2) gsub(\"U\",\"T\"); print}' " }   
+	if (params.seq_type == "RNA") {	RNA_conv_cmd = " | awk '{if (NR%4==2) gsub(\"U\",\"T\"); print}' " }   
     if (basecaller == "albacore") {
         // in case input files are multi fast5 convert them in single fast5 since albacore is not able to deal with multi fast5
         if (multi5 == 1) {
@@ -251,25 +260,7 @@ process baseCalling {
 /*
 *  Perform demultiplexing (optional) using porechop on basecalled reads
 */
-if (demultiplexer == "porechop") {
-	process demultiplexing_with_porechop {
-		label 'basecall_cpus'
-   	    tag {"${demultiplexer}-${fastq_file}"}  
-				
-		input:
-		set idfile, file(fastq_file) from fastq_files_for_demultiplexing
-
-		output:
-		set idfile, file ("*.fastq.gz") into fastq_for_filtering
-
-		script:
-		"""
-			porechop -i ${fastq_file} --threads ${task.cpus} -b ./ ${demultiplexer_opt}
-			for i in *.fastq; do gzip \$i; done
-		"""
-		} 
-	}
-else if(demultiplexer == "deeplexicon"){
+if(demultiplexer == "deeplexicon") {
 	process demultiplexing_with_deeplexicon {
 		label 'basecall_cpus'
    	    tag {"${demultiplexer}-${idfile}"}  
@@ -306,7 +297,7 @@ else if(demultiplexer == "deeplexicon"){
  		"""
 	} 
 } else {
-	fastq_files_for_demultiplexing.into{ fastq_for_filtering; ocazz}
+	fastq_files_for_demultiplexing.set{ fastq_for_filtering}
 }
 
 /*
@@ -321,7 +312,7 @@ if (params.filter == "nanofilt") {
 		set idfile, file(fastq_file) from fastq_for_filtering.transpose()
 
 		output:
-		set idfile, file("*-filt.fastq.gz") into fastq_for_next_step, ocazz2
+		set idfile, file("*-filt.fastq.gz") into fastq_for_next_step
 
 		script:
 		output = "${fastq_file}".replace(".fastq.gz", "-filt.fastq.gz")
@@ -330,9 +321,8 @@ if (params.filter == "nanofilt") {
 		"""
 	} 
 } else {
-	fastq_for_filtering.transpose().into{fastq_for_next_step; ocazz2}
+	fastq_for_filtering.transpose().set{fastq_for_next_step}
 }
-//ocazz2.println()
 
 
 fastq_for_next_step.map{
@@ -343,9 +333,7 @@ fastq_for_next_step.map{
 	} else {
 		["${folder_name}", filepath]
 	}
-}.groupTuple().into{fastq_files_for_grouping; ocazz}
-
-//ocazz.println()
+}.groupTuple().set{fastq_files_for_grouping}
 
 /*
 *  Concatenate FastQ files
@@ -455,6 +443,35 @@ process mapping {
         """
    }     
 }
+
+/*
+*  Perform counting
+*/
+
+process counting {
+	tag {"${idfile}"}  
+	publishDir outputCounts, mode: 'copy'
+
+	input:
+	set idfile, file(bamfile) from aligned_reads_for_counts
+
+	output:
+	set idfile, file("${idfile}.count") into read_counts
+
+	script:    
+	if (params.ref_type == "transcriptome") {
+		"""
+		NanoCount -i ${bamfile} -o ${idfile}.count ${counter_opt}
+		"""
+	} else if (params.ref_type == "genome") {
+		"""
+		htseq-count ${counter_opt} ${bamfile} ${params.annotation} > ${idfile}.count 
+		"""		
+	}
+}
+
+
+
 
 /*
 *  Perform alnQC 

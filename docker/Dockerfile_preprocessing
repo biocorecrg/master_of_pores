@@ -16,6 +16,8 @@ ARG MINIMAP_VERSION=2.17
 ARG NANOPLOT_VERSION=1.26.3
 ARG FASTQC_VERSION=0.11.8
 ARG ONTFAST5API_VERSION=1.4.4
+ARG NANOCOUNT_VERSION=v0.1.a3
+ARG HTSEQ_VERSION=0.11.1
 
 # Environment variables
 ENV POREQUAL_PATH=$PWD/POREquality/
@@ -84,6 +86,12 @@ RUN pip install multiqc==${MULTIQC_VERSION}
 
 # Installing GraphicsMagick
 RUN yum install -y GraphicsMagick.x86_64
+
+# Installing NanoCount
+RUN pip install NanoCount==${NANOCOUNT_VERSION}
+
+# Installing HTseq
+RUN pip install HTSeq==${HTSEQ_VERSION}
 
 # Clean cache
 RUN yum clean all 
