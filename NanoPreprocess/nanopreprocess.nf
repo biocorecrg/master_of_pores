@@ -126,11 +126,23 @@ folder_name = folder_info[-2]
 //	exit 1, "Demultiplexing with guppy can be performed ONLY when the basecaller is guppy too. Exiting"
 //if (basecaller == "guppy" && demultiplexer == "guppy") 
 //	log.info "Performing basecalling and demultiplexing at the same time with Guppy."
+
+/*
+* This is default value in case guppy will be used for RNA demultiplexing
+*/
+params.barcodekit = ""
+
 if (demultiplexer != "" && demultiplexer != "deeplexicon")
 exit 1, "Demultiplexing of RNA can be performed only with deeplexicon. Current value is ${demultiplexer}"
 
 if (params.GPU == "YES" && basecaller != "guppy")
 	exit 1, "GPU can be used only with GUPPY basecaller!"
+
+if (params.ref_type == "genome") {
+	annotation = file(params.annotation)
+	if( !annotation.exists() ) exit 1, "Missing annotation file: ${params.annotation}! This is mandatory when ref_type = 'genome'"
+}
+
 
 process testInput {
     tag {"${fast5}"}  
@@ -464,8 +476,9 @@ process counting {
 		NanoCount -i ${bamfile} -o ${idfile}.count ${counter_opt}
 		"""
 	} else if (params.ref_type == "genome") {
+	    def anno = unzipBash(annotation) 
 		"""
-		htseq-count ${counter_opt} ${bamfile} ${params.annotation} > ${idfile}.count 
+		samtools view ${bamfile} |htseq-count -f sam - ${anno} > ${idfile}.count 
 		"""		
 	}
 }
@@ -601,4 +614,12 @@ workflow.onComplete {
     println "Execution status: ${ workflow.success ? 'OK' : 'failed' }"
 }
 
+// make named pipe 
+def unzipBash(filename) { 
+    cmd = filename.toString()
+    if (cmd[-3..-1] == ".gz") {
+    	cmd = "<(zcat ${filename})"
+    }
+    return cmd
+}
 
