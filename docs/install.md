@@ -11,25 +11,29 @@ The pipeline can be run in Mac OSX and Linux operative systems.
 ## Installation
 
 
-For installing Nextflow (version 19.10.0):
+### 1. Install Nextflow (version 19.10.0)
 
 ```bash
 curl -s https://get.nextflow.io | bash
 ```
 
+### 2. Clone the MasterOfPores repository
 The pipeline can be cloned in this way using **git**:
 
 ```bash
 git clone --depth 1 https://github.com/biocorecrg/master_of_pores.git
 ```
 
-Install Docker and/or Singularity (for Singularity, version 2.6.1 and Docker 19.03 or later are required):
+### 3. Install Docker and/or Singularity 
+For Singularity, version 2.6.1 is required
+For Docker, 19.03 or later are required
 - Docker: https://docs.docker.com/install/
 - Singularity: https://sylabs.io/guides/2.6/user-guide/quick_start.html#quick-installation-steps
 
+### 4. Download Nanopore base-calling algorithms
 Because of redistribution restriction of the basecallers **Albacore** and **Guppy** we cannot provide them inside the docker image, so you would need to download the binaries from the official website https://nanoporetech.com and place them inside the **master_of_pores/NanoPreprocess/bin** folder.
 
-#### Both Albacore and Guppy
+#### a) Both Albacore and Guppy
 ```bash
 cd master_of_pores/NanoPreprocess/bin
 tar -zvxf ont-guppy_3.1.5_linux64.tar.gz
@@ -38,8 +42,7 @@ pip3 install --target=./albacore ont_albacore-2.1.7-cp36-cp36m-manylinux1_x86_64
 ln -s albacore/bin/read_fast5_basecaller.py
 ```
 
-
-#### Albacore
+#### b) Albacore
 Download the wheel file.
 
 ```bash
@@ -48,13 +51,28 @@ pip3 install --target=./albacore ont_albacore-2.1.7-cp36-cp36m-manylinux1_x86_64
 $ ln -s albacore/bin/multi_to_single_fast5 
 $ ln -s albacore/bin/read_fast5_basecaller.py
 ```
-#### Guppy
-There are two version fo Guppy, one that runs on CPUs and the other works on both CPUs and GPUs. The difference of speed between GPUs and GPU is more than 10 times.
+#### c) Guppy
+Please note Guppy versions older than 3.1 (e.g. 3.0.3) only runs on CPUs.
+Newer versions (e.g. 3.1.5 and above) works on both CPUs and GPUs. The difference of speed between CPUs and GPU is more than 10 times.
 
 ```bash
 cd master_of_pores/NanoPreprocess/bin
 tar -zvxf ont-guppy_3.1.5_linux64.tar.gz
 ln -s ont-guppy_3.1.5_linux64/ont-guppy/bin/guppy_* .
 ````
+
+### 5. Optional step: install CUDA drivers (only needed for GPU support): 
+
 In case you want to use the GPU you need to install the [CUDA drivers](
 https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html) 
+
+### 6. Run the pipeline:
+Using Singularity:
+```bash
+nextflow run preprocessing.nf -with-singularity
+```
+Using Docker:
+```bash
+nextflow run preprocessing.nf -with-docker
+``` 
+
