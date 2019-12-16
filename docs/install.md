@@ -11,7 +11,7 @@ The pipeline can be run in Mac OSX and Linux operative systems.
 ## Installation
 
 
-For installing Nextflow:
+For installing Nextflow (version 19.10.0):
 
 ```bash
 curl -s https://get.nextflow.io | bash
@@ -23,10 +23,24 @@ The pipeline can be cloned in this way using **git**:
 git clone --depth 1 https://github.com/biocorecrg/master_of_pores.git
 ```
 
+Install Docker and/or Singularity (for Singularity, version 2.6.1 and Docker 19.03 or later are required):
+- Docker: https://docs.docker.com/install/
+- Singularity: https://sylabs.io/guides/2.6/user-guide/quick_start.html#quick-installation-steps
+
 Because of redistribution restriction of the basecallers **Albacore** and **Guppy** we cannot provide them inside the docker image, so you would need to download the binaries from the official website https://nanoporetech.com and place them inside the **master_of_pores/bin** folder.
 
+```bash
+cd master_of_pores/bin
+tar -zvxf ont-guppy_3.1.5_linux64.tar.gz
+ln -s ont-guppy_3.1.5_linux64/ont-guppy/bin/guppy_* .
+pip3 install --target=./albacore ont_albacore-2.1.7-cp36-cp36m-manylinux1_x86_64.whl
+ln -s albacore/bin/multi_to_single_fast5 
+ln -s albacore/bin/read_fast5_basecaller.py
+```
+
+
 #### Albacore
-Download the whel file.
+Download the wheel file.
 
 ```bash
 pip3 install --target=./albacore ont_albacore-2.1.7-cp36-cp36m-manylinux1_x86_64.whl
