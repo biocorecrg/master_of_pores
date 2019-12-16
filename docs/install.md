@@ -27,14 +27,14 @@ Install Docker and/or Singularity (for Singularity, version 2.6.1 and Docker 19.
 - Docker: https://docs.docker.com/install/
 - Singularity: https://sylabs.io/guides/2.6/user-guide/quick_start.html#quick-installation-steps
 
-Because of redistribution restriction of the basecallers **Albacore** and **Guppy** we cannot provide them inside the docker image, so you would need to download the binaries from the official website https://nanoporetech.com and place them inside the **master_of_pores/bin** folder.
+Because of redistribution restriction of the basecallers **Albacore** and **Guppy** we cannot provide them inside the docker image, so you would need to download the binaries from the official website https://nanoporetech.com and place them inside the **master_of_pores/NanoPreprocess/bin** folder.
 
+#### Both Albacore and Guppy
 ```bash
-cd master_of_pores/bin
+cd master_of_pores/NanoPreprocess/bin
 tar -zvxf ont-guppy_3.1.5_linux64.tar.gz
 ln -s ont-guppy_3.1.5_linux64/ont-guppy/bin/guppy_* .
 pip3 install --target=./albacore ont_albacore-2.1.7-cp36-cp36m-manylinux1_x86_64.whl
-ln -s albacore/bin/multi_to_single_fast5 
 ln -s albacore/bin/read_fast5_basecaller.py
 ```
 
@@ -43,6 +43,7 @@ ln -s albacore/bin/read_fast5_basecaller.py
 Download the wheel file.
 
 ```bash
+cd master_of_pores/NanoPreprocess/bin
 pip3 install --target=./albacore ont_albacore-2.1.7-cp36-cp36m-manylinux1_x86_64.whl
 $ ln -s albacore/bin/multi_to_single_fast5 
 $ ln -s albacore/bin/read_fast5_basecaller.py
@@ -51,7 +52,7 @@ $ ln -s albacore/bin/read_fast5_basecaller.py
 There are two version fo Guppy, one that runs on CPUs and the other works on both CPUs and GPUs. The difference of speed between GPUs and GPU is more than 10 times.
 
 ```bash
-cd master_of_pores/bin
+cd master_of_pores/NanoPreprocess/bin
 tar -zvxf ont-guppy_3.1.5_linux64.tar.gz
 ln -s ont-guppy_3.1.5_linux64/ont-guppy/bin/guppy_* .
 ````
