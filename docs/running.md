@@ -5,6 +5,7 @@ navigation: 3
 ---
 
 # Running the pipeline
+## NanoPreprocess
 
 Input files are either multifast5 or single fast5 files containing reads from genomic DNA, cDNA or RNA sequencing. 
 They will be basecalled and eventually demultiplexed and aligned to a reference sequence (genome or transcriptome).
@@ -103,8 +104,11 @@ Currently the pipeline has the following steps:
 The pipeline accept both single fast5 reads or multi-fast5. You need to specify the format using the parameter **multi5**
 The parameter **granularity** is related to the amount of input file to be analyzed in a single execution. In case you have single sequence fast5 you can use a value of 2000 or up to 4000. In case you have multi-fast5 file you can go for a value of 1 or in case you use **Guppy** with GPU support a better choice can be up to 300 per time depending on the amount of GPU-RAM available. 
 
------
-## Pipeline workflow
+## NanoPolyA
+Data produced by NanoPreprocess are needed for this module. The reference must be the transcriptome.
 
-<img align="middle" src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/dag_graph.png" />
+
+## NanoRNAmod
+
+write something
 
