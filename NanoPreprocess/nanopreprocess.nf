@@ -47,6 +47,7 @@ mapper                    : ${params.mapper}
 mapper_opt                : ${params.mapper_opt}
 map_type                  : ${params.map_type}
 
+count                     : ${params.count}
 counter_opt               : ${params.counter_opt}
 
 email                     : ${params.email}
@@ -457,56 +458,60 @@ process mapping {
 }
 
 /*
-*  Perform counting
+*  Perform counting (optional)
 */
 
-process counting {
-	tag {"${idfile}"}  
-	publishDir outputCounts, mode: 'copy'
+if (params.count == "YES") {
+	process counting {
+		tag {"${idfile}"}  
+		publishDir outputCounts, mode: 'copy'
 
-	input:
-	set idfile, file(bamfile) from aligned_reads_for_counts
+		input:
+		set idfile, file(bamfile) from aligned_reads_for_counts
 
-	output:
-	file("${idfile}.count") into read_counts
-	file("${idfile}.stats") optional true into count_stats
+		output:
+		file("${idfile}.count") into read_counts
+		file("${idfile}.stats") optional true into count_stats
 
-	script:    
-	if (params.ref_type == "transcriptome") {
-		"""
-		NanoCount -i ${bamfile} -o ${idfile}.count ${counter_opt};
-awk '{sum+=\$3}END{print FILENAME"\t"sum}' ${idfile}.count |sed s@.count@@g > ${idfile}.stats
-		"""
-	} else if (params.ref_type == "genome") {
-	    def anno = unzipBash(annotation) 
-		"""
-		samtools view ${bamfile} |htseq-count -f sam - ${anno} > ${idfile}.count 
-		"""		
+		script:    
+		if (params.ref_type == "transcriptome") {
+			"""
+			NanoCount -i ${bamfile} -o ${idfile}.count ${counter_opt};
+	awk '{sum+=\$3}END{print FILENAME"\t"sum}' ${idfile}.count |sed s@.count@@g > ${idfile}.stats
+			"""
+		} else if (params.ref_type == "genome") {
+			def anno = unzipBash(annotation) 
+			"""
+			samtools view ${bamfile} |htseq-count -f sam - ${anno} > ${idfile}.count 
+			"""		
+		}
 	}
-}
 
-/*
-*  Join alnQC 
-*/
-
-
-process joinCountQCs {
+	/*
+	*  Join alnQC 
+	*/
+	process joinCountQCs {
    
-    input:
-    file "*" from count_stats.collect()
+		input:
+		file "*" from count_stats.collect()
 
-    output:
-    file("counts_mqc.txt") into count_repo_for_multiQC
-    
-    script:
-    """
-   echo '# id: NanoCount
-# plot_type: \'table\'
-# section_name: Read counts 
-File name	\'Counts\' ' > counts_mqc.txt 
-    cat *.stats  >> counts_mqc.txt 
-    """
+		output:
+		file("counts_mqc.txt") into count_repo_for_multiQC
+	
+		script:
+		"""
+	   echo '# id: NanoCount
+	# plot_type: \'table\'
+	# section_name: Read counts 
+	File name	\'Counts\' ' > counts_mqc.txt 
+		cat *.stats  >> counts_mqc.txt 
+		"""
+	}
+} else {
+   read_counts = Channel.empty()
+   count_repo_for_multiQC = Channel.empty()
 }
+
 
 /*
 *  Perform alnQC 
