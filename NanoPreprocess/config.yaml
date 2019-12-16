@@ -11,6 +11,7 @@ custom_logo_title: 'Master of Pores'
 
 extra_fn_clean_trim: 
    - '_QC'
+   - '.count'
 
 read_count_multiplier: 0.001
 read_count_prefix: 'K'

@@ -468,12 +468,14 @@ process counting {
 	set idfile, file(bamfile) from aligned_reads_for_counts
 
 	output:
-	set idfile, file("${idfile}.count") into read_counts
+	file("${idfile}.count") into read_counts
+	file("${idfile}.stats") optional true into count_stats
 
 	script:    
 	if (params.ref_type == "transcriptome") {
 		"""
-		NanoCount -i ${bamfile} -o ${idfile}.count ${counter_opt}
+		NanoCount -i ${bamfile} -o ${idfile}.count ${counter_opt};
+awk '{sum+=\$3}END{print FILENAME"\t"sum}' ${idfile}.count |sed s@.count@@g > ${idfile}.stats
 		"""
 	} else if (params.ref_type == "genome") {
 	    def anno = unzipBash(annotation) 
@@ -483,8 +485,28 @@ process counting {
 	}
 }
 
+/*
+*  Join alnQC 
+*/
 
 
+process joinCountQCs {
+   
+    input:
+    file "*" from count_stats.collect()
+
+    output:
+    file("counts_mqc.txt") into count_repo_for_multiQC
+    
+    script:
+    """
+   echo '# id: NanoCount
+# plot_type: \'table\'
+# section_name: Read counts 
+File name	\'Counts\' ' > counts_mqc.txt 
+    cat *.stats  >> counts_mqc.txt 
+    """
+}
 
 /*
 *  Perform alnQC 
@@ -555,22 +577,18 @@ process alnQC2 {
     """
 }
 
+QC_folders.mix(fastqc_for_multiqc,qc2_for_multiqc,read_counts,count_repo_for_multiQC,alnQC_for_multiQC).set{files_for_report}
 
 /*
 *  Perform multiQC report
 */
-
 process multiQC {
     publishDir outputMultiQC, mode: 'copy'
    
     input:
-    file("*") from QC_folders.collect()
-    file("*") from fastqc_for_multiqc.collect()
-    file("*") from qc2_for_multiqc.collect()
-    //set file("Percent_identity_vs_Average_base_quality_mqc.png"), file("Length_vs_Quality_dot_mqc.png"), file("Read_length_distribution_mqc.png"), file("Weighted_read_length_distribution_mqc.png") from qc2_for_multiqc.collect()
-    file(alnQC_for_multiQC)
-    file(config_report)
     file(logo)
+    file(config_report)
+    file("*") from files_for_report.collect()
     
     output:
     file("multiqc_report.html") into multiQC 
