@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Home
-navigation: 3
+navigation: 2
 ---
 
 Here we add information on installation
