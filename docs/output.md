@@ -14,9 +14,12 @@ From NanoPreprocess (Module 1):
 - QC reports within “QC” folder.
 - Final report within “report” folder.
 - Aligned reads in BAM files within the “aln” folder.
+- Read counts within the "count" folder.
 
 From NanoRNAmod (Module 2): 
 - Plain TXT files with predicted RNA modifications in the “rna_mods” folder
 
 From NanoPolyA (Module 3): 
 - Plain TXT files with polyA tail length estimations in the “polyA_length” folder
+
+
