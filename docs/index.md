@@ -14,7 +14,7 @@ navigation: 1
 
 # ![Nanopore analysis pipeline](https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/logo_master.jpg) 
 
-<img align="right" href="https://biocore.crg.eu/" src="https://github.com/CRG-CNAG/BioCoreMiscOpen/blob/master/logo/biocore-logo_small.png" />
+<img align="right" href="https://biocore.crg.eu/" src="https://raw.githubusercontent.com/CRG-CNAG/BioCoreMiscOpen/master/logo/biocore-logo_small.png" />
 
 <br/>
 
