@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Home
+title: Installation
 navigation: 2
 ---
 
