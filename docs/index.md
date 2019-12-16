@@ -11,13 +11,11 @@ navigation: 1
 [![Singularity version](https://img.shields.io/badge/Singularity-v2.6.1-green.svg)](https://www.sylabs.io/)
 [![Docker version](https://img.shields.io/badge/Docker-v19.03-blue)](https://www.docker.com/)
 
-
-# ![Nanopore analysis pipeline](https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/logo_master.jpg) 
-
 <img align="right" href="https://biocore.crg.eu/" src="https://raw.githubusercontent.com/CRG-CNAG/BioCoreMiscOpen/master/logo/biocore-logo_small.png" />
 
 <br/>
 
+# ![Nanopore analysis pipeline](https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/logo_master.jpg) 
 
 # Nanopore analysis pipeline
 Nextflow pipeline for analysis of Nanopore data from direct RNA sequencing. This is a joint project between [CRG bioinformatics core](https://biocore.crg.eu/) and [Epitranscriptomics and RNA Dynamics research group](https://www.crg.eu/en/programmes-groups/novoa-lab).  
