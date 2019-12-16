@@ -23,3 +23,4 @@ From NanoPolyA (Module 3):
 - Plain TXT files with polyA tail length estimations in the “polyA_length” folder
 
 
+
