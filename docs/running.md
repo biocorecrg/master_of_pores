@@ -24,7 +24,8 @@ Steps:
 
 You can launch the pipeline choosing either the parameter **-with-singularity** or **with-docker** depending on which containers you want to use:
 
-```nextflow run main.nf -with-docker
+```
+nextflow run main.nf -with-docker
 N E X T F L O W  ~  version 0.31.1
 Launching `biocorecrg/master_of_pores` [pensive_boyd] - revision: fc7613225b [master]
 
