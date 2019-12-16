@@ -1,3 +1,9 @@
+---
+layout: page
+title: Home
+navigation: 1
+---
+
 [![Docker Build Status](https://img.shields.io/docker/automated/biocorecrg/nanopore.svg)](https://cloud.docker.com/u/biocorecrg/repository/docker/biocorecrg/nanopore/builds)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://zenodo.org/badge/179323639.svg)](https://zenodo.org/badge/latestdoi/179323639)
