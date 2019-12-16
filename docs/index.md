@@ -6,7 +6,7 @@ navigation: 1
 
 [![Docker Build Status](https://img.shields.io/docker/automated/biocorecrg/nanopore.svg)](https://cloud.docker.com/u/biocorecrg/repository/docker/biocorecrg/nanopore/builds)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/record/3518291.svg)](https://zenodo.org/badge/latestdoi/3518291)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3518291.svg)](https://doi.org/10.5281/zenodo.3518291)
 [![Nextflow version](https://img.shields.io/badge/Nextflow-19.10.0-brightgreen)](https://www.nextflow.io/)
 [![Singularity version](https://img.shields.io/badge/Singularity-v2.6.1-green.svg)](https://www.sylabs.io/)
 [![Docker version](https://img.shields.io/badge/Docker-v19.03-blue)](https://www.docker.com/)
