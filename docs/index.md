@@ -35,7 +35,7 @@ The MasterOfPores workflow includes all steps needed to process raw FAST5 files 
 This module takes as input the raw Fast5 reads and produces as output base-called FASTQ and BAM. The pre-processing module performs base-calling, demultiplexing, filtering, quality control and mapping, generating a final report of the performance and results of each of the steps performed.
 The NanoPreprocess module comprises 8 main steps:
 
--  1. *Read base-calling* with the algorithm of choice, using Albacore (https://nanoporetech.com) or Guppy (https://nanoporetech.com). This step can be run in parallel and the user can decide the number of files to be processed in a single job by using the command --granularity. 
+- 1. *Read base-calling* with the algorithm of choice, using Albacore (https://nanoporetech.com) or Guppy (https://nanoporetech.com). This step can be run in parallel and the user can decide the number of files to be processed in a single job by using the command --granularity. 
 - 2. *Filtering* of the resulting fastq files using Nanofilt (De Coster et al., 2018). This step is optional and can be run in parallel.
 - 3. *Demultiplexing* of the fastq files using DeePlexiCon (Smith et al.). This step is optional, and can only be used if the libraries have been barcoded using the oligonucleotides used to train the deep neural classifier (https://github.com/Psy-Fer/deeplexicon)
 - 4. *Quality control* of the base-called data using MinIONQC (Lanfear et al., 2019) and FastQC (http://www.bioinformatics.babraham.ac.uk/projects/fastqc).
