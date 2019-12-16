@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Running the pipeline
+title: Output generated 
 navigation: 4
 ---
 
