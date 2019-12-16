@@ -41,5 +41,5 @@ cd master_of_pores/bin
 tar -zvxf ont-guppy_3.1.5_linux64.tar.gz
 ln -s ont-guppy_3.1.5_linux64/ont-guppy/bin/guppy_* .
 ````
-In case you want to use the GPU you need to install the CUDA drivers:
-https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html 
+In case you want to use the GPU you need to install the [CUDA drivers](
+https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html) 
