@@ -12,7 +12,7 @@ navigation: 1
 [![Docker version](https://img.shields.io/badge/Docker-v19.03-blue)](https://www.docker.com/)
 
 
-# ![Nanopore analysis pipeline](https://github.com/biocorecrg/master_of_pores/blob/master/docs/logo_master.jpg) 
+# ![Nanopore analysis pipeline](https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/logo_master.jpg) 
 
 <img align="right" href="https://biocore.crg.eu/" src="https://github.com/CRG-CNAG/BioCoreMiscOpen/blob/master/logo/biocore-logo_small.png" />
 
