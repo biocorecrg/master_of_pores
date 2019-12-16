@@ -25,10 +25,8 @@ git clone --depth 1 https://github.com/biocorecrg/master_of_pores.git
 ```
 
 ### 3. Install Docker and/or Singularity 
-For Singularity, version 2.6.1 is required
-For Docker, 19.03 or later are required
-- Docker: https://docs.docker.com/install/
-- Singularity: https://sylabs.io/guides/2.6/user-guide/quick_start.html#quick-installation-steps
+- Docker: https://docs.docker.com/install/ (version 10.03 or later is required)
+- Singularity: https://sylabs.io/guides/2.6/user-guide/quick_start.html#quick-installation-steps (version 2.6.1 is required)
 
 ### 4. Download Nanopore base-calling algorithms
 Because of redistribution restriction of the basecallers **Albacore** and **Guppy** we cannot provide them inside the docker image, so you would need to download the binaries from the official website https://nanoporetech.com and place them inside the **master_of_pores/NanoPreprocess/bin** folder.
