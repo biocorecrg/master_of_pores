@@ -1,6 +1,13 @@
-theme: jekyll-theme-minimal
-title: Master of Pores
-description: Nextflow pipeline for analysis of Nanopore reads
-url: "https://biocorecrg.github.io/master_of_pores/" 
-logo: "https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/logo_small.png"
+title: Biocore's RNAseq course 2019
+description: Some description
+url: "https://biocorecrg.github.io/RNAseq_course_2019/" 
 
+# Build settings
+markdown: kramdown
+kramdown:
+  syntax_highlighter_opts:
+    disable : true
+
+sass:
+  sass_dir: _sass
+  style: compressed
