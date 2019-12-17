@@ -14,7 +14,7 @@ navigation: 1
 
 <br/>
 
-# ![Nanopore analysis pipeline](https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/logo_master.jpg) 
+# ![Direct RNA nanopore analysis pipeline](https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/logo_master.jpg) 
 
 # Nanopore analysis pipeline
 Nextflow pipeline for analysis of Nanopore data from direct RNA sequencing. This is a joint project between [CRG bioinformatics core](https://biocore.crg.eu/) and [Epitranscriptomics and RNA Dynamics research group](https://www.crg.eu/en/programmes-groups/novoa-lab).  
