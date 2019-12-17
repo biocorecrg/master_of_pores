@@ -35,24 +35,24 @@ The MasterOfPores workflow includes all steps needed to process raw FAST5 files 
 This module takes as input the raw Fast5 reads and produces as output base-called FASTQ and BAM. The pre-processing module performs base-calling, demultiplexing, filtering, quality control and mapping, generating a final report of the performance and results of each of the steps performed.
 The NanoPreprocess module comprises 8 main steps:
 
-- 1. *Read base-calling* with the algorithm of choice, using Albacore (https://nanoporetech.com) or Guppy (https://nanoporetech.com). This step can be run in parallel and the user can decide the number of files to be processed in a single job by using the command --granularity. 
-- 2. *Filtering* of the resulting fastq files using Nanofilt (https://github.com/wdecoster/nanofilt). This step is optional and can be run in parallel.
-- 3. *Demultiplexing* of the fastq files using DeePlexiCon (https://github.com/Psy-Fer/deeplexicon). This step is optional, and can only be used if the libraries have been barcoded using the oligonucleotides used to train the deep neural classifier. 
-- 4. *Quality control* of the base-called data using MinIONQC (https://github.com/roblanf/minion_qc) and FastQC (http://www.bioinformatics.babraham.ac.uk/projects/fastqc).
-- 5. *Read mapping* to the reference genome or transcriptome using minimap2 (https://github.com/lh3/minimap2) or graphmap2 (https://github.com/lbcb-sci/graphmap2). 
-- 6. Quality control on the alignment using NanoPlot (https://github.com/wdecoster/NanoPlot) and bam2stats (https://github.com/lpryszcz/bin).
-- 7. *Isoform quantification* using HTSeq  (https://htseq.readthedocs.io/) or NanoCount (https://github.com/a-slide/NanoCount) which estimates transcript abundance using an expectation-maximization algorithm. Of note, NanoCount can only be run if the reads have been mapped to the transcriptome, using the flag --reference_type transcriptome. By default, reads are mapped to the genome and HTSeq is used to quantify per-gene counts. 
-- 8. *Final report* of the data processing using multiQC (https://github.com/ewels/MultiQC) that combines the single quality controls done previously, as well as global run statistics. 
+- 1. *Read base-calling* with the algorithm of choice, using ***Albacore*** (https://nanoporetech.com) or ***Guppy*** (https://nanoporetech.com). This step can be run in parallel and the user can decide the number of files to be processed in a single job by using the command --granularity. 
+- 2. *Filtering* of the resulting fastq files using ***Nanofilt*** (https://github.com/wdecoster/nanofilt). This step is optional and can be run in parallel.
+- 3. *Demultiplexing* of the fastq files using ***DeePlexiCon*** (https://github.com/Psy-Fer/deeplexicon). This step is optional, and can only be used if the libraries have been barcoded using the oligonucleotides used to train the deep neural classifier. 
+- 4. *Quality control* of the base-called data using ***MinIONQC*** (https://github.com/roblanf/minion_qc) and ***FastQC*** (http://www.bioinformatics.babraham.ac.uk/projects/fastqc).
+- 5. *Read mapping* to the reference genome or transcriptome using ***minimap2*** (https://github.com/lh3/minimap2) or ***Graphmap2*** (https://github.com/lbcb-sci/graphmap2). 
+- 6. Quality control on the alignment using ***NanoPlot*** (https://github.com/wdecoster/NanoPlot) and ***bam2stats*** (https://github.com/lpryszcz/bin).
+- 7. *Isoform quantification* using ***HTSeq***  (https://htseq.readthedocs.io/) or ***NanoCount*** (https://github.com/a-slide/NanoCount) which estimates transcript abundance using an expectation-maximization algorithm. Of note, NanoCount can only be run if the reads have been mapped to the transcriptome, using the flag --reference_type transcriptome. By default, reads are mapped to the genome and HTSeq is used to quantify per-gene counts. 
+- 8. *Final report* of the data processing using ***MultiQC*** (https://github.com/ewels/MultiQC) that combines the single quality controls done previously, as well as global run statistics. 
 
 - ### Module 2: *NanoTail* 
 This module takes as input the raw fast5 and produces polyA tail estimations using as input the raw fast5 reads
 
-The NanoPolyA module estimates polyA tail lengths using Nanopolish (https://github.com/jts/nanopolish) and Tailfindr (https://github.com/adnaniazi/tailfindr), producing a plain text file that includes polyA tail length estimates for each read, computed using both algorithms. 
+The NanoTail module estimates polyA tail lengths using ***Nanopolish*** (https://github.com/jts/nanopolish) and ***Tailfindr*** (https://github.com/adnaniazi/tailfindr), producing a plain text file that includes polyA tail length estimates for each read, computed using both algorithms. 
 
 - ### Module 3:  *NanoMod* 
 This module takes as input the raw FAST5 and BAM file generated during the pre-processing step, and produces a flat text file which includes the predicted RNA modifications.
 
-The NanoRNAmod module predicts RNA modifications using Tombo (https://github.com/nanoporetech/tombo) and EpiNano (https://github.com/enovoa/EpiNano), producing a plain text file that is intersection of predicted sites both algorithms, to reduce the number of false positives.  
+The NanoMod module predicts RNA modifications using ***Tombo*** (https://github.com/nanoporetech/tombo) and ***EpiNano*** (https://github.com/enovoa/EpiNano), producing a plain text file that is intersection of predicted sites both algorithms, to reduce the number of false positives.  
 
 ## Reference
 If you use this tool please cite our pre-print:
