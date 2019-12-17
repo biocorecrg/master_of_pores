@@ -54,7 +54,7 @@ This module takes as input the raw FAST5 and BAM file generated during the pre-p
 
 The NanoMod module predicts RNA modifications using ***Tombo*** (https://github.com/nanoporetech/tombo) and ***EpiNano*** (https://github.com/enovoa/EpiNano), producing a plain text file that is intersection of predicted sites both algorithms, to reduce the number of false positives.  
 
-## Reference
+## Citing this work
 If you use this tool please cite our pre-print:
 
 Parallel and scalable workflow for the analysis of Oxford Nanopore direct RNA sequencing datasets.
