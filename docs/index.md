@@ -44,12 +44,12 @@ The NanoPreprocess module comprises 8 main steps:
 - 7. *Isoform quantification* using HTSeq  (https://htseq.readthedocs.io/) or NanoCount (https://github.com/a-slide/NanoCount) which estimates transcript abundance using an expectation-maximization algorithm. Of note, NanoCount can only be run if the reads have been mapped to the transcriptome, using the flag --reference_type transcriptome. By default, reads are mapped to the genome and HTSeq is used to quantify per-gene counts. 
 - 8. *Final report* of the data processing using multiQC (https://github.com/ewels/MultiQC) that combines the single quality controls done previously, as well as global run statistics. 
 
-- ### Module 2: *NanoPolyA* 
+- ### Module 2: *NanoTail* 
 This module takes as input the raw fast5 and produces polyA tail estimations using as input the raw fast5 reads
 
 The NanoPolyA module estimates polyA tail lengths using Nanopolish (https://github.com/jts/nanopolish) and Tailfindr (https://github.com/adnaniazi/tailfindr), producing a plain text file that includes polyA tail length estimates for each read, computed using both algorithms. 
 
-- ### Module 3:  *NanoRNAmod* 
+- ### Module 3:  *NanoMod* 
 This module takes as input the raw FAST5 and BAM file generated during the pre-processing step, and produces a flat text file which includes the predicted RNA modifications.
 
 The NanoRNAmod module predicts RNA modifications using Tombo (https://github.com/nanoporetech/tombo) and EpiNano (https://github.com/enovoa/EpiNano), producing a plain text file that is intersection of predicted sites both algorithms, to reduce the number of false positives.  
