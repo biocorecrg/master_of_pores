@@ -8,25 +8,20 @@ ARG PICARD_VERSION=2.20.0
 ARG R_VERSION=3.6.0
 ARG NANOPOLISH_VERSION=v0.11.1
 ARG MINIMAP_VERSION=2.17
-ARG HTSEQ_VERSION=0.11.1
-ARG NANOCOUNT_VERSION=0.1.a4
 ARG TOMBO_VERSION=1.5 
 ARG ONTFAST5API_VERSION=1.4.4
 ARG TAILFINDR_VERSION=6865f84
 ARG SAMTOOLS_VERSION=1.4.1
+ARG EPINANO_VERSION=1.2
+ARG BEDTOOLS_VERSION=2.29.2
 
 #upgrade pip
-RUN pip install --upgrade pip
-
-#Installing HTSEQ
-RUN pip install numpy matplotlib  
-RUN pip install HTSEQ==${HTSEQ_VERSION}
-
-# Installing nanocount
-RUN pip install NanoCount==${NANOCOUNT_VERSION}
+RUN pip install -U pip
+RUN pip install --upgrade setuptools
 
 # Installing Tombo
-RUN pip install pyfaidx ont-tombo==${TOMBO_VERSION}
+RUN pip install pyfaidx numpy
+RUN pip install ont-tombo==${TOMBO_VERSION}
 
 # Installing samtools
 RUN yum install -y xz-devel.x86_64
@@ -64,18 +59,21 @@ RUN Rscript -e "BiocManager::install(c('Rsamtools'))"
 RUN Rscript -e "BiocManager::install(c('tidyr'))"
 RUN Rscript -e "devtools::install_github(\"adnaniazi/tailfindr\", dependencies=FALSE)"
 
-
-
 # Installing Nanopolish
 RUN yum install -y wget 
 RUN yum group install "Development Tools" -y
 RUN git clone --recursive https://github.com/jts/nanopolish.git
 RUN cd nanopolish; git checkout ${NANOPOLISH_VERSION}; make all
 
-# Installing modules
-RUN pip upgrade setuptools
-RUN pip install pyts numba sklearn tensorflow
+# Installing modules for EPINANO
+RUN pip install h5py numpy pandas sklearn
+RUN bash -c 'curl -k -L https://github.com/enovoa/EpiNano/archive/python3.tar.gz > epinano.tar.gz'
+RUN tar -zxvf epinano.tar.gz; chmod +x EpiNano-python3/scripts
+ENV PATH "/project/EpiNano-python3/scripts/:/project/nanopolish/:${PATH}" 
 
+# Installing BEDTOOLS
+RUN bash -c 'curl -k -L https://github.com/arq5x/bedtools2/releases/download/v${BEDTOOLS_VERSION}/bedtools.static.binary > /usr/local/bin/bedtools'
+RUN chmod +x /usr/local/bin/bedtools
 
 # Clean cache
 RUN yum clean all 

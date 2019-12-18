@@ -24,6 +24,7 @@ BIOCORE@CRG NanoTail. Detection of polyA length (RNA) - N F  ~  version ${versio
 
 *****************   Input files    *********************
 folderin                : ${params.folderin}
+comparison              : ${params.comparison}
 
 ******* reference has to be the transcriptome **********
 reference                : ${params.reference}
@@ -56,97 +57,112 @@ outputTailfindr     = "${params.output}/Tailfindr"
 outputNanoPolish    = "${params.output}/NanoPolish"
 outputFinal         = "${params.output}/PolyA_final"
 
+compfile = file(params.comparison)
+if( !compfile.exists() ) exit 1, "Missing comparison file: ${compfile}. Specify path with --comparisons"
+
+/*
+ * Creates the channels with comparisons
+ */
+ Channel
+    .from(compfile.readLines())
+    .map { line ->
+        list = line.split("\t")
+        if (list[0]!= "") {
+            sampleID = list[0]
+            ctrlID = list[1]
+            [ "${params.folderin}/${sampleID}", "${params.folderin}/${ctrlID}" ]
+        }
+    }
+    .into{ ids_to_tailfindr; id_to_fetch_bam}
+
 /*
  * Creates the channels that emits input data
- */
+
 Channel
     .fromFilePairs( params.folderin, type: 'dir', size: 1) 
     .ifEmpty { error "Cannot find any folder matching: ${params.folderin}" }
     .map {  
         sampleID = it[0]
         folderPath = it[1][0]
-        fast5 = file("${folderPath}/fast5_files")
-        fastq = file("${folderPath}/fastq_files/*")
-        alignment = file("${folderPath}/alignment/*")
-        [ sampleID, fast5, fastq, alignment ]
-    }.into{data_for_tailfindr; data_for_nanopolish}
- 
+        fast5 = "${folderPath}/fast5_files/"
+        fastq = "${folderPath}/fastq_files/"
+        alignment = "${folderPath}/alignment/"
+        [ sampleID, folderPath ]
+    }.set{data_for_folders}
+
+data_for_folders.cross(ids_to_compare).println()
+ */
+
 /*
-* Estimate polyA tail size with tailfindr
+ * Creates the channels that emits fast5 files
+ 
+Channel
+    .fromPath( params.fast5_sample)                                             
+    .ifEmpty { error "Cannot find any sample file matching: ${params.fast5_sample}" }
+    .set { fast5_sample_4_to_tail}
+
+Channel
+    .fromPath( params.fast5_control)                                             
+    .ifEmpty { error "Cannot find any control file matching: ${params.fast5_control}" }
+    .set { fast5_control_4_tail}
+
+// Get the name from the folder
+folder_sample_name = getFolderName(params.fast5_sample)
+folder_ctrl_name = getFolderName(params.fast5_control)
+
+// Get the channel for tail finder
+//data_sample_4_tails = tailFindrChannel(fast5_sample_4_to_tail, tailfinder, params.bam_sample, params.fastq_sample)
+//data_ctrl_4_tails = tailFindrChannel(fast5_control_4_tail, tailfinder, params.bam_control, params.fastq_control)
+
+data_sample_4_tails.mix(data_ctrl_4_tails).into{
+	data_4_tailfindr; data_4_nanopolish
+}
+
+/*
+* Estimate polyA tail size
 */
 
 process tailfindr {
-	publishDir outputTailfindr, pattern: "*_findr.csv",  mode: 'copy'
-	tag { sampleID }  
-	label 'big_mem_cpus_time'
+	publishDir outputPolyA, pattern: "*_findr.csv",  mode: 'copy'
+	tag { folder_name }  
+	label 'big_mem_cpus'
 	
 	input:
 	file(reference)
-	set val(sampleID), file(fast5), file(fastq), file(alignment) from data_for_tailfindr
+	set file(sample_fid), file(control_fid) from ids_to_tailfindr
 
 	output:
-	set val(sampleID), file("${sampleID}_findr.csv") into tailfindr_res
+	file("${folder_name}_findr.csv")
 
 	script:
 	"""
-	R --slave -e "library(tailfindr); find_tails(fast5_dir = './fast5_files' , save_dir = 'output', ${params.tailfindr_opt}, csv_filename = \'${sampleID}_findr.csv\', num_cores = ${task.cpus})"
+	R --slave -e "library(tailfindr); find_tails(fast5_dir = './' , save_dir = 'output', ${params.tailfinder}, csv_filename = \'${folder_name}_findr.csv\', num_cores = ${task.cpus})"
 	"""
 }
 
-/*
-* Estimate polyA tail size with nanopolish
-*/
 process tail_nanopolish {
-	publishDir outputNanoPolish, pattern: "*.polya.estimation.tsv",  mode: 'copy'
-	tag { sampleID }  
-	label 'big_mem_cpus_time'
+	publishDir outputPolyA, pattern: "*.polya.estimation.tsv",  mode: 'copy'
+	tag { folder_name }  
+	label 'big_mem_cpus'
 	
 	input:
 	file(reference)
-	set val(sampleID), file(fast5), file(fastq), file(alignment) from data_for_nanopolish
+	set folder_name, file(bam_file), file(fastq_file), file(fast5_files) from data_4_nanopolish
 
 	output:
-	set val(sampleID), file("${sampleID}.polya.estimation.tsv") into nanopol_res
+	file("${folder_name}.polya.estimation.tsv")
 
 	script:
+	def reference_cmd = unzipBash(reference)
 	"""
-    if [ `echo ${reference} | grep ".gz"` ]; then 
-        zcat ${reference} > `basename ${reference} .gz`
-        myreference=`basename ${reference} .gz`
-    else myreference=${reference}
-    fi
-	samtools index ${alignment}
+	#index bam
+	samtools index ${bam_file}
 	#index reads
-	nanopolish index -d ./ ${fastq}
+	nanopolish index -d ./ ${fastq_file}
 	# polya length estimation
-	nanopolish polya -r ${fastq} ${params.nanopolish_opt} -g \$myreference -t ${task.cpus} -b ${alignment} > ${sampleID}.polya.estimation.tsv
-	rm \$myreference
+	nanopolish polya -r ${fastq_file} ${params.tailfinder} -g ${reference_cmd} -t ${task.cpus} -b ${bam_file} > ${folder_name}.polya.estimation.tsv
 	"""
 } 
-
-/*
-process join_results {
-	publishDir outputFinal,  mode: 'copy'
-	tag { sampleID }  
-	label 'big_mem_cpus_time'
-	
-	input:
-	set val(sampleID), file(tail_res), file(nano_res) from tailfindr_res.join(nanopol_res)
-	
-	output:
-
-	script:
-	"""
-	"""
-	
-}
-
-
-/*
-* Merge the results
-*/
-
-
 
 /*
 * functions
@@ -157,6 +173,22 @@ def getFolderName(sample) {
    return folder_info[-2]
 }
 
+def tailFindrChannel(fast5s, tailfinder, bamfile, fastqfile) {
+    fast5_4_tailfindr =Channel.empty()
+    if (tailfinder == "nanopolish") {
+	    fast5s.map { 
+			[getFolderName(it), it]
+		}.groupTuple().map { 
+		[it[0], file(bamfile), file(fastqfile), it[1]]
+		}.set{ fast5_4_tailfindr}
+	} else {
+	    fast5s.map { 
+			[getFolderName(it), it]
+		}.groupTuple().set{ fast5_4_tailfindr}		
+	}
+	return fast5_4_tailfindr
+}
+
 // make named pipe 
 def unzipBash(filename) { 
     cmd = filename.toString()
@@ -165,8 +197,6 @@ def unzipBash(filename) {
     }
     return cmd
 }
-
-
 
 /*
 *  Finish message
