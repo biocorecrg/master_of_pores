@@ -75,6 +75,9 @@ ENV PATH "/project/EpiNano-python3/scripts/:/project/nanopolish/:${PATH}"
 RUN bash -c 'curl -k -L https://github.com/arq5x/bedtools2/releases/download/v${BEDTOOLS_VERSION}/bedtools.static.binary > /usr/local/bin/bedtools'
 RUN chmod +x /usr/local/bin/bedtools
 
+# Installing ont-fast5-api
+RUN pip install ont-fast5-api==${ONTFAST5API_VERSION}
+
 # Clean cache
 RUN yum clean all 
 

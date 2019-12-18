@@ -23,7 +23,7 @@ BIOCORE@CRG NanoTail. Detection of polyA length (RNA) - N F  ~  version ${versio
 ====================================================
 
 *****************   Input files    *********************
-folderin                : ${params.folderin}
+input_folders            : ${params.input_folders}
 
 ******* reference has to be the transcriptome **********
 reference                : ${params.reference}
@@ -60,17 +60,28 @@ outputFinal         = "${params.output}/PolyA_final"
  * Creates the channels that emits input data
  */
 Channel
-    .fromFilePairs( params.folderin, type: 'dir', size: 1) 
-    .ifEmpty { error "Cannot find any folder matching: ${params.folderin}" }
-    .map {  
+    .fromFilePairs( params.input_folders, type: 'dir', size: 1) 
+    .ifEmpty { error "Cannot find any folder matching: ${params.input_folders}" }
+    .into{folders_for_tailfindr; folders_for_nanopolish}
+    
+folders_for_nanopolish.map {  
         sampleID = it[0]
         folderPath = it[1][0]
         fast5 = file("${folderPath}/fast5_files")
         fastq = file("${folderPath}/fastq_files/*")
         alignment = file("${folderPath}/alignment/*")
         [ sampleID, fast5, fastq, alignment ]
-    }.into{data_for_tailfindr; data_for_nanopolish}
- 
+    }.set{data_for_nanopolish}
+
+folders_for_tailfindr.map {  
+        sampleID = it[0]
+        folderPath = it[1][0]
+        fast5 = file("${folderPath}/fast5_files")
+        fastq = file("${folderPath}/fastq_files/*")
+        alignment = file("${folderPath}/alignment/*")
+        [ sampleID, fast5, fastq ]
+    }.set{data_for_tailfindr}
+
 /*
 * Estimate polyA tail size with tailfindr
 */
@@ -81,15 +92,14 @@ process tailfindr {
 	label 'big_mem_cpus_time'
 	
 	input:
-	file(reference)
-	set val(sampleID), file(fast5), file(fastq), file(alignment) from data_for_tailfindr
+	set val(sampleID), file(fast5), file(fastq) from data_for_tailfindr
 
 	output:
 	set val(sampleID), file("${sampleID}_findr.csv") into tailfindr_res
 
 	script:
 	"""
-	R --slave -e "library(tailfindr); find_tails(fast5_dir = './fast5_files' , save_dir = 'output', ${params.tailfindr_opt}, csv_filename = \'${sampleID}_findr.csv\', num_cores = ${task.cpus})"
+	R --slave -e "library(tailfindr); find_tails(fast5_dir = './fast5_files' , save_dir = './', ${params.tailfindr_opt}, csv_filename = \'${sampleID}_findr.csv\', num_cores = ${task.cpus})"
 	"""
 }
 
@@ -115,11 +125,13 @@ process tail_nanopolish {
         myreference=`basename ${reference} .gz`
     else myreference=${reference}
     fi
-	samtools index ${alignment}
+    #to keep only mapped reads and remove secondary alignments 
+    samtools view -bF 260 ${alignment} > ${sampleID}.bam 
+	samtools index ${sampleID}.bam 
 	#index reads
 	nanopolish index -d ./ ${fastq}
 	# polya length estimation
-	nanopolish polya -r ${fastq} ${params.nanopolish_opt} -g \$myreference -t ${task.cpus} -b ${alignment} > ${sampleID}.polya.estimation.tsv
+	nanopolish polya -r ${fastq} ${params.nanopolish_opt} -g \$myreference -t ${task.cpus} -b ${sampleID}.bam > ${sampleID}.polya.estimation.tsv
 	rm \$myreference
 	"""
 } 
