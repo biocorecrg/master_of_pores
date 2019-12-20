@@ -96,6 +96,7 @@ outputQual     = "${params.output}/QC_files"
 outputMultiQC  = "${params.output}/report"
 outputMapping  = "${params.output}/alignment"
 outputCounts   = "${params.output}/counts"
+outputAssigned = "${params.output}/assigned"
 outputReport   = file("${outputMultiQC}/multiqc_report.html")
 
 /*
@@ -464,7 +465,8 @@ process mapping {
 if (params.count == "YES") {
 	process counting {
 		tag {"${idfile}"}  
-		publishDir outputCounts, mode: 'copy'
+		publishDir outputCounts, pattern: "*.count", mode: 'copy'
+		publishDir outputAssigned, pattern: "*.assigned", mode: 'copy'
 
 		input:
 		set idfile, file(bamfile) from aligned_reads_for_counts
@@ -472,17 +474,20 @@ if (params.count == "YES") {
 		output:
 		file("${idfile}.count") into read_counts
 		file("${idfile}.stats") optional true into count_stats
-
+		file("${idfile}.assigned") optional true
 		script:    
 		if (params.ref_type == "transcriptome") {
 			"""
 			NanoCount -i ${bamfile} -o ${idfile}.count ${counter_opt};
 	awk '{sum+=\$3}END{print FILENAME"\t"sum}' ${idfile}.count |sed s@.count@@g > ${idfile}.stats
+	samtools view -F 256 ${bamfile} |cut -f 1,3 > ${idfile}.assigned
 			"""
 		} else if (params.ref_type == "genome") {
 			def anno = unzipBash(annotation) 
 			"""
-			samtools view ${bamfile} |htseq-count -f sam - ${anno} > ${idfile}.count 
+			samtools view ${bamfile} |htseq-count -f sam - ${anno} -o ${idfile}.sam > ${idfile}.count
+			awk '{gsub(/XF:Z:/,"",\$NF); print \$1"\t"\$NF}' ${idfile}.sam |grep -v '__' > ${idfile}.assigned
+			rm ${idfile}.sam
 			"""		
 		}
 	}

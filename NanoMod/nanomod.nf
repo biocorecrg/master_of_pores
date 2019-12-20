@@ -22,15 +22,15 @@ log.info """
 BIOCORE@CRG NanoDirectRNA. Detection of modification and polyA length (RNA) - N F  ~  version ${version}
 ====================================================
 
-*****************   Input files    *********************
+*****************   Input files    *******************
 folderin                : ${params.folderin}
 comparison              : ${params.comparison}
 
-*********** reference has to be the transcriptome ***************
+********** reference has to be the genome *************
 reference                : ${params.reference}
 output                   : ${params.output}
 
-********** tombo and epinano are currently supported ************
+************* tombo and epinano params ***************
 tombo_opt                 : ${params.tombo_opt}
 epinano_opt               : ${params.epinano_opt}
 
@@ -47,6 +47,10 @@ if( !reference.exists() ) exit 1, "Missing reference file: ${reference}!"
 //config_report = file("$baseDir/config.yaml")
 //if( !config_report.exists() ) exit 1, "Missing config.yaml file!"
 logo = file("$baseDir/../docs/logo_small.png")
+
+model_folder = file("$baseDir/models/")
+if( !model_folder.exists() ) exit 1, "Missing folders with EpiNano's models!"
+
 
 tombo_opt    	= params.tombo_opt
 epinano_opt     = params.epinano_opt
@@ -76,17 +80,20 @@ if( !compfile.exists() ) exit 1, "Missing comparison file: ${compfile}. Specify 
     .map { line ->
         list = line.split("\t")
         if (list[0]!= "") {
-            sampleID = list[0]
-            ctrlID = list[1]
+            def sampleID = list[0]
+            def ctrlID = list[1]
             [ sampleID, ctrlID ]
         }
     }
-    .into{ id_to_tombo_fast5; id_to_tombo_idx; id_to_epinano; id_to_resquiggling}
+    .into{ id_to_tombo_fast5; id_to_tombo_idx; id_to_epinano; id_for_resquiggling}
 
-id_to_resquiggling.flatten().unique().map {
-    filepath = file("${params.folderin}/${it}/fast5_files/*")
-    [it, filepath]
+id_for_resquiggling.flatten().unique().map {
+    [it, file("${params.folderin}/${it}/fast5_files/*.fast5")]
 }.transpose().set{fast5_for_resquiggling}
+
+id_to_epinano.flatten().unique().map {
+    [it, file("${params.folderin}/${it}/alignment/*.bam")]
+}.transpose().set{bams_for_variant_calling}
 
 /*
 * Perform resquiggling
@@ -115,7 +122,7 @@ process resquiggling {
     rm ./filename_mapping.txt; 
     mv ./*/*.fast5 ${infolder};
     # resquiggling
-    tombo resquiggle ${infolder} ${reference} --rna --processes ${task.cpus} --overwrite --failed-reads-filename ${infolder}.resquiggle.failed.tsv 
+    tombo resquiggle ${infolder} ${tombo_opt} ${reference} --rna --processes ${task.cpus} --overwrite --failed-reads-filename ${infolder}.resquiggle.failed.tsv 
     """
 }
 
@@ -136,7 +143,9 @@ id_to_tombo_idx.combine(grouped_indexes_A, by: 0).map {
 	[ "${it[1]}--${it[0]}", it[2], it[3] ]
 }.set{idx_for_tombo_modifications}
 
-fast5_for_tombo_modifications.combine(idx_for_tombo_modifications, by: 0).set{data_for_tombo_modifications}
+fast5_for_tombo_modifications.println()
+
+//.combine(idx_for_tombo_modifications, by: 0).set{data_for_tombo_modifications}
 
 /*
 * detect modification 
@@ -175,12 +184,9 @@ process getModifications {
 
 /*
 * Perform preprocessing for Epinano
+*/
 
 process index_reference {
-
-	when:
-	modfinder == "epinano"
-    file(reference)
 
     input:
     file(reference)
@@ -199,7 +205,69 @@ process index_reference {
 	samtools faidx reference.fa
 	"""
 }
+
+/*
+* Calling variants for Epinano
 */
+
+process call_variants {
+
+    tag {"${sampleID}"}  
+	
+    input:
+    set val(sampleID), file(alnfile) from bams_for_variant_calling
+    set file(reference), file(dict_index), file(faiidx) from indexes
+
+    output:
+    set sampleID, file("${sampleID}.tsv") into variants_for_frequency
+   
+    script:
+	"""
+	samtools view -h ${alnfile} -F 256 | \$SAM2TSV -r ${reference} >${sampleID}.tsv
+	"""
+}
+
+/*
+* 
+*/
+
+process calc_var_frequencies {
+
+    tag {"${sampleID}"}  
+    label 'big_mem_cpus'
+	
+    input:
+    set val(sampleID), file(tsvfile) from variants_for_frequency
+    
+    output:
+    set val(sampleID), file("*per_site_var.5mer.csv") into per_site_vars
+   
+    script:
+	"""
+	TSV_to_Variants_Freq.py3 -f ${tsvfile} -t ${task.cpus}
+	"""
+}
+
+/*
+* 
+*/
+
+process predict_with_EPInano {
+
+    tag {"${sampleID}"}  
+    label 'big_mem_cpus'
+    file(model_folder)
+	
+    input:
+    set val(sampleID), file(per_site_var) from per_site_vars
+   
+    script:
+	"""
+	SVM.py -a -M ${model_folder}/model2.1-mis3.del3.q3.poly.dump -p ${per_site_var} -cl 7,12,22 ${params.epinano_opt} -o ${sampleID}.prediction
+	"""
+}
+
+
 
 
 
@@ -261,9 +329,13 @@ def unzipFile(zipfile, filename) {
 *  Finish message
 */
 workflow.onComplete {
-    println "Pipeline completed at: $workflow.complete"
+    println "Pipeline BIOCORE@CRG Master of Pore completed!"
+    println "Started at  $workflow.start" 
+    println "Finished at $workflow.complete"
+    println "Time elapsed: $workflow.duration"
     println "Execution status: ${ workflow.success ? 'OK' : 'failed' }"
 }
+
 
 /*
  * Mail notification

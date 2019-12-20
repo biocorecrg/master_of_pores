@@ -68,7 +68,8 @@ RUN cd nanopolish; git checkout ${NANOPOLISH_VERSION}; make all
 # Installing modules for EPINANO
 RUN pip install h5py numpy pandas sklearn
 RUN bash -c 'curl -k -L https://github.com/enovoa/EpiNano/archive/python3.tar.gz > epinano.tar.gz'
-RUN tar -zxvf epinano.tar.gz; chmod +x EpiNano-python3/scripts
+RUN tar -zxvf epinano.tar.gz; 
+RUN chmod +x /project/EpiNano-python3/scripts/*
 ENV PATH "/project/EpiNano-python3/scripts/:/project/nanopolish/:${PATH}" 
 
 # Installing BEDTOOLS
