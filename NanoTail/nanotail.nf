@@ -47,6 +47,8 @@ if( !reference.exists() ) exit 1, "Missing reference file: ${reference}!"
 config_report = file("$baseDir/config.yaml")
 if( !config_report.exists() ) exit 1, "Missing config.yaml file!"
 logo = file("$baseDir/../docs/logo_small.png")
+joinScript = file("$baseDir/bin/join.r")
+
 
 nanopolish_opt 	   = params.nanopolish_opt
 tailfindr_opt      = params.tailfindr_opt
@@ -226,10 +228,14 @@ process join_results {
 	
 	input:
 	set val(sampleID), file(nanopol), file(tailfindr), file(genes) from nanopol_len.join(tailfindr_len).join(genes_for_final)
+	file(joinScript)
+	
+	output:
+	file("${sampleID}_*")
 	
 	script:
 	"""
-	echo ciao
+	Rscript --vanilla join.r ${tailfindr} ${nanopol} ${genes} ${sampleID}
 	"""
 	
 }

@@ -66,7 +66,7 @@ RUN git clone --recursive https://github.com/jts/nanopolish.git
 RUN cd nanopolish; git checkout ${NANOPOLISH_VERSION}; make all
 
 # Installing modules for EPINANO
-RUN pip install h5py numpy pandas sklearn
+RUN pip install h5py==2.8.0 numpy==1.15.4 pandas==0.23.4 scikit-learn==0.20.2
 RUN bash -c 'curl -k -L https://github.com/enovoa/EpiNano/archive/python3.tar.gz > epinano.tar.gz'
 RUN tar -zxvf epinano.tar.gz; 
 RUN chmod +x /project/EpiNano-python3/scripts/*
