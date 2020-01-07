@@ -1,6 +1,6 @@
-title: Biocore's RNAseq course 2019
-description: Some description
-url: "https://biocorecrg.github.io/RNAseq_course_2019/" 
+title: Master of Pores
+description: Nextflow pipeline for analysis of Nanopore data from direct RNA sequencing.
+url: "https://biocorecrg.github.io/master_of_pores/" 
 
 # Build settings
 markdown: kramdown
