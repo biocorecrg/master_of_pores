@@ -134,7 +134,7 @@ folder_name = folder_info[-2]
 */
 params.barcodekit = ""
 
-if (demultiplexer != "" && demultiplexer != "deeplexicon")
+if (demultiplexer != "" && demultiplexer != "OFF" && demultiplexer != "deeplexicon")
 exit 1, "Demultiplexing of RNA can be performed only with deeplexicon. Current value is ${demultiplexer}"
 
 if (params.GPU == "YES" && basecaller != "guppy")
@@ -276,7 +276,7 @@ process baseCalling {
 */
 if(demultiplexer == "deeplexicon") {
 	process demultiplexing_with_deeplexicon {
-		label 'basecall_cpus'
+		label 'demult'
    	    tag {"${demultiplexer}-${idfile}"}  
 				
 		input:

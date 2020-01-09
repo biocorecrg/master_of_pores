@@ -1,8 +1,3 @@
-findr	<- "test2ko.findr.len"
-nanopol	<- "test2ko.nanopol.len"
-assigned <- "test2ko.assigned"
-prefix = "test2ko"
-
 # R --slave --args findr nanopol assigned prefix < join.r
 
 args<-commandArgs(TRUE)
@@ -33,8 +28,16 @@ y<-e[,3]
 data.lm<-lm(y ~ x)
 rsquared<-round(summary(data.lm)$r.squared, 2)
 
-subtitle=bquote(R^2 == .(rsquared))
-pdf(paste0(prefix, "_corr.pdf"))
-plot(x, y, xlab="TailfindR", ylab="Nanopolish", ylim=c(0,10), xlim=c(0,10), pch=19, frame=FALSE, main=prefix, sub=subtitle)
+rsquare=bquote(R^2 == .(rsquared))
+
+subtitle=expression('PolyA tail length estimation log'[2]*'(n+1)')
+
+png(paste0(prefix, "_corr.png"), width = 1600, height = 1200)
+op <- par(mar=c(8, 8, 8, 8) + 0.1)
+plot(x, y, xlab="TailfindR", ylab="Nanopolish", ylim=c(0,10), xlim=c(0,10), cex=.2, cex.lab=2, cex.sub=2,, cex.main=3, cex.axis=2, pch=19, col = rgb(red = 0, green = 0, blue = 0, alpha = 0.5), frame=FALSE, main=prefix)
+mtext(side=3, line=0, at=6.5, adj=1, cex=2, subtitle)
+mtext(side=3, line=-65, at=10, adj=1, cex=2, rsquare)
+
+par(op)
 abline(data.lm, col = "blue")
 dev.off()

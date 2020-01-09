@@ -23,7 +23,7 @@ BIOCORE@CRG NanoDirectRNA. Detection of modification and polyA length (RNA) - N 
 ====================================================
 
 *****************   Input files    *******************
-folderin                : ${params.folderin}
+input_folders           : ${params.input_folders}
 comparison              : ${params.comparison}
 
 ********** reference has to be the genome *************
@@ -32,7 +32,10 @@ output                   : ${params.output}
 
 ************* tombo and epinano params ***************
 tombo_opt                 : ${params.tombo_opt}
+tombo_score               : ${params.tombo_score}
+
 epinano_opt               : ${params.epinano_opt}
+epinano_score             : ${params.epinano_score}
 
 email                     : ${params.email}
 """
@@ -56,8 +59,9 @@ tombo_opt    	= params.tombo_opt
 epinano_opt     = params.epinano_opt
 
 // Output folders
-outputtombo   = "${params.output}/tombo"
+outputtombo   = "${params.output}/Tombo"
 outputEpinano      = "${params.output}/Epinano"
+outputCombined      = "${params.output}/Comb_mod"
 //outputReport   = file("${outputMultiQC}/multiqc_report.html")
 
 /*
@@ -87,12 +91,35 @@ if( !compfile.exists() ) exit 1, "Missing comparison file: ${compfile}. Specify 
     }
     .into{ id_to_tombo_fast5; id_to_tombo_idx; id_to_epinano; id_for_resquiggling}
 
+/*
+ * Creates the channels with samples and KOs for EpiNano
+ */
+ Channel
+    .from(compfile.readLines())
+    .map { line ->
+        list = line.split("\t")
+        if (list[0]!= "") {
+            list[0] 
+        }
+    }
+    .set{ samples_for_epinano_filtering }
+
+ Channel
+    .from(compfile.readLines())
+    .map { line ->
+        list = line.split("\t")
+        if (list[1]!= "") {
+            list[1] 
+        }
+    }
+    .set{ ko_for_epinano_filtering }
+
 id_for_resquiggling.flatten().unique().map {
-    [it, file("${params.folderin}/${it}/fast5_files/*.fast5")]
+    [it, file("${params.input_folders}/${it}/fast5_files/*.fast5")]
 }.transpose().set{fast5_for_resquiggling}
 
 id_to_epinano.flatten().unique().map {
-    [it, file("${params.folderin}/${it}/alignment/*.bam")]
+    [it, file("${params.input_folders}/${it}/alignment/*.bam")]
 }.transpose().set{bams_for_variant_calling}
 
 /*
@@ -122,7 +149,7 @@ process resquiggling {
     rm ./filename_mapping.txt; 
     mv ./*/*.fast5 ${infolder};
     # resquiggling
-    tombo resquiggle ${infolder} ${tombo_opt} ${reference} --rna --processes ${task.cpus} --overwrite --failed-reads-filename ${infolder}.resquiggle.failed.tsv 
+    tombo resquiggle ${infolder} ${reference} --rna --processes ${task.cpus} --overwrite --failed-reads-filename ${infolder}.resquiggle.failed.tsv 
     """
 }
 
@@ -143,9 +170,7 @@ id_to_tombo_idx.combine(grouped_indexes_A, by: 0).map {
 	[ "${it[1]}--${it[0]}", it[2], it[3] ]
 }.set{idx_for_tombo_modifications}
 
-fast5_for_tombo_modifications.println()
-
-//.combine(idx_for_tombo_modifications, by: 0).set{data_for_tombo_modifications}
+fast5_for_tombo_modifications.combine(idx_for_tombo_modifications, by: 0).set{data_for_tombo_modifications}
 
 /*
 * detect modification 
@@ -161,7 +186,7 @@ process getModifications {
     set val(combID), file(fast5s_A), file(fast5s_B), file(index_A), file(index_B) from data_for_tombo_modifications
     
     output:
-    file ("*.significant_regions.fasta") into sign_regions
+    file ("*.significant_regions.fasta") into sign_tombo_regions
 
     script:
 	def reference_cmd = unzipFile(reference, "reference.fa")
@@ -176,7 +201,7 @@ process getModifications {
 	mv ${fast5s_B} ${folder_name_B}
 	mv ${index_B} ${folder_name_B}
 	tombo detect_modifications model_sample_compare --fast5-basedirs ${folder_name_A}/* --control-fast5-basedirs ${folder_name_B}/* --statistics-file-basename ${folder_name_A}_${folder_name_B}_model_sample_compare --rna --per-read-statistics-basename ${folder_name_A}_${folder_name_B}_per-read-statistics --processes ${task.cpus}
-	tombo text_output signif_sequence_context --statistics-filename ${folder_name_A}_${folder_name_B}_model_sample_compare.tombo.stats  --genome-fasta reference.fa --fast5-basedirs ${folder_name_A} --sequences-filename ${folder_name_A}_${folder_name_B}.significant_regions.fasta 
+	tombo text_output signif_sequence_context ${tombo_opt} --num-regions 1000000000 --statistics-filename ${folder_name_A}_${folder_name_B}_model_sample_compare.tombo.stats  --genome-fasta reference.fa --fast5-basedirs ${folder_name_A} --sequences-filename ${folder_name_A}_${folder_name_B}.significant_regions.fasta 
 	rm reference.fa
 	"""
 }
@@ -255,19 +280,73 @@ process calc_var_frequencies {
 process predict_with_EPInano {
 
     tag {"${sampleID}"}  
-    label 'big_mem_cpus'
+    label 'big_mem_cpus_2'
     file(model_folder)
 	
     input:
     set val(sampleID), file(per_site_var) from per_site_vars
-   
+
+    output:
+    file("*.dump.csv") into epi_predictions
+  
     script:
 	"""
-	SVM.py -a -M ${model_folder}/model2.1-mis3.del3.q3.poly.dump -p ${per_site_var} -cl 7,12,22 ${params.epinano_opt} -o ${sampleID}.prediction
+	SVM.py -M ${model_folder}/model2.1-mis3.del3.q3.poly.dump -p ${per_site_var} -cl 7,12,22 ${params.epinano_opt} -o ${sampleID}.prediction
 	"""
 }
 
 
+
+/*
+* 
+*/
+
+process cross_tombo_pred {
+	publishDir outputtombo,  mode: 'copy'
+
+    label 'big_mem_cpus_2'
+	
+    input:
+    file(sign_tombo_region) from sign_tombo_regions.collect()
+
+    output:
+    file("tombo_all.txt")
+
+    script:
+	"""
+	intersect_tombo.py fasta ${params.tombo_score} tombo_all.txt
+	"""
+
+}
+
+
+/*
+* 
+*/
+
+process filter_EPInano_pred {
+	publishDir outputEpinano,  mode: 'copy'
+
+    label 'big_mem_cpus_2'
+	
+    input:
+    file(epi_prediction) from epi_predictions.collect()
+    val(samples_epi) from samples_for_epinano_filtering.collect()
+    val(kos) from ko_for_epinano_filtering.collect()
+       
+    output:
+    file("output_epi.txt")
+
+    script:
+    def sample_list = samples_epi.join(' -w ')
+    def ko_list = kos.join(' -k ')
+
+	"""
+	for i in *.prediction.*; do ln -s \$i `echo \$i| awk -F "." '{print \$1}'`; done
+	final.py -k ${ko_list} -w ${sample_list} -c ${params.epinano_score} -o output_epi_raw.txt -m [AG][AG]AC[ACT] 
+	grep "YES" output_epi_raw.txt > output_epi.txt
+	"""
+}
 
 
 
