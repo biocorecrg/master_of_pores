@@ -48,7 +48,7 @@ mapper_opt                : ${params.mapper_opt}
 map_type                  : ${params.map_type}
 
 counter                   : ${ params.counter}
-counter_opt               : ${ params.counterer_opt}
+counter_opt               : ${ params.counter_opt}
 
 email                     : ${params.email}
 """
@@ -86,7 +86,7 @@ demultiplexer 		= params.demultiplexing
 demultiplexer_opt   = params.demultiplexing_opt
 mapper      		= params.mapper
 mapper_opt   		= params.mapper_opt
-counter_opt   		=  params.counterer_opt 
+counter_opt   		= params.counterer_opt 
 
 
 // Output folders
