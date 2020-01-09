@@ -9,7 +9,48 @@ navigation: 5
 The simplest option is running an EC2 instance interactively where the pipeline can be installed as pointed in the previous documentation pages.
 
 Last available Amazon Machine (AMI) we provide is:
-* **ami-06da745a6b33715f1** (Ubuntu 18.04, CUDA compatible, Docker 19.x and Singularity 3.2.1 preinstalled)
+* **ami-0bf3a9a6cb7a5ea9f** (Ubuntu 18.04, CUDA compatible, Docker 19.x, Singularity 3.2.1 and Nextflow 19.10 preinstalled)
+
+When running an instance among the different [available ones](https://aws.amazon.com/ec2/instance-types/), minimum CPU and memory requirements must be taken into account. These must fit with Nextflow executor process configuration parameter values.
+
+Keep in mind that not all [Amazon infrastructure regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) may have the same instance types. As a example, in January 2020 Frankfurt has GPU nodes, but not Paris. 
+
+Launch an instane from the AMI image above (Go to Images > AMI and copy-paste the ID provided above filtering by public images).
+
+Therefore, you can connect to your EC2 instance using the command below:
+
+    ssh -i "key-nf.pem" ubuntu@xxx.eu-central-1.compute.amazonaws.com
+    
+where ```key-nf.pem``` is your private key ([reference](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)) and host details can be obtained from Connect popup in EC2 instances dashboard.
+
+### Terraform
+
+For sake of commodity, you may prefer to automate deployment of EC2 instances and S3 buckets. Terraform is a convenient tool for this.
+
+Place [terraform](https://www.terraform.io/downloads.html) binary in your local workstation path and move where your are keeping your tf files. Examples are provided in the terraform base directory of this repository.
+
+Adapt terraform configuration files to include your credentials, use your chosen instance types, which key pair they are associated with, or whether allow files in S3 bucket to be kept or not (```force_destroy``` parameter).
+
+Initialize terraform directory:
+
+    terraform init
+    
+Validate terraform files:
+
+    terraform validate
+    
+Inspect what changes are going to be performed in your AWS account:
+
+    terraform plan
+    
+Proceed:
+    
+    terraform apply
+    
+Once analyses are finished, infrastructure can be dismantled with:
+
+    terraform destroy
+    
 
 ### Share files in Amazon S3
 
@@ -25,17 +66,15 @@ You can include in ```/etc/fstab``` the following mounting point (adapt accordin
 
     frankfurt-nf    /mnt/frankfurt-nf fuse.s3fs _netdev,allow_other,passwd_file=/root/.passwd-s3fs,uid=1000,gid=1000   0 0
 
+If not mounted, you can mount it therefore straightforward by running:
 
-### Terraform
-
-Place [terraform](https://www.terraform.io/downloads.html) binary in your path
+    sudo mount /mnt/frankfurt-nf
     
-    terraform init
-    terraform validate
-    terraform plan
-    terraform apply
+Adapt your S3 bucket and mounting point names according to your choice.
+
+Specially for huge amount of data, we suggest to use [AWS CLI](https://aws.amazon.com/cli/) to transfer files from your premises to a S3 Bucket ([Ref](https://docs.aws.amazon.com/en_us/cli/latest/userguide/cli-services-s3.html)). For instance, the commandline below uploads the data example file in a pre-existing bucket.
+
+    aws s3 cp  multifast5_1.fast5 s3://frankfurt-nf
+
+
     
-
-Connect to your EC2 instance:
-
-    ssh -i "key-nf.pem" ubuntu@xxx.eu-central-1.compute.amazonaws.com

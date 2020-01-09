@@ -1,7 +1,7 @@
 
 resource "aws_instance" "computing" {
  
-  ami         = "ami-06da745a6b33715f1"
+  ami         = "ami-0bf3a9a6cb7a5ea9f"
   instance_type = "t2.micro"
   iam_instance_profile = "S3access"
   key_name = "key-nf"
