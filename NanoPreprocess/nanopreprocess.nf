@@ -47,8 +47,8 @@ mapper                    : ${params.mapper}
 mapper_opt                : ${params.mapper_opt}
 map_type                  : ${params.map_type}
 
-count                     : ${params.count}
-counter_opt               : ${params.counter_opt}
+counter                   : ${ params.counter}
+counter_opt               : ${ params.counterer_opt}
 
 email                     : ${params.email}
 """
@@ -86,7 +86,7 @@ demultiplexer 		= params.demultiplexing
 demultiplexer_opt   = params.demultiplexing_opt
 mapper      		= params.mapper
 mapper_opt   		= params.mapper_opt
-counter_opt   		= params.counter_opt 
+counter_opt   		=  params.counterer_opt 
 
 
 // Output folders
@@ -133,8 +133,11 @@ folder_name = folder_info[-2]
 * This is default value in case guppy will be used for RNA demultiplexing
 */
 params.barcodekit = ""
+if (demultiplexer == "") {
+	demultiplexer = "OFF"
+}
 
-if (demultiplexer != "" && demultiplexer != "OFF" && demultiplexer != "deeplexicon")
+if (demultiplexer != "OFF" && demultiplexer != "deeplexicon")
 exit 1, "Demultiplexing of RNA can be performed only with deeplexicon. Current value is ${demultiplexer}"
 
 if (params.GPU == "YES" && basecaller != "guppy")
@@ -196,7 +199,7 @@ process baseCalling {
     output:
     file ("${idfile}_out/workspace/*.fast5") optional true 
     set idfile, file ("${idfile}.*.gz") into fastq_files_for_demultiplexing, demulti_log
-    file ("${idfile}_out/sequencing_summary.txt") into seq_summaries
+    file ("${idfile}_out/sequencing_summary.txt") into seq_summaries optional true 
 
     script:
 	// conversion command if input is RNA - have to check if this is really needed
@@ -252,7 +255,7 @@ process baseCalling {
 				${multi_cmd}
 			"""
         }
-        else {
+        else  {
 			"""
             ${gpu_prefix}
 			guppy_basecaller ${gpu_cmd} --flowcell ${params.flowcell} --kit ${params.kit} --fast5_out ${basecaller_opt} --input ${infolder} --save_path ./${idfile}_out --cpu_threads_per_caller 1  --num_callers  ${task.cpus} 
@@ -262,9 +265,9 @@ process baseCalling {
 			${multi_cmd}
 			"""	
 		}	
-   } else {
-        """
- 		echo "nothing to do!"
+   } else if (demultiplexer == "OFF") {		
+		"""
+ 		fast5_to_fastq.py ${fast5}; mv *.fastq ${idfile}.fastq; gzip ${idfile}.fastq
         """
    }
 }
@@ -346,7 +349,7 @@ if (params.filter == "nanofilt") {
 
 fastq_for_next_step.map{
 	filepath=it[1]
-    if (demultiplexer != "") {
+    if (demultiplexer != "OFF") {
         fileparts = filepath.getName().tokenize(".")
  		["${folder_name}.${fileparts[-3]}", filepath]
 	} else {
@@ -467,7 +470,7 @@ process mapping {
 *  Perform counting (optional)
 */
 
-if (params.count == "YES") {
+if ( params.counter == "YES") {
 	process counting {
 		tag {"${idfile}"}  
 		publishDir outputCounts, pattern: "*.count", mode: 'copy'
