@@ -84,7 +84,8 @@ nextflow run nanopreprocess.nf -with-singularity -bg -resume > log.txt
 
 ### Results:
 
-Seven folders contains the results inside the folder specified by the **output** parameter:
+Seven folders are created by the pipeline within the output folder specified by the **output** parameter:
+
 1. fast5_files: contains the basecalled multisequence fast5 files. Each batch contains 4000 sequences. 
 1. fastq_files: contains one or, in case of demultiplexing, more fastq files.
 1. QC_files: contains each single QC produced by the pipeline.
@@ -121,7 +122,7 @@ This module allows to estimates polyA sizes by using two different methods. Data
 
 
 ### Results
-Three folders contains the results:
+Three folders are created by the pipeline within the output folder:
 1. NanoPolish: contains the output of *nanopolish* tool.
 1. Tailfindr: contains the output of *tailfindr* tool.
 1. PolyA_final: contains the txt files with the combined results (i.e. predicted polyA sizes). Here an example of a test:
@@ -166,7 +167,7 @@ WT3 KO3
 1. **email**
 
 ### Results
-Three folders contains the results:
+Three folders are produced by this module:
 
 1. Epinano, containing the results obtained with this method. You have a single file with already filtered modifications. 
 
@@ -178,7 +179,7 @@ geneA,192033,AGACC,11.0,1.849874054901369e-12,11.0,3.00000089999998e-14,YES
 geneA,192201,AGACA,14.0,0.01469732206992497,16.0,3.00000089999998e-14,YES
 ...
 ```
-2. Tombo, containing the results obtained with this method. You have one file for each comparison WT vs KO and a final one, **tombo_all.txt**, with the intersection after filtering per score. 
+2. Tombo, containing the results obtained with this method. You have one file for each comparison WT vs KO and a final one, **tombo_all.txt**, with the intersection after filtering per score. Here an example of tombo_all.txt file:
 
 ```bash
 >geneA:549289:+
@@ -190,7 +191,8 @@ TTTTT
 ...
 ```
 
-3. Comb_mod, containing the all the modifications found in Epinano and Tombo called **RNA_modifications.txt** and a Venn Diagram.
+3. Comb_mod, containing the all the modifications found in Epinano and Tombo called **RNA_modifications.txt** and a Venn Diagram. Here an example of RNA_modifications.txt file:
+
 
 ```bash
 "positions"	"epinano"	"tombo"
