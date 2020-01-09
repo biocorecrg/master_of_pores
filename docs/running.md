@@ -36,7 +36,28 @@ They will be basecalled and eventually demultiplexed and aligned to a reference 
 
 You can launch the pipeline choosing either the parameter **-with-singularity** or **-with-docker** depending on which containers you want to use:
 
-## Input files
+## Input Paramaters:
+
+1. **fast5 files**. Path to fast5 input files. They can contain either a single sequence or multiple ones. They should be inside a folder that will be used as sample name.
+1. **reference** file in fasta format. It can be either a genome or a transcriptome. this must be specified via **ref_type** parameter.
+1. **kit** and **flowcell** parameters needed for basecalling.
+1. **annotation** in GTF format. It is optional and needed only in case of mapping to the genome and when interested in gene counts. 
+1. **seq_type**, It can be either RNA or DNA.
+1. **output** output folder name
+1. **granularity** indicates the number of input fast5 files analyzed in a single process. It is by default 4000 for single-sequence fast5 files and 1 for multi-sequence fast5 files. In case **GPU** option is turned on this value is not needed since every file will be analyzed sequentially.
+1. **basecaller** program. guppy or albacore are supported.
+1. **basecaller_opt** command line options for basecaller program 
+1. **GPU** it allows using GPU or not. I can be either OFF or NO
+1. **demultiplexing** program. It is supported only deeplexicon. It can be turned off by specifying "OFF"
+1. **demultiplexing_opt** options for the demultiplexing program. 
+1. **filter** YES is filtering is needed with NanoFilter.   
+1. **filter_opt** options of the filtering program.   
+1. **mapper** it can be either minimap2 or graphmap2
+1. **mapper_opt**  options of the mapping program. 
+1. **map_type** it can be either spliced or not. In case the alignment is to a eukaryotic genome it should be spliced.
+1. **count** this parameter can be YES for counting the number of tags per gene (in case of mapping to the genome) or per transcript (in case of mapping to the transcriptome). An annotation file is needed in case of mapping to the genome.
+1. **counter_opt** options of the counter program: NanoCount for transcripts and Htseq-count for genes.
+1. **email** for receving a mail with the final report when the pipeline is finished
 
 ```
 cd master_of_pores/NanoPreprocess
