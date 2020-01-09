@@ -86,7 +86,7 @@ demultiplexer 		= params.demultiplexing
 demultiplexer_opt   = params.demultiplexing_opt
 mapper      		= params.mapper
 mapper_opt   		= params.mapper_opt
-counter_opt   		= params.counterer_opt 
+counter_opt   		= params.counter_opt 
 
 
 // Output folders
