@@ -276,7 +276,7 @@ process baseCalling {
 */
 if(demultiplexer == "deeplexicon") {
 	process demultiplexing_with_deeplexicon {
-		label 'demult'
+		label 'demulti'
    	    tag {"${demultiplexer}-${idfile}"}  
 				
 		input:
