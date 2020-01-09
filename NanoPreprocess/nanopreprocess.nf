@@ -161,7 +161,7 @@ process testInput {
     """
 }
 
-multi5_type.map {  it.trim().toInteger() }.into{multi5_type_for_msg; multi5_type_for_bc; multi5_type_for_granularity}
+multi5_type.map {  it.trim().toInteger() }.into{multi5_type_for_msg; multi5_type_for_bc; multi5_type_for_granularity; multi5_type_for_demultiplexing}
 multi5_type_for_msg.map{it == 0 ? "Single Fast5 files detected!": "MultiFast5 files detected!" }.println()
 
 // if you are using GPU analyse the whole dataset, otherwise make batch of 4,000 sequences if they are single fast5
@@ -276,11 +276,12 @@ process baseCalling {
 */
 if(demultiplexer == "deeplexicon") {
 	process demultiplexing_with_deeplexicon {
-		label 'demulti'
+		label 'basecall_cpus'
    	    tag {"${demultiplexer}-${idfile}"}  
 				
 		input:
     	set idfile, file(fast5) from fast5_4_demulti
+    	val (multi5) from multi5_type_for_bc
         file(deeplexicon_folder)
         
 		output:
@@ -288,9 +289,13 @@ if(demultiplexer == "deeplexicon") {
 
 		script:
 		def model = ''
+		def deep_option = 'multi'
+		if (multi5 == 0){
+			deep_option = 'single'
+		}
 		"""
 		    ln -s ${deeplexicon_folder}/* .
-            cmd_line_deeplexicon_caller_2019_09_12.py -p ./ ${demultiplexer_opt} -t multi -b 1000 -v > ${idfile}_demux.tsv
+            cmd_line_deeplexicon_caller_2019_09_12.py -p ./ ${demultiplexer_opt} -t ${deep_option} -b 1000 -v > ${idfile}_demux.tsv
  		"""
 	} 
 	
