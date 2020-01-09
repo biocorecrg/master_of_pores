@@ -2,7 +2,7 @@
 resource "aws_instance" "computing" {
  
   ami         = "ami-0bf3a9a6cb7a5ea9f"
-  instance_type = "t2.micro" // m4.large may be more suitable for the pipeline
+  instance_type = "t2.micro" // m4.2xlarge is suitable for the pipeline
   iam_instance_profile = "S3access"
   key_name = "key-nf"
   security_groups = [ "allow_ssh" ]
