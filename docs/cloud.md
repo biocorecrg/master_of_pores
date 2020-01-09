@@ -11,23 +11,23 @@ The simplest option is running an EC2 instance interactively where the pipeline 
 Last available Amazon Machine (AMI) we provide is:
 * **ami-0bf3a9a6cb7a5ea9f** (Ubuntu 18.04, CUDA compatible, Docker 19.x, Singularity 3.2.1 and Nextflow 19.10 preinstalled)
 
-When running an instance among the different [available ones](https://aws.amazon.com/ec2/instance-types/), minimum CPU and memory requirements must be taken into account. These must fit with Nextflow executor process configuration parameter values.
+When running an instance among the different [available types](https://aws.amazon.com/ec2/instance-types/), minimum CPU and memory requirements must be taken into account. These must fit with Nextflow executor process configuration values.
 
 Keep in mind that not all [Amazon infrastructure regions](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) may have the same instance types. As a example, in January 2020 Frankfurt has GPU nodes, but not Paris. 
 
-Launch an instane from the AMI image above (Go to Images > AMI and copy-paste the ID provided above filtering by public images).
+Launch an instane from the AMI image above (Go to EC2 > Images > AMI and copy-paste the ID provided above filtering in public images). Once you find that image, you can launch an instance from it.
 
-Therefore, you can connect to your EC2 instance using the command below:
+You can connect to the launched instance by using this command below:
 
     ssh -i "key-nf.pem" ubuntu@xxx.eu-central-1.compute.amazonaws.com
     
-where ```key-nf.pem``` is your private key ([reference](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)) and host details can be obtained from Connect popup in EC2 instances dashboard.
+where ```key-nf.pem``` is your private key ([reference](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)) and host details can be obtained from *Connect popup* in EC2 instances dashboard.
 
 ### Terraform
 
 For sake of commodity, you may prefer to automate deployment of EC2 instances and S3 buckets. Terraform is a convenient tool for this.
 
-Place [terraform](https://www.terraform.io/downloads.html) binary in your local workstation path and move where your are keeping your tf files. Examples are provided in the terraform base directory of this repository.
+Place [terraform](https://www.terraform.io/downloads.html) binary in your local workstation path and move where your are keeping your tf files. Examples are provided in the terraform directory of this repository.
 
 Adapt terraform configuration files to include your credentials, use your chosen instance types, which key pair they are associated with, or whether allow files in S3 bucket to be kept or not (```force_destroy``` parameter).
 
