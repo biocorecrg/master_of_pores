@@ -53,7 +53,7 @@ logo = file("$baseDir/../docs/logo_small.png")
 
 model_folder = file("$baseDir/models/")
 if( !model_folder.exists() ) exit 1, "Missing folders with EpiNano's models!"
-
+joinScript = file("$baseDir/bin/join.r")
 
 tombo_opt    	= params.tombo_opt
 epinano_opt     = params.epinano_opt
@@ -280,7 +280,7 @@ process calc_var_frequencies {
 process predict_with_EPInano {
 
     tag {"${sampleID}"}  
-    label 'big_mem_cpus_2'
+    label 'single_cpu_long'
     file(model_folder)
 	
     input:
@@ -304,13 +304,13 @@ process predict_with_EPInano {
 process cross_tombo_pred {
 	publishDir outputtombo,  mode: 'copy'
 
-    label 'big_mem_cpus_2'
+    label 'single_cpu'
 	
     input:
     file(sign_tombo_region) from sign_tombo_regions.collect()
 
     output:
-    file("tombo_all.txt")
+    file("tombo_all.txt") into tombo_output
 
     script:
 	"""
@@ -327,7 +327,7 @@ process cross_tombo_pred {
 process filter_EPInano_pred {
 	publishDir outputEpinano,  mode: 'copy'
 
-    label 'big_mem_cpus_2'
+    label 'single_cpu'
 	
     input:
     file(epi_prediction) from epi_predictions.collect()
@@ -335,20 +335,45 @@ process filter_EPInano_pred {
     val(kos) from ko_for_epinano_filtering.collect()
        
     output:
-    file("output_epi.txt")
+    file("output_epi.txt") into output_epinano
 
     script:
     def sample_list = samples_epi.join(' -w ')
     def ko_list = kos.join(' -k ')
+    def sample_n = samples_epi.size()
+    def ko_n = kos.size()
 
 	"""
 	for i in *.prediction.*; do ln -s \$i `echo \$i| awk -F "." '{print \$1}'`; done
-	final.py -k ${ko_list} -w ${sample_list} -c ${params.epinano_score} -o output_epi_raw.txt -m [AG][AG]AC[ACT] 
+	epinano_paired.py -k ${ko_list} -w ${sample_list} -dk ${ko_n} -dw ${sample_n} -c ${params.epinano_score} -o output_epi_raw.txt -m [AG][AG]AC[ACT] 
 	grep "YES" output_epi_raw.txt > output_epi.txt
 	"""
 }
 
+/*
+* 
+*/
 
+process join_results {
+	publishDir outputCombined,  mode: 'copy'
+    label 'single_cpu'
+	
+    input:
+    file(output_epinano)
+    file(tombo_output)
+ 	file(joinScript)
+   
+    output:
+    file("RNA_modifications.txt")
+    file("venn_diagram.png")
+
+    script:
+	"""
+	awk -F"," '{print \$1"-"\$2}' ${output_epinano} > epinano.txt
+	grep ">" ${tombo_output} | sed s@>@@g|awk -F ":" '{print \$1"-"\$2}' > tombo.txt
+	Rscript --vanilla ${joinScript} epinano.txt tombo.txt "RNA modifications" 
+	"""
+}
 
 
 

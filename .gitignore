@@ -1,8 +1,13 @@
+*/log*
+anno*
+*/rep*
+NanoPreprocess/preproc_data
+NanoPreprocess/wrong
 real_data
 NanoPreprocess/bin/guppy*
 NanoPreprocess/bin/ont-guppy*
 log
-output
+*/out*
 work
 singularity
 .nextflow*

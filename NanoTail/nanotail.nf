@@ -235,7 +235,7 @@ process join_results {
 	
 	script:
 	"""
-	Rscript --vanilla join.r ${tailfindr} ${nanopol} ${genes} ${sampleID}
+	Rscript --vanilla ${joinScript} ${tailfindr} ${nanopol} ${genes} ${sampleID}
 	"""
 	
 }
