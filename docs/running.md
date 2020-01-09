@@ -18,7 +18,7 @@ Each module relies on tools installed within linux containers which recipes are 
 Input files are either multifast5 or single fast5 files containing reads from direct RNA sequencing. 
 They will be basecalled and eventually demultiplexed and aligned to a reference sequence (genome or transcriptome).
 
-## Steps
+### Steps
  1. **testInput** Detection of kind of fast5 (multi or single)
  1. **baseCalling** Basecalling with *Albacore* or *Guppy*
  1. **demultiplexing_with_deeplexicon** Demultiplexing (optional) with **DeePlexiCon**
@@ -36,7 +36,7 @@ They will be basecalled and eventually demultiplexed and aligned to a reference 
 
 You can launch the pipeline choosing either the parameter **-with-singularity** or **-with-docker** depending on which containers you want to use:
 
-## Input Paramaters:
+### Input Parameters
 
 1. **fast5 files**. Path to fast5 input files. They can contain either a single sequence or multiple ones. They should be inside a folder that will be used as sample name.
 1. **reference** file in fasta format. It can be either a genome or a transcriptome. this must be specified via **ref_type** parameter.
@@ -50,7 +50,7 @@ You can launch the pipeline choosing either the parameter **-with-singularity** 
 1. **GPU** it allows using GPU or not. I can be either OFF or NO
 1. **demultiplexing** program. It is supported only deeplexicon. It can be turned off by specifying "OFF"
 1. **demultiplexing_opt** options for the demultiplexing program. 
-1. **filter** YES is filtering is needed with NanoFilter.   
+1. **filter** it can be NanoFilt or OFF is filtering is needed.
 1. **filter_opt** options of the filtering program.   
 1. **mapper** it can be either minimap2 or graphmap2
 1. **mapper_opt**  options of the mapping program. 
@@ -59,51 +59,6 @@ You can launch the pipeline choosing either the parameter **-with-singularity** 
 1. **counter_opt** options of the counter program: NanoCount for transcripts and Htseq-count for genes.
 1. **email** for receving a mail with the final report when the pipeline is finished
 
-```
-cd master_of_pores/NanoPreprocess
-
-nextflow run nanopreprocess.nf --help
-N E X T F L O W  ~  version 19.10.0
-Launching `nanopreprocess.nf` [thirsty_bassi] - revision: a857b134a2
-╔╦╗┌─┐┌─┐┌┬┐┌─┐┬─┐  ┌─┐┌─┐  ╔═╗╔═╗╦═╗╔═╗╔═╗
-║║║├─┤└─┐ │ ├┤ ├┬┘  │ │├┤   ╠═╝║ ║╠╦╝║╣ ╚═╗
-╩ ╩┴ ┴└─┘ ┴ └─┘┴└─  └─┘└    ╩  ╚═╝╩╚═╚═╝╚═╝
-                                                                                       
-====================================================
-BIOCORE@CRG Preprocessing of Nanopore direct RNA - N F  ~  version 0.1
-====================================================
-
-kit                       : SQK-RNA002
-flowcell                  : FLO-MIN106
-fast5                     : ../real_data/test1wt/*.fast5
-reference                 : ../anno/genome.fa.gz
-annotation                : ../anno/Saccharomyces_cerevisiae.R64-1-1.98.gtf.gz
-
-ref_type                  : genome
-seq_type                  : RNA
-
-output                    : test1
-qualityqc                 : 5
-granularity               : 
-
-basecaller                : guppy
-basecaller_opt            : 
-GPU                       : OFF
-demultiplexing            :  
-demultiplexing_opt        : -m pAmps-final-actrun_newdata_nanopore_UResNet20v2_model.030.h5 
-
-filter                    : 
-filter_opt                : 
-mapper                    : minimap2
-mapper_opt                : -uf -k14
-map_type                  : spliced
-
-count                     : YES
-counter_opt               : 
-
-email                     :
-
-```
 
 You can change them by editing the **params.config** file or using the command line (each param name needs to have the characters **--** before): 
 
@@ -129,13 +84,23 @@ nextflow run nanopreprocess.nf -with-singularity -bg -resume > log.txt
 
 ### Results:
 
+Seven folders contains the results inside the folder specified by the **output** parameter:
+1. fast5_files: contains the basecalled multisequence fast5 files. Each batch contains 4000 sequences. 
+1. fastq_files: contains one or, in case of demultiplexing, more fastq files.
+1. QC_files: contains each single QC produced by the pipeline.
+1. alignment: contains the bam file(s)
+1. counts: contains read counts per gene / transcript. It is optional.
+1. assigned: contains assignment of each read to a given gene / transcript. It is optional.
+1. report: contains the final multiqc report. 
+
 -----------------------------------------------------
 
 
 ## NanoTail
-Data produced by NanoPreprocess are needed for this module. 
+This module allows to estimates polyA sizes by using two different methods. Data produced by NanoPreprocess are needed and in particular the read counts / assignment must be given.
 
-Steps:
+### Steps
+
  1. **check_reference** It verifies whether the reference is zipped and eventually unzip it
  1. **tailfindr** it runs *tailfindr* tool in parallel.
  1. **collect_tailfindr_results** It collects the results of tailfindr.
@@ -144,7 +109,16 @@ Steps:
  1. **collect_nanopolish_results** It collects the results of tail_nanopolish. 
  1. **join_results** It merges the results from the two algorithms and make a plot of the correlation.
 
-....
+
+### Input Parameters
+
+1. **input_folders** path to the folders produced by NanoPreprocessing step.
+1. **nanopolish_opt** options for the nanopolish program
+1. **tailfindr_opt** options for the tailfindr program
+1. **reference** reference genome / transcriptome
+1. **output** folder
+1. **email** 
+
 
 ### Results
 Three folders contains the results:
@@ -159,10 +133,69 @@ Three folders contains the results:
 "0154ce9c-fe6b-4ebc-bbb1-517fdc524207"	24.05	24.24	"YFL044C"
 "020cde28-970d-4710-90a5-977e4b4bbc46"	41.27	56.79	"YGL238W"
 ```
-
+A plot is also produced for showing the correlation between the two methods.
 
 ## NanoMod
-Data produced by NanoPreprocess are needed for this module. 
+This module allows to predict the loci with RNA modifications. Data produced by NanoPreprocess are needed and in particular the reads must be aligned to the transcriptome.
 
-Finish writing usage
+### Steps
+1. **index_reference** index the reference file for Epinano
+1. **call_variants** uses Samtools for calling the variants for Epinano
+1. **calc_var_frequencies** it uses TSV_to_Variants_Freq.py3 for calculating the frequencies of each variants for Epinano
+1. **predict_with_EPInano** It predicts the modifications with Epinano
+1. **filter_EPInano_pred** It filers the results from Epinano using replicates if avialable
+1. **resquiggling** resquiggle fast5 files for Tombo
+1. **getModifications** it estimates the modifications using Tombo comparing WT vs KO
+1. **cross_tombo_pred** it gets the intersection between differen replicates
+1. **join_results** it gets the intersection between the Epinano and Tombo predictions
 
+### Input Parameters
+1. **input_folders** path to the folders produced by NanoPreprocessing step.
+1. **comparison** tab separated text file containing the list of comparison. Here an example:
+```bash
+WT1 KO1
+WT2 KO2
+WT3 KO3
+```
+1. **reference** reference transcriptome
+1. **output** folder
+1. **tombo_opt** options for tombo
+1. **epinano_opt** options for epinano
+1. **tombo_score** score for filtering reliable modifications (from 0.5 to 1)
+1. **epinano_score** coverage score for epinano for filtering reliable modifications (integer)  
+1. **email**
+
+### Results
+Three folders contains the results:
+
+1. Epinano, containing the results obtained with this method. You have a single file with already filtered modifications. 
+
+```bash
+geneA,126771,GAACT,5.0,0.7865299392210111,6.0,7.650999662942007e-06,YES
+geneA,139467,AGACA,26.0,1.2631007354786662e-05,34.0,9.22202894828834e-14,YES
+geneA,139625,AGACA,17.0,0.012299404049052885,20.0,4.64573431891912e-06,YES
+geneA,192033,AGACC,11.0,1.849874054901369e-12,11.0,3.00000089999998e-14,YES
+geneA,192201,AGACA,14.0,0.01469732206992497,16.0,3.00000089999998e-14,YES
+...
+```
+2. Tombo, containing the results obtained with this method. You have one file for each comparison WT vs KO and a final one, **tombo_all.txt**, with the intersection after filtering per score. 
+
+```bash
+>geneA:549289:+
+CTGAC
+>geneA:478105:+
+GAGCT
+>geneA:426607:-
+TTTTT
+...
+```
+
+3. Comb_mod, containing the all the modifications found in Epinano and Tombo called **RNA_modifications.txt** and a Venn Diagram.
+
+```bash
+"positions"	"epinano"	"tombo"
+"chrIX-290356"	"1"	"1"
+"chrX-274861"	"1"	"1"
+"chrXV-513509"	"1"	"1"
+"chrI-126771"	"1"	"0"
+```
