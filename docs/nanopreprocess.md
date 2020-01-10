@@ -9,7 +9,10 @@ navigation: 3
 This module takes as input the raw fast5 reads and produces a number of outputs (basecalled fast5, sequences in fastq format, aligned reads in BAM format etc). The pre-processing module performs base-calling, demultiplexing (optional), filtering, quality control, mapping to a genome / transcriptome reference, read counting and it generates a final report of the performance and results of each of the steps performed. It automatically detects the kinf of input fast5 file (single or multi sequence).
 
 
-## Steps
+## Workflow
+
+<img src="https://github.com/biocorecrg/master_of_pores/blob/master/docs/dag_graph3.png" width="600" align="middle">
+
 | Process name  | Description |
 | ------------- | ------------- |
 |**testInput**|Detection of kind of fast5 (multi or single)|
