@@ -1,9 +1,3 @@
----
-layout: page
-title: Running the pipeline
-navigation: 3
----
-
 # Running the pipeline
 The pipeline is composed of three different modules within three different folders:
 
