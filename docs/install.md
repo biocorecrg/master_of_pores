@@ -67,10 +67,12 @@ https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
 ### 6. Run the pipeline:
 Using Singularity:
 ```bash
+cd master_of_pores/NanoPreprocess/
 nextflow run preprocessing.nf -with-singularity
 ```
 Using Docker:
 ```bash
+cd master_of_pores/NanoPreprocess/
 nextflow run preprocessing.nf -with-docker
 ``` 
 

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Running on the cloud 
-navigation: 5
+navigation: 6
 ---
 
 ## Amazon Web Service EC2
@@ -77,4 +77,3 @@ Specially for huge amount of data, we suggest to use [AWS CLI](https://aws.amazo
     aws s3 cp  multifast5_1.fast5 s3://frankfurt-nf
 
 Modify your Nexflow configuration files in order to point your input files at the mounted S3 bucket. Both input and final output files can be placed in that mounted S3 storage, but we do not recommend that ```work``` Nextflow directory (containing pipeline intermediary files) is kept there, since it significatively delays the whole process. Choose a suitable disk size for your instance depending on the amount of data to be processed.
-    
