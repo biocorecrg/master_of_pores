@@ -2,7 +2,7 @@
 resource "aws_instance" "computing" {
  
   ami         = "ami-0bf3a9a6cb7a5ea9f"
-  instance_type = "m4.2xlarge"
+  instance_type = "m4.2xlarge" // We suggest p3.2xlarge for GPU processing
   iam_instance_profile = "S3access"
   key_name = "key-nf"
   security_groups = [ "allow_ssh" ]
