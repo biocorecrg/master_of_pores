@@ -37,12 +37,12 @@ You can launch the pipeline choosing either the parameter **-with-singularity** 
 | Parameter name  | Description |
 | ------------- | --------------|
 |**fast5 files**|Path to fast5 input files. They can contain either a single sequence or multiple ones. They should be inside a folder that will be used as sample name.|
-|**reference**|file in fasta format. It can be either a genome or a transcriptome. this must be specified via **ref_type**|parameter.|
-|**kit**|and **flowcell**|parameters needed for basecalling.|
+|**reference**|file in fasta format. It can be either a genome or a transcriptome. this must be specified via **ref_type** parameter.|
+|**kit**|and **flowcell** parameters needed for basecalling.|
 |**annotation**|in GTF format. It is optional and needed only in case of mapping to the genome and when interested in gene counts. |
 |**seq_type**| It can be either RNA or DNA.|
 |**output**|output folder name|
-|**granularity**|indicates the number of input fast5 files analyzed in a single process. It is by default 4000 for single-sequence fast5 files and 1 for multi-sequence fast5 files. In case **GPU**|option is turned on this value is not needed since every file will be analyzed sequentially.|
+|**granularity**|indicates the number of input fast5 files analyzed in a single process. It is by default 4000 for single-sequence fast5 files and 1 for multi-sequence fast5 files. In case **GPU** option is turned on this value is not needed since every file will be analyzed sequentially.|
 |**basecaller**|program. guppy or albacore are supported.|
 |**basecaller_opt**|command line options for basecaller program |
 |**GPU**|it allows using GPU or not. I can be either OFF or NO|
@@ -84,13 +84,13 @@ nextflow run nanopreprocess.nf -with-singularity -bg -resume > log.txt
 
 Seven folders are created by the pipeline within the output folder specified by the **output** parameter:
 
-* fast5_files: contains the basecalled multisequence fast5 files. Each batch contains 4000 sequences. 
-* fastq_files: contains one or, in case of demultiplexing, more fastq files.
-* QC_files: contains each single QC produced by the pipeline.
-* alignment: contains the bam file(s)
-* counts: contains read counts per gene / transcript. It is optional.
-* assigned: contains assignment of each read to a given gene / transcript. It is optional.
-* report: contains the final multiqc report. 
+* **fast5_files**: contains the basecalled multisequence fast5 files. Each batch contains 4000 sequences. 
+* **fastq_files**: contains one or, in case of demultiplexing, more fastq files.
+* **QC_files**: contains each single QC produced by the pipeline.
+* **alignment**: contains the bam file(s)
+* **counts**: contains read counts per gene / transcript. It is optional.
+* **assigned**: contains assignment of each read to a given gene / transcript. It is optional.
+* **report**: contains the final multiqc report. 
 
 -----------------------------------------------------
 
