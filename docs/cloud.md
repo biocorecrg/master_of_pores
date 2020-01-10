@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Running on the cloud 
-navigation:7
+navigation: 7
 ---
 
 ## Amazon Web Service EC2
