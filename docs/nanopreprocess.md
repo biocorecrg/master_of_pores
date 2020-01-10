@@ -50,7 +50,7 @@ You can launch the pipeline choosing either the parameter **-with-singularity** 
 |**mapper**|it can be either minimap2 or graphmap2|
 |**mapper_opt**| options of the mapping program. |
 |**map_type**|it can be either spliced or not. In case the alignment is to a eukaryotic genome it should be spliced.|
-|**count**|this parameter can be YES for counting the number of tags per gene (in case of mapping to the genome) or per transcript (in case of mapping to the transcriptome). An annotation file is needed in case of mapping to the genome.|
+|**counter**|this parameter can be YES for counting the number of tags per gene (in case of mapping to the genome) or per transcript (in case of mapping to the transcriptome). An annotation file is needed in case of mapping to the genome.|
 |**counter_opt**|options of the counter program: NanoCount for transcripts and Htseq-count for genes.|
 |**email**|for receving a mail with the final report when the pipeline is finished|
 
