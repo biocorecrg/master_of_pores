@@ -37,7 +37,7 @@ You can launch the pipeline choosing either the parameter **-with-singularity** 
 |**reference**|file in fasta format. It can be either a genome or a transcriptome. this must be specified via **ref_type**|parameter.|
 |**kit**|and **flowcell**|parameters needed for basecalling.|
 |**annotation**|in GTF format. It is optional and needed only in case of mapping to the genome and when interested in gene counts. |
-|**seq_type**, It can be either RNA or DNA.|
+|**seq_type**| It can be either RNA or DNA.|
 |**output**|output folder name|
 |**granularity**|indicates the number of input fast5 files analyzed in a single process. It is by default 4000 for single-sequence fast5 files and 1 for multi-sequence fast5 files. In case **GPU**|option is turned on this value is not needed since every file will be analyzed sequentially.|
 |**basecaller**|program. guppy or albacore are supported.|
