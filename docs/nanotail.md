@@ -4,10 +4,10 @@ title: NanoTail
 navigation: 4
 ---
 
-## NanoTail
-This module allows to estimates polyA sizes by using two different methods. Data produced by NanoPreprocess are needed and in particular the read counts / assignment must be given.
+# NanoTail
+This module allows to estimates polyA sizes by using two different methods (nanopolish and talifindr). it reads directly the output produced by NanoPreprocess and in particular it needs the read counts / assignment.
 
-### Steps
+## Steps
 
  1. **check_reference** It verifies whether the reference is zipped and eventually unzip it
  1. **tailfindr** it runs *tailfindr* tool in parallel.
@@ -18,7 +18,7 @@ This module allows to estimates polyA sizes by using two different methods. Data
  1. **join_results** It merges the results from the two algorithms and make a plot of the correlation.
 
 
-### Input Parameters
+## Input Parameters
 
 1. **input_folders** path to the folders produced by NanoPreprocessing step.
 1. **nanopolish_opt** options for the nanopolish program
@@ -28,7 +28,7 @@ This module allows to estimates polyA sizes by using two different methods. Data
 1. **email** 
 
 
-### Results
+## Results
 Three folders are created by the pipeline within the output folder:
 1. NanoPolish: contains the output of *nanopolish* tool.
 1. Tailfindr: contains the output of *tailfindr* tool.
