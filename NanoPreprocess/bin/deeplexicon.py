@@ -5,7 +5,6 @@ import warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
 import argparse
 import sys
-# from __future__ import print_function
 import os
 from copy import deepcopy
 import re
@@ -37,7 +36,6 @@ from sklearn.model_selection import train_test_split
 from tensorflow.python.client import device_lib
 from keras.models import load_model
 
-# import matplotlib.pyplot as plt
 
 
 '''
@@ -47,23 +45,36 @@ from keras.models import load_model
     Garvan Institute
     Copyright 2019
 
-    Tansel Ersevas ....
+    Tansel Ersevas (t.ersevas@garvan.org.au)
 
     script description
 
+
+
     ----------------------------------------------------------------------------
-    version 0.0 - initial
+    version 0.0.0 - initial
+    version 0.8.0 - CPU version Done
+    version 0.9.0 - Fixed segment offset
+    version 0.9.1 - added segment and squiggle output
+    version 0.9.2 - separate segment output and code clean up
+    version 1.0.0 - initial release
 
     So a cutoff of: 0.4958776 for high accuracy
     and another of 0.2943664 for high recovery
 
     TODO:
-        -
+        - Remove leftover libraries
+        - remove debug plots
+        - Remove redundant code
+        - create log files with information
+        - take in fastq for dmux splitting
+        - take in paf or bam for training splitting
+
 
     ----------------------------------------------------------------------------
     MIT License
 
-    Copyright (c) 2019 -------NAME----------
+    Copyright (c) 2019 James M. Ferguson
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -135,14 +146,14 @@ def main():
     '''
     Main function
     '''
-    VERSION = "0.9.0"
+    VERSION = "1.0.0"
 
     parser = MyParser(
         description="DeePlexiCon - Demultiplex direct RNA reads")
     #group = parser.add_mutually_exclusive_group()
     parser.add_argument("-p", "--path",
                         help="Top path of fast5 files to dmux")
-    parser.add_argument("-t", "--type", default="multi", choices=["multi", "single"],
+    parser.add_argument("-f", "--form", default="multi", choices=["multi", "single"],
                         help="Multi or single fast5s")
     parser.add_argument("-c", "--config",
                         help="config file")
@@ -150,14 +161,16 @@ def main():
     #                     help="list of gpus, 1, or [1,3,5], etc. of PCI_BUS_ID order")
     # parser.add_argument("-o", "--output",
     #                     help="Output directory")
-    # parser.add_argument("-s", "--threshold", type=float, default=0.7,
-    #                     help="confidence interval threshold")
     parser.add_argument("-s", "--threshold", type=float, default=0.50,
                         help="probability threshold - 0.5 hi accuracy / 0.3 hi recovery")
                         # populate choices with models found in saved_models/
     # parser.add_argument("-m", "--model", default="4_bc_normal.h5", choices=["4_bc_normal.h5", "model2"],
     parser.add_argument("-m", "--model",
                         help="Trained model name to use")
+    parser.add_argument("--squiggle",
+                        help="dump squiggle data into this .tsv file")
+    parser.add_argument("--segment",
+                        help="dump segment data into this .tsv file")
     parser.add_argument("-b", "--batch_size", type=int, default=4000,
                         help="batch size - for single fast5s")
     parser.add_argument("-V", "--version",
@@ -180,17 +193,25 @@ def main():
         else:
             print_verbose("Please install GPU version of TF")
 
+    if args.squiggle:
+        squig_file = args.squiggle
+        with open(squig_file, 'a') as f:
+            f.write("{}\t{}\n".format("ReadID", "signal_pA"))
+    else:
+        squig_file = ''
+
+    if args.segment:
+        seg_file = args.segment
+        with open(seg_file, 'a') as f:
+            f.write("{}\t{}\n".format("ReadID", "start", "stop"))
+    else:
+        seg_file = ''
 
     # Globals
     if args.config:
         config = read_config(args.config) #TODO check config read error
 
-    squiggle_max = 1199
-    squiggle_min = 1
-    input_cut = 72000 #potenitall need to be configurable
-    image_size = 224
-    num_classes = 4
-    window = 2000
+    # gpu settings
     # Devices
     # os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 
@@ -203,140 +224,94 @@ def main():
 
     # read model
 
-    #TODO Check model errors
     model = read_model(config[deeplexicon][trained_model]) if args.config else read_model(args.model)
+    barcode_out = {0: "bc_1",
+                   1: "bc_2",
+                   2: "bc_3",
+                   3: "bc_4",
+                   None: "unknown"
+                   }
     labels = []
     images = []
     fast5s = {}
     stats = ""
+    seg_dic = {}
     print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format("fast5", "ReadID", "Barcode", "Confidence Interval", "P_bc_1", "P_bc_2", "P_bc_3", "P_bc_4"))
     # for file in input...
     for dirpath, dirnames, files in os.walk(args.path):
         for fast5 in files:
             if fast5.endswith('.fast5'):
                 fast5_file = os.path.join(dirpath, fast5)
-                if args.type == "single":
+                if args.form == "single":
                     #everthing below this, send off in batches of N=args.batch_size
                     # The signal extraction and segmentation can happen in the first step
                     # read fast5 files
-                    readID, seg_signal = get_single_fast5_signal(fast5_file, window)
-                    # segment
-                    # array[name, signal.....]
-                    # seg_signal = dRNA_segmenter(signal)
+                    readID, seg_signal = get_single_fast5_signal(fast5_file, window, squig_file, seg_file)
                     if not seg_signal:
                         print_err("Segment not found for:\t{}\t{}".format(fast5_file, readID))
                         continue
                     # convert
                     sig = np.array(seg_signal, dtype=float)
-                    # print(sig)
                     img = convert_to_image(sig)
-                    # print(img)
-                    labels.append(readID) # read ID?
-                    # print_verbose(labels)
+                    labels.append(readID)
                     fast5s[readID] = fast5
-                    # print_verbose(readID)
-                    # print_verbose(fast5)
-                    # print_verbose(fast5s)
                     images.append(img)
-                    # sys.exit()
                     # classify
                     if len(labels) >= args.batch_size:
                         C = classify(model, labels, np.array(images), False, args.threshold)
-                        # out = classify(model, readID, np.array([img]), False, 0.0)
-                        # print_verbose(C)
                         # save to output
                         for readID, out, c, P in C:
                             prob = [round(float(i), 6) for i in P]
                             cm = round(float(c), 4)
                             if args.verbose:
                                 print_verbose("cm is: {}".format(cm))
-                            if out == 0:
-                                print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "bc_1", cm, prob[0], prob[1], prob[2], prob[3]))
-                            elif out == 1:
-                                print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "bc_2", cm, prob[0], prob[1], prob[2], prob[3]))
-                            elif out == 2:
-                                print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "bc_3", cm, prob[0], prob[1], prob[2], prob[3]))
-                            elif out == 3:
-                                print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "bc_4", cm, prob[0], prob[1], prob[2], prob[3]))
-                            else:
-                                print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "unknown", cm, prob[0], prob[1], prob[2], prob[3]))
+                            print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, barcode_out[out], cm, prob[0], prob[1], prob[2], prob[3]))
                         labels = []
                         images = []
                         fast5s = {}
 
 
-                elif args.type == "multi":
+                elif args.form == "multi":
                     #everthing below this, send off in batches of N=args.batch_size
                     # The signal extraction and segmentation can happen in the first step
                     # read fast5 files
-                    seg_signal = get_multi_fast5_signal(fast5_file, window)
-                    # segment
-                    # array[name, signal.....]
-                    # seg_signal = dRNA_segmenter(signal)
-                    # print_verbose(list(seg_signal.keys()))
+                    seg_signal = get_multi_fast5_signal(fast5_file, window, squig_file, seg_file)
                     sig_count = 0
                     for readID in seg_signal:
                         # convert
                         img = convert_to_image(np.array(seg_signal[readID], dtype=float))
-                        labels.append(readID) #change to readID?
+                        labels.append(readID)
                         images.append(img)
                         fast5s[readID] = fast5
                         sig_count += 1
                         if len(labels) >= args.batch_size:
                             C = classify(model, labels, np.array(images), False, args.threshold)
-                            # out = classify(model, readID, np.array([img]), False, 0.0)
-                            # print_verbose(C)
                             # save to output
                             for readID, out, c, P in C:
                                 prob = [round(float(i), 6) for i in P]
                                 cm = round(float(c), 4)
                                 if args.verbose:
                                     print_verbose("cm is: {}".format(cm))
-                                if out == 0:
-                                    print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "bc_1", cm, prob[0], prob[1], prob[2], prob[3]))
-                                elif out == 1:
-                                    print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "bc_2", cm, prob[0], prob[1], prob[2], prob[3]))
-                                elif out == 2:
-                                    print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "bc_3", cm, prob[0], prob[1], prob[2], prob[3]))
-                                elif out == 3:
-                                    print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "bc_4", cm, prob[0], prob[1], prob[2], prob[3]))
-                                else:
-                                    print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "unknown", cm, prob[0], prob[1], prob[2], prob[3]))
+                                print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, barcde_out[out], cm, prob[0], prob[1], prob[2], prob[3]))
                             labels = []
                             images = []
                             fast5s = {}
                         elif args.verbose:
                             print_verbose("analysing sig_count: {}/{}".format(sig_count, len(seg_signal)))
                         else:
-                            blah = 0
+                            blah = 0 # clean
     #finish up
     C = classify(model, labels, np.array(images), False, args.threshold)
-    # out = classify(model, readID, np.array([img]), False, 0.0)
-    # print_verbose(C)
     # save to output
     for readID, out, c, P in C:
         prob = [round(float(i), 6) for i in P]
         cm = round(float(c), 4)
         if args.verbose:
             print_verbose("cm is: {}".format(cm))
-        if out == 0:
-            print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "bc_1", cm, prob[0], prob[1], prob[2], prob[3]))
-        elif out == 1:
-            print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "bc_2", cm, prob[0], prob[1], prob[2], prob[3]))
-        elif out == 2:
-            print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "bc_3", cm, prob[0], prob[1], prob[2], prob[3]))
-        elif out == 3:
-            print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "bc_4", cm, prob[0], prob[1], prob[2], prob[3]))
-        else:
-            print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, "unknown", cm, prob[0], prob[1], prob[2], prob[3]))
+        print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(fast5s[readID], readID, barcode_out[out], cm, prob[0], prob[1], prob[2], prob[3]))
     labels = []
     images = []
     fast5s = {}
-
-
-
-
-
 
 
     # final report/stats
@@ -344,7 +319,7 @@ def main():
 
 # file handling and segmentation
 
-def get_single_fast5_signal(read_filename, w):
+def get_single_fast5_signal(read_filename, w, squig_file, seg_file):
     '''
     open sigle fast5 file and extract information
     '''
@@ -357,49 +332,53 @@ def get_single_fast5_signal(read_filename, w):
     # segment on raw
     readID = f5_dic['readID']
     signal = f5_dic['signal']
-    seg = dRNA_segmenter(signal, w)
+    seg = dRNA_segmenter(readID, signal, w)
     if not seg:
         print_verbose("No segment found - skipping: {}".format(readID))
         return 0, 0
     # convert to pA
     pA_signal = convert_to_pA(f5_dic)
+    if squig_file:
+        with open(squig_file, 'a') as f:
+            f.write("{}\t{}\n".format(readID, "\t".join(pA_signal)))
+    if seg_file:
+        with open(seg_file, 'a') as f:
+            f.write("{}\t{}\n".format(readID, seg[0], seg[1]))
     # return signal/signals
     return readID, pA_signal[seg[0]:seg[1]]
 
 
-def get_multi_fast5_signal(read_filename, w):
+def get_multi_fast5_signal(read_filename, w, squig_file, seg_file):
     '''
     open multi fast5 files and extract information
     '''
     pA_signals = {}
+    seg_dic = {}
     f5_dic = read_multi_fast5(read_filename)
-    # print_verbose(list(f5_dic.keys()))
     seg = 0
     sig_count = 0
     for read in f5_dic:
         sig_count += 1
         print_verbose("reading sig_count: {}/{}".format(sig_count, len(f5_dic)))
         # get readID and signal
-        # print_verbose("read: {}".format(read))
         readID = f5_dic[read]['readID']
-        # print_verbose("readID: {}".format(readID))
         signal = f5_dic[read]['signal']
-        # print_verbose("sig: {}".format(signal[:5]))
-        # continue
-
-
 
         # segment on raw
         seg = dRNA_segmenter(readID, signal, w)
-        # print_verbose("seg return: {}".format(seg))
         if not seg:
-            # print_verbose("No segment found - skipping: {}".format(readID))
             seg = 0
             continue
         # convert to pA
         pA_signal = convert_to_pA(f5_dic[read])
-        # print_verbose("pA: {}".format(pA_signal[:5]))
+        if squig_file:
+            with open(squig_file, 'a') as f:
+                f.write("{}\t{}\n".format(readID, "\t".join(pA_signal)))
+        if seg_file:
+            with open(seg_file, 'a') as f:
+                f.write("{}\t{}\n".format(readID, seg[0], seg[1]))
         pA_signals[readID] = pA_signal[seg[0]:seg[1]]
+        seg_dic[readID] = seg
     # return signal/signals
     return pA_signals
 
@@ -424,7 +403,6 @@ def read_single_fast5(filename):
         for col in hdf['Raw/Reads/'][c[0]]['Signal'][()]:
             f5_dic['signal'].append(int(col))
 
-
         f5_dic['readID'] = hdf['Raw/Reads/'][c[0]].attrs['read_id'].decode()
         f5_dic['digitisation'] = hdf['UniqueGlobalKey/channel_id'].attrs['digitisation']
         f5_dic['offset'] = hdf['UniqueGlobalKey/channel_id'].attrs['offset']
@@ -444,12 +422,8 @@ def read_multi_fast5(filename):
     read multifast5 file and return data
     '''
     f5_dic = {}
-    # c = 0
     with h5py.File(filename, 'r') as hdf:
         for read in list(hdf.keys()):
-            # c += 1
-            # if c > 100:
-            #     break
             f5_dic[read] = {'signal': [], 'readID': '', 'digitisation': 0.0,
                             'offset': 0.0, 'range': 0.0, 'sampling_rate': 0.0}
             try:
@@ -488,8 +462,6 @@ def dRNA_segmenter(readID, signal, w):
     # Trained on 0.5
     bot = mn - (std*0.5)
 
-
-
     # main algo
 
     begin = False
@@ -522,36 +494,21 @@ def dRNA_segmenter(readID, signal, w):
         else:
             continue
 
-    offset = -1050
-    buff = 150
-
-    # fig = plt.figure(1)
-    # #fig.subplots_adjust(hspace=0.1, wspace=0.01)
-    # ax = fig.add_subplot(111)
-    #
-    # print_verbose("segs: {}".format(segs))
-    # # # Show segment lines
-    # for i, j in segs:
-    #     ax.axvline(x=i+offset-buff, color='m')
-    #     ax.axvline(x=j+offset+buff, color='m')
-    #
-    # ax.axhline(y=bot, color='r')
-    # plt.plot(sig, color='teal')
-    # plt.plot(t, color='k')
-    # plt.show()
-    # plt.clf()
+    # offset = -1050
+    # buff = 150
+    offset = -1000
+    buff = 0
 
     x, y = 0, 0
 
-    # print_verbose("segs befor filter: {}".format(segs))
     for a, b in segs:
         if b - a > hi_thresh:
             continue
         if b - a < lo_thresh:
             continue
         x, y = a, b
-        # print "{}\t{}\t{}\t{}".format(f5, read_dic[f5], x, y)
-        # print_verbose("xy before return: [{},{}]".format(x, y))
+
+        # to be modified in next major re-training
         return [x+offset-buff, y+offset+buff]
         break
     print_verbose("dRNA_segmenter: no seg found: {}".format(readID))
@@ -576,15 +533,11 @@ def convert_to_pA(d):
         new_raw.append("{0:.2f}".format(round(j,2)))
     return new_raw
 
-# Python timeseries interface
-
 
 def pyts_transform(transform, data, image_size, show=False, cmap='rainbow', img_index=0):
     try:
         t_start=time.time()
         X_transform = transform.fit_transform(data)
-        # if args.verbose:
-        #     print_verbose("{} {}".format(time.time() - t_start, 'seconds'))
         if (show):
             plt.figure(figsize=(4, 4))
             plt.grid(b=None)
@@ -642,10 +595,6 @@ def confidence_margin(npa):
     sorted = np.sort(npa)[::-1]    #return sort in reverse, i.e. descending
     # sorted = np.sort(npa)   #return sort in reverse, i.e. descending
     d = sorted[0] - sorted[1]
-    # if args.verbose:
-    #     print_verbose("Sorted: {}".format(sorted))
-    #     print_verbose("conf interval: {}".format(d))
-    # return(sorted[0][0] - sorted[0][1])
     return(d)
 
 def classify(model, labels, image, subtract_pixel_mean, threshold):
@@ -657,18 +606,12 @@ def classify(model, labels, image, subtract_pixel_mean, threshold):
         x_mean = np.mean(x, axis=0)
         x -= x_mean
     x=[x]
-    # print(x)
     y = model.predict(x, verbose=0)
-    # print(y)
     res = []
     for i in range(len(y)):
         cm = confidence_margin(y[i])
-        #print_verbose(y[i][np.argmax(y[i])])
         if y[i][np.argmax(y[i])] >= threshold:
-            # return(np.argmax(y))
             res.append([labels[i], np.argmax(y[i]), cm, y[i]])
-        # return(None)
-        # return(np.argmax(y))
         else:
             res.append([labels[i], None, cm, y[i]])
     return res

@@ -279,23 +279,30 @@ workflow.onComplete {
 }
 
 /*
- * Mail notification
-
-
-workflow.onComplete {
-    def subject = 'Master of Pore execution'
-    def recipient = "${params.email}"
-    def attachment = "${outputMultiQC}/multiqc_report.html"
-
-    ['mail', '-s', subject, '-a', attachment, recipient].execute() << """
-    Pipeline execution summary
-    ---------------------------
-    Completed at: ${workflow.complete}
-    Duration    : ${workflow.duration}
-    Success     : ${workflow.success}
-    workDir     : ${workflow.workDir}
-    exit status : ${workflow.exitStatus}
-    Error report: ${workflow.errorReport ?: '-'}
-    """
-}
+* Mail notification
 */
+
+if (params.email == "yourmail@yourdomain" || params.email == "") { 
+    log.info 'Skipping the email\n'
+}
+else {
+    log.info "Sending the email to ${params.email}\n"
+
+    workflow.onComplete {
+
+    def msg = """\
+        NanoTail module's execution summary
+        ---------------------------
+        Completed at: ${workflow.complete}
+        Duration    : ${workflow.duration}
+        Success     : ${workflow.success}
+        workDir     : ${workflow.workDir}
+        exit status : ${workflow.exitStatus}
+        Error report: ${workflow.errorReport ?: '-'}
+        """
+        .stripIndent()
+
+        sendMail(to: params.email, subject: "Master of Pore execution", body: msg)
+    }
+}
+

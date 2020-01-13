@@ -23,21 +23,28 @@ BIOCORE@CRG NanoDirectRNA. Detection of modification and polyA length (RNA) - N 
 ====================================================
 
 *****************   Input files    *******************
-input_folders           : ${params.input_folders}
-comparison              : ${params.comparison}
+input_folders                           : ${params.input_folders}
+comparison                              : ${params.comparison}
 
 ********** reference has to be the genome *************
-reference                : ${params.reference}
-output                   : ${params.output}
+reference                               : ${params.reference}
+output                                  : ${params.output}
 
-************* tombo and epinano params ***************
-tombo_opt                 : ${params.tombo_opt}
-tombo_score               : ${params.tombo_score}
+************* tombo and epinano params ****************
+tombo_opt                               : ${params.tombo_opt}
+tombo_score                             : ${params.tombo_score}
 
-epinano_opt               : ${params.epinano_opt}
-epinano_score             : ${params.epinano_score}
+epinano_opt                             : ${params.epinano_opt}
+epinano_score                           : ${params.epinano_score}
 
-email                     : ${params.email}
+******************* filtering ***********************
+wt_num (number of times a modification has to be
+ found in wt samples)                   : ${params.wt_num}
+ko_num (number of times a modification has to be 
+found in ko samples / only epinano)     : ${params.ko_num}
+motif(s)                                : ${params.motif}
+
+email                                   : ${params.email}
 """
 
 // Help and avoiding typos
@@ -313,8 +320,14 @@ process cross_tombo_pred {
     file("tombo_all.txt") into tombo_output
 
     script:
+    def motif_tombo = ""
+    if (params.motif != "") {
+    	motif_tombo = "-m ${params.motif}"
+    }
+    def sample_list = sign_tombo_region.join(' -t ')
+
 	"""
-	intersect_tombo.py fasta ${params.tombo_score} tombo_all.txt
+	tombo_filter.py -t ${sample_list} -d ${params.wt_num} -o tombo_all.txt -p ${params.tombo_score} ${motif_tombo}
 	"""
 
 }
@@ -336,16 +349,18 @@ process filter_EPInano_pred {
        
     output:
     file("output_epi.txt") into output_epinano
+    file("output_epi_raw.txt") 
 
     script:
     def sample_list = samples_epi.join(' -w ')
     def ko_list = kos.join(' -k ')
-    def sample_n = samples_epi.size()
-    def ko_n = kos.size()
-
+    def motif_epi = ""
+    if (params.motif != "") {
+    	motif_epi = "-m ${params.motif}"
+    }
 	"""
 	for i in *.prediction.*; do ln -s \$i `echo \$i| awk -F "." '{print \$1}'`; done
-	epinano_paired.py -k ${ko_list} -w ${sample_list} -dk ${ko_n} -dw ${sample_n} -c ${params.epinano_score} -o output_epi_raw.txt -m [AG][AG]AC[ACT] 
+	epinano_paired.py -k ${ko_list} -w ${sample_list} -dk ${params.ko_num} -dw ${params.wt_num} -c ${params.epinano_score} -o output_epi_raw.txt ${motif_epi} 
 	grep "YES" output_epi_raw.txt > output_epi.txt
 	"""
 }
@@ -370,7 +385,7 @@ process join_results {
     script:
 	"""
 	awk -F"," '{print \$1"-"\$2}' ${output_epinano} > epinano.txt
-	grep ">" ${tombo_output} | sed s@>@@g|awk -F ":" '{print \$1"-"\$2}' > tombo.txt
+	awk -F"," '{print \$1"-"\$2}' ${tombo_output} > tombo.txt
 	Rscript --vanilla ${joinScript} epinano.txt tombo.txt "RNA modifications" 
 	"""
 }
@@ -440,25 +455,30 @@ workflow.onComplete {
     println "Execution status: ${ workflow.success ? 'OK' : 'failed' }"
 }
 
-
 /*
- * Mail notification
-
-
-workflow.onComplete {
-    def subject = 'Master of Pore execution'
-    def recipient = "${params.email}"
-    def attachment = "${outputMultiQC}/multiqc_report.html"
-
-    ['mail', '-s', subject, '-a', attachment, recipient].execute() << """
-    Pipeline execution summary
-    ---------------------------
-    Completed at: ${workflow.complete}
-    Duration    : ${workflow.duration}
-    Success     : ${workflow.success}
-    workDir     : ${workflow.workDir}
-    exit status : ${workflow.exitStatus}
-    Error report: ${workflow.errorReport ?: '-'}
-    """
-}
+* Mail notification
 */
+
+if (params.email == "yourmail@yourdomain" || params.email == "") { 
+    log.info 'Skipping the email\n'
+}
+else {
+    log.info "Sending the email to ${params.email}\n"
+
+    workflow.onComplete {
+
+    def msg = """\
+        NanoMod module's execution summary
+        ---------------------------
+        Completed at: ${workflow.complete}
+        Duration    : ${workflow.duration}
+        Success     : ${workflow.success}
+        workDir     : ${workflow.workDir}
+        exit status : ${workflow.exitStatus}
+        Error report: ${workflow.errorReport ?: '-'}
+        """
+        .stripIndent()
+
+        sendMail(to: params.email, subject: "Master of Pore execution", body: msg)
+    }
+}

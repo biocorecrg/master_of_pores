@@ -190,14 +190,16 @@ process baseCalling {
     label (params.GPU == "ON" ? 'basecall_gpus': 'basecall_cpus')
 	
 	// move basecalled output fast5 files 
-	publishDir outputFast5, pattern: "*_out/workspace/*.fast5",  mode: 'move', saveAs: { file -> "${file.split('\\/')[-1]}"  }
-            
+	if(demultiplexer != "deeplexicon") {
+		publishDir outputFast5, pattern: "*_out/workspace/*.fast5",  mode: 'move', saveAs: { file -> "${file.split('\\/')[-1]}"  }
+    }
+    
     input:
     set idfile, file(fast5) from fast5_4_basecall
     val (multi5) from multi5_type_for_bc
     
     output:
-    file ("${idfile}_out/workspace/*.fast5") optional true 
+    file ("${idfile}_out/workspace/*.fast5") optional true into fast5_files_for_demultiplexing
     set idfile, file ("${idfile}.*.gz") into fastq_files_for_demultiplexing, demulti_log
     file ("${idfile}_out/sequencing_summary.txt") into seq_summaries optional true 
 
@@ -289,6 +291,7 @@ if(demultiplexer == "deeplexicon") {
         
 		output:
 		set idfile, file ("${idfile}_demux.tsv") into demux_for_fastq_extraction
+		file ("${idfile}_demux.tsv") into demux_for_fast5_extraction
 
 		script:
 		def model = ''
@@ -298,13 +301,13 @@ if(demultiplexer == "deeplexicon") {
 		}
 		"""
 		    ln -s ${deeplexicon_folder}/* .
-            cmd_line_deeplexicon_caller_2019_09_12.py -p ./ ${demultiplexer_opt} -t ${deep_option} -b 1000 -v > ${idfile}_demux.tsv
+            deeplexicon.py -p ./ ${demultiplexer_opt} -f ${deep_option} -b 4000 -v > ${idfile}_demux.tsv
  		"""
 	} 
 	
 	process extracting_demultiplexed_fastq {
 		label 'basecall_cpus'
-   	    tag {"${demultiplexer}-${idfile}"}  
+   	    tag {"${demultiplexer}"}  
 				
 		input:
     	set idfile, file(demux), file(fastq) from demux_for_fastq_extraction.join(fastq_files_for_demultiplexing)
@@ -318,6 +321,31 @@ if(demultiplexer == "deeplexicon") {
 			for i in *.fastq; do gzip \$i; done
  		"""
 	} 
+	
+	process extracting_demultiplexed_fast5 {
+
+		label 'basecall_cpus'
+   	    tag {"${demultiplexer}-${idfile}"}  
+		publishDir outputFast5,  mode: 'copy'
+				
+		input:
+    	file("demux_*") from demux_for_fast5_extraction.collect()
+    	file("*") from fast5_files_for_demultiplexing.collect()
+
+		output:
+        file("dem_*")
+        
+		script:
+		"""
+		cat demux_* | grep -v ReadID >> dem.files
+		awk '{print \$2 > \$3".list" }' dem.files
+		for i in *.list; do mkdir dem_`basename \$i .list`; done
+		for i in *.list; do fast5_subset --input ./ --save_path dem_`basename \$i .list`/ --read_id_list \$i --batch_size 4000 -t ${task.cpus}; done 
+ 		rm dem_*/filename_mapping.txt
+ 		"""
+	} 
+	
+	
 } else {
 	fastq_files_for_demultiplexing.set{ fastq_for_filtering}
 }
@@ -361,9 +389,10 @@ fastq_for_next_step.map{
 *  Concatenate FastQ files
 */
 process concatenateFastQFiles {
-    tag {idfile}  
+    tag {idfile} 
+
 	publishDir outputFastq, pattern: "*.fq.gz",  mode: 'copy'
-    
+
     input:
     set idfile, file(fastq_files) from fastq_files_for_grouping
 

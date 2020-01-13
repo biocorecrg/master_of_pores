@@ -9,9 +9,9 @@ parser.add_argument ('-k','--knockout', required=True, dest='kos', action='appen
 parser.add_argument ('-w','--wildtype', required=True, dest='wts', action='append', help='wildtype sample epinano prediction results')
 parser.add_argument ('-c','--coverage', nargs = '?', const=5, default=5,type = int, help='minimum coverage to be considered as valid, default is 5')
 parser.add_argument ('-o','--output', required = True, help= 'output file name')
-parser.add_argument ('-m','--motif', type=str, default='[AG][AG]AC[ACT]',help='motif to be kept in the final results; default is RRACH motif aka "[AG][AG]AC[ACT]"; if this option is not supplied, all motifs will be saved ')
-parser.add_argument ('-dk','--ko_duplicates', required = True, type=int, default=3, help='a site has to be at least predicted in this many samples to be used to determine final modificaiton status; default is 3')
-parser.add_argument ('-dw','--wt_duplicates', required = True, type=int, default=3, help='a site has to be at least predicted in this many samples to be used to determine final modificaiton status; ddefault is 3')
+parser.add_argument ('-m','--motif', type=str, default='[AGCTUagctu]',help='motif to be kept in the final results; default will keep all motifs; "-m [AG][AG]AC[ACT]" will keep RRACH motifs; ')
+parser.add_argument ('-dk','--ko_duplicates', required = True, type=int, default=1, help='a site has to be at least predicted in this many samples to be used to determine final modificaiton status; default is 3')
+parser.add_argument ('-dw','--wt_duplicates', required = True, type=int, default=1, help='a site has to be at least predicted in this many samples to be used to determine final modificaiton status; ddefault is 3')
 args = parser.parse_args()
 
 '''
