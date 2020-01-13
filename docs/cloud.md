@@ -19,8 +19,10 @@ Launch an instane from the AMI image above (Go to EC2 > Images > AMI and copy-pa
 
 You can connect to the launched instance by using this command below:
 
-    ssh -i "key-nf.pem" ubuntu@xxx.eu-central-1.compute.amazonaws.com
-    
+```bash
+ssh -i "key-nf.pem" ubuntu@xxx.eu-central-1.compute.amazonaws.com
+```
+
 where ```key-nf.pem``` is your private key ([reference](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)) and host details can be obtained from *Connect popup* in EC2 instances dashboard.
 
 ### Terraform
@@ -33,24 +35,26 @@ Adapt terraform configuration files to include your credentials, use your chosen
 
 Initialize terraform directory:
 
-    terraform init
-    
+```bash
+terraform init
+```
 Validate terraform files:
-
-    terraform validate
-    
+```bash
+terraform validate
+```  
 Inspect what changes are going to be performed in your AWS account:
 
-    terraform plan
-    
+```bash
+terraform plan
+```
 Proceed:
-    
-    terraform apply
-    
+```bash    
+terraform apply
+```   
 Once analyses are finished, infrastructure can be dismantled with:
-
-    terraform destroy
-    
+```bash
+terraform destroy
+```    
 
 ### Share files in Amazon S3
 
@@ -73,7 +77,7 @@ If not mounted, you can mount it therefore straightforward by running:
 Adapt your S3 bucket and mounting point names according to your choice.
 
 Specially for huge amount of data, we suggest to use [AWS CLI](https://aws.amazon.com/cli/) to transfer files from your premises to a S3 Bucket ([Ref](https://docs.aws.amazon.com/en_us/cli/latest/userguide/cli-services-s3.html)). For instance, the commandline below uploads the data example file in a pre-existing bucket.
-
-    aws s3 cp  multifast5_1.fast5 s3://frankfurt-nf
-
+```bash
+aws s3 cp  multifast5_1.fast5 s3://frankfurt-nf
+```
 Modify your Nexflow configuration files in order to point your input files at the mounted S3 bucket. Both input and final output files can be placed in that mounted S3 storage, but we do not recommend that ```work``` Nextflow directory (containing pipeline intermediary files) is kept there, since it significatively delays the whole process. Choose a suitable disk size for your instance depending on the amount of data to be processed.
