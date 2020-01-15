@@ -31,7 +31,7 @@ The workflow named Master of Pores, which has been built using the Nextflow fram
 
 The MasterOfPores workflow includes all steps needed to process raw FAST5 files produced by Nanopore direct RNA sequencing and executes the following steps, allowing users a choice among different algorithms. The pipeline consists of 3 modules:
 
-- ### Module 1: *NanoPreprocess*
+### Module 1: *NanoPreprocess*
 This module takes as input the raw Fast5 reads and produces as output base-called FASTQ and BAM. The pre-processing module performs base-calling, demultiplexing, filtering, quality control, mapping, read counting, generating a final report of the performance and results of each of the steps performed. It automatically detects the kinf of input fast5 file (single or multi sequence).
 
 The NanoPreprocess module comprises 8 main steps:
@@ -45,13 +45,13 @@ The NanoPreprocess module comprises 8 main steps:
 7. *Gene or Isoform quantification* using ***HTSeq***  (https://htseq.readthedocs.io/) or ***NanoCount*** (https://github.com/a-slide/NanoCount) which estimates transcript abundance using an expectation-maximization algorithm. Of note, NanoCount is run if the reads have been mapped to the transcriptome, using the flag --reference_type transcriptome while HTseq is used when mapping to the genome. By default, reads are mapped to the genome and HTSeq is used to quantify per-gene counts. 
 8. *Final report* of the data processing using ***MultiQC*** (https://github.com/ewels/MultiQC) that combines the single quality controls done previously, as well as global run statistics. 
 
-- ### Module 2: *NanoTail* 
+### Module 2: *NanoTail* 
 This module takes as input the output produced by the NanoPreprocess module and produces polyA tail estimations.
 
 The NanoTail module estimates polyA tail lengths using ***Nanopolish*** (https://github.com/jts/nanopolish) and ***Tailfindr*** (https://github.com/adnaniazi/tailfindr), producing a plain text file that includes polyA tail length estimates for each read, computed using both algorithms. The correlation between the two algorithms is also reported as a plot. 
 
 
-- ### Module 3:  *NanoMod* 
+### Module 3:  *NanoMod* 
 This module takes as input the rthe output produced by the NanoPreprocess module and produces a flat text file which includes the predicted RNA modifications.
 
 The NanoMod module predicts RNA modifications using ***Tombo*** (https://github.com/nanoporetech/tombo) and ***EpiNano*** (https://github.com/enovoa/EpiNano), producing a plain text file that is intersection of predicted sites both algorithms, to reduce the number of false positives.  
