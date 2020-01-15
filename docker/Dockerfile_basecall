@@ -1,0 +1,33 @@
+FROM nvidia/cuda:10.1-base-ubuntu18.04 
+
+MAINTAINER Leszek Pryszcz <l.p.pryszcz+docker@gmail.com>
+MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com>
+
+ARG GUPPY_VERSION=3.1.5
+ARG ALBACORE_VERSION=2.1.7
+ARG PORECHOP_VERSION=0.2.4
+
+# Install Python3 & pip, curl
+RUN apt update && apt install -y python3-setuptools curl
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3 get-pip.py && rm get-pip.py
+
+RUN mkdir -p /project
+WORKDIR /project
+
+#Installing ont_fast5_api
+RUN pip install ont-fast5-api
+
+# Install guppy's dependencies
+RUN apt update && apt install -y p7zip-full libidn11 libgssapi-krb5-2
+
+# Cleanup
+RUN apt-get clean && apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* 
+RUN locale-gen en_US.UTF-8
+
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda-10.1/compat/
+ENV PYTHONPATH $PATH 
+WORKDIR /
+
+ENV LC_ALL=en_US.utf8
+ENV LANG=en_US.utf8

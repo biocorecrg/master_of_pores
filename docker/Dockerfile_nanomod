@@ -1,0 +1,96 @@
+FROM biocorecrg/centos-perlbrew-pyenv3-java:centos7
+
+# File Author / Maintainer
+MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com> 
+
+ARG JVARKIT_VERSION=f39087b
+ARG PICARD_VERSION=2.20.0
+ARG R_VERSION=3.6.0
+ARG NANOPOLISH_VERSION=v0.11.1
+ARG MINIMAP_VERSION=2.17
+ARG TOMBO_VERSION=1.5 
+ARG ONTFAST5API_VERSION=1.4.4
+ARG TAILFINDR_VERSION=6865f84
+ARG SAMTOOLS_VERSION=1.4.1
+ARG EPINANO_VERSION=1.2
+ARG BEDTOOLS_VERSION=2.29.2
+
+#upgrade pip
+RUN pip install -U pip
+RUN pip install --upgrade setuptools
+
+# Installing Tombo
+RUN pip install pyfaidx numpy
+RUN pip install ont-tombo==${TOMBO_VERSION}
+
+# Installing samtools
+RUN yum install -y xz-devel.x86_64
+RUN bash -c 'curl -k -L https://downloads.sourceforge.net/project/samtools/samtools/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 > samtools.tar.bz2'
+RUN tar -jvxf samtools.tar.bz2
+RUN cd samtools-${SAMTOOLS_VERSION}; ./configure; make; make install; cd ../ 
+RUN rm samtools.tar.bz2
+
+# install sam2tsv // version is github tag
+RUN git clone "https://github.com/lindenb/jvarkit.git"; cd jvarkit; git checkout ${JVARKIT_VERSION}; ./gradlew sam2tsv
+
+# Installing Picard
+RUN bash -c 'curl -k -L https://github.com/broadinstitute/picard/releases/download/${PICARD_VERSION}/picard.jar > /usr/local/bin/picard.jar'
+
+#Installing R
+RUN yum install -y epel-release libxml2-devel libcurl-devel libcurl libcurl-devel
+RUN yum install R-${R_VERSION} -y
+RUN mkdir -p /usr/share/doc/R-${R_VERSION}/html
+# problem with curl 4.1 // must use 4.0
+RUN Rscript -e "install.packages('https://cran.r-project.org/src/contrib/Archive/curl/curl_4.0.tar.gz',repo=NULL,type='source')"
+
+RUN Rscript -e "install.packages(c('data.table','flexdashboard','dplyr','plyr','ggExtra','ggplot2','hexbin','knitr','optparse','RColorBrewer','reshape2'), repos='http://cran.us.r-project.org')"
+RUN Rscript -e "install.packages(c('devtools', 'futile.logger','readr','scales','viridis','yaml', 'ggplot2'), dependencies = TRUE, repos='http://cran.us.r-project.org')"
+RUN Rscript -e "install.packages(c('BiocManager', 'snow'), repos='http://cran.us.r-project.org')"; Rscript -e "BiocManager::install()"
+
+# Installing tailfindr 
+RUN bash -c 'curl -k -L https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.21/src/hdf5-1.8.21.tar.gz > hdf5-1.8.21.tar.gz'
+RUN tar -zvxf hdf5-1.8.21.tar.gz; cd hdf5-1.8.21; \
+./configure --prefix=/usr/local/hdf5 --enable-fortran --enable-cxx; make; make install
+ENV LD_LIBRARY_PATH "/usr/local/hdf5/lib" 
+ENV PATH "/usr/local/hdf5/bin":${PATH} 
+
+RUN Rscript -e "BiocManager::install(c('BiocGenerics', 'Biostrings', 'IRanges', 'zlibbioc', 'XVector', 'bit', 'pryr', 'hdf5r', 'foreach', 'doParallel', 'doSNOW', 'rbokeh', 'psych', 'gistr', 'mnormt'))"
+RUN Rscript -e "BiocManager::install(c('Rsamtools'))"
+RUN Rscript -e "BiocManager::install(c('tidyr'))"
+RUN Rscript -e "devtools::install_github(\"adnaniazi/tailfindr\", dependencies=FALSE)"
+
+# Installing Nanopolish
+RUN yum install -y wget 
+RUN yum group install "Development Tools" -y
+RUN git clone --recursive https://github.com/jts/nanopolish.git
+RUN cd nanopolish; git checkout ${NANOPOLISH_VERSION}; make all
+
+# Installing modules for EPINANO
+RUN pip install h5py==2.8.0 numpy==1.16.1 pandas==0.23.4 scikit-learn==0.20.2
+RUN bash -c 'curl -k -L https://github.com/enovoa/EpiNano/archive/python3.tar.gz > epinano.tar.gz'
+RUN tar -zxvf epinano.tar.gz; 
+RUN chmod +x /project/EpiNano-python3/scripts/*
+ENV PATH "/project/EpiNano-python3/scripts/:/project/nanopolish/:${PATH}" 
+
+# Installing BEDTOOLS
+RUN bash -c 'curl -k -L https://github.com/arq5x/bedtools2/releases/download/v${BEDTOOLS_VERSION}/bedtools.static.binary > /usr/local/bin/bedtools'
+RUN chmod +x /usr/local/bin/bedtools
+
+# Installing ont-fast5-api
+RUN pip install ont-fast5-api==${ONTFAST5API_VERSION}
+
+# Installing vennDiagram
+RUN Rscript -e "install.packages(c('gplots', 'VennDiagram'), dependencies = TRUE, repos='http://cran.us.r-project.org')"
+
+# Clean cache
+RUN yum clean all 
+
+#cleaning
+RUN rm -fr *.tar.gz; rm -fr *.bz2; rm -fr ./tmp
+RUN rm -rf /var/cache/yum
+RUN rm -fr fastqc.zip  samtools-* 
+
+ENV SAM2TSV "java -jar /project/jvarkit/dist/sam2tsv.jar"
+ENV PICARD "java -jar /usr/local/bin/picard.jar"
+ENV LC_ALL=en_US.utf8
+ENV LANG=en_US.utf8

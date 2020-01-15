@@ -1,0 +1,108 @@
+FROM biocorecrg/centos-perlbrew-pyenv23-java:centos7
+
+# File Author / Maintainer
+MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com> 
+
+ARG MULTIQC_VERSION=1.8
+ARG SAMTOOLS_VERSION=1.4.1
+ARG JVARKIT_VERSION=f39087b
+ARG NANOFILT_VERSION=2.3.0
+ARG GRAPHMAP2_VERSION=220d611
+ARG PICARD_VERSION=2.20.0
+ARG R_VERSION=3.6.0
+ARG POREQUALITY_VERSION=4fb2f6e
+ARG MINIONQC_VERSION=1.4.1
+ARG MINIMAP_VERSION=2.17
+ARG NANOPLOT_VERSION=1.26.3
+ARG FASTQC_VERSION=0.11.8
+ARG ONTFAST5API_VERSION=1.4.4
+ARG NANOCOUNT_VERSION=0.1.a4
+ARG HTSEQ_VERSION=0.11.2
+
+# Environment variables
+ENV POREQUAL_PATH=$PWD/POREquality/
+ENV MINIONQC=/usr/local/bin/MinIONQC.R
+
+#upgrade pip
+RUN pip install --upgrade pip
+
+#INSTALLING FASTQC
+RUN bash -c 'curl -k -L https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v${FASTQC_VERSION}.zip > fastqc.zip'
+RUN unzip fastqc.zip; chmod 775 FastQC/fastqc; ln -s $PWD/FastQC/fastqc /usr/local/bin/fastqc
+
+# Installing samtools
+RUN yum install -y xz-devel.x86_64
+RUN bash -c 'curl -k -L https://downloads.sourceforge.net/project/samtools/samtools/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 > samtools.tar.bz2'
+RUN tar -jvxf samtools.tar.bz2
+RUN cd samtools-${SAMTOOLS_VERSION}; ./configure; make; make install; cd ../ 
+RUN rm samtools.tar.bz2
+
+# install sam2tsv // version is github tag
+RUN git clone "https://github.com/lindenb/jvarkit.git"; cd jvarkit; git checkout ${JVARKIT_VERSION}; ./gradlew sam2tsv
+
+# Installing nanofilt
+RUN pip install nanofilt==${NANOFILT_VERSION}
+
+# Installing graphmap2 -- ONT reads aligner // version is github tag
+RUN yum install -y libstdc++-static
+RUN git clone "https://github.com/lbcb-sci/graphmap2"; cd graphmap2; git checkout ${GRAPHMAP2_VERSION}; make modules; make
+ENV PATH "/project/graphmap2/bin/Linux-x64:${PATH}" 
+
+# Installing minimap2
+RUN bash -c 'curl -k -L https://github.com/lh3/minimap2/releases/download/v${MINIMAP_VERSION}/minimap2-${MINIMAP_VERSION}_x64-linux.tar.bz2 > minimap.tar.bz2'
+RUN tar -jvxf minimap.tar.bz2; cd minimap2-${MINIMAP_VERSION}_x64-linux; ln -s $PWD/minimap2 /usr/local/bin/minimap2; cd ../
+
+# Installing Picard
+RUN bash -c 'curl -k -L https://github.com/broadinstitute/picard/releases/download/${PICARD_VERSION}/picard.jar > /usr/local/bin/picard.jar'
+
+#Installing R
+RUN yum install -y epel-release libxml2-devel libcurl-devel libcurl libcurl-devel
+RUN yum install R-${R_VERSION} -y
+RUN mkdir -p /usr/share/doc/R-${R_VERSION}/html
+# problem with curl 4.1 // must use 4.0
+RUN yum install -y gdal gdal-devel geos geos-devel udunits2-devel cairo-devel
+RUN Rscript -e "install.packages('https://cran.r-project.org/src/contrib/Archive/curl/curl_4.0.tar.gz',repo=NULL,type='source')"
+RUN Rscript -e "install.packages(c('data.table','flexdashboard','dplyr','plyr','ggExtra','ggplot2','hexbin','knitr','optparse','RColorBrewer','reshape2'), repos='http://cran.us.r-project.org')"
+RUN Rscript -e "install.packages(c('devtools', 'futile.logger','readr','scales','viridis','yaml'), dependencies = TRUE, repos='http://cran.us.r-project.org')"
+RUN Rscript -e "install.packages(c('BiocManager', 'snow'), repos='http://cran.us.r-project.org')"; Rscript -e "BiocManager::install()"
+
+# Installing POREquality // version is github tag
+RUN yum install -y pandoc
+RUN git clone https://github.com/carsweshau/POREquality; cd POREquality/; git checkout ${POREQUALITY_VERSION}; cd ../ 
+
+# Installing MinIONQC
+RUN bash -c 'curl -k -L https://github.com/roblanf/minion_qc/releases/download/v${MINIONQC_VERSION}/MinIONQC.R > /usr/local/bin/MinIONQC.R'
+RUN chmod +x /usr/local/bin/MinIONQC.R
+
+# Installing ont-fast5-api
+RUN pip install ont-fast5-api==${ONTFAST5API_VERSION}
+
+#install Nanoplot
+RUN pip install pandas 
+RUN pip install NanoPlot==${NANOPLOT_VERSION}
+
+# Installing MULTIQC_VERSION 
+RUN pip install multiqc==${MULTIQC_VERSION}
+
+# Installing GraphicsMagick
+RUN yum install -y GraphicsMagick.x86_64
+
+# Installing NanoCount
+RUN pip install NanoCount==${NANOCOUNT_VERSION}
+
+# Installing HTseq
+RUN pip install HTSeq==${HTSEQ_VERSION}
+
+# Clean cache
+RUN yum clean all 
+
+#cleaning
+RUN rm -fr *.tar.gz; rm -fr *.bz2; rm -fr ./tmp
+RUN rm -rf /var/cache/yum
+RUN rm -fr fastqc.zip  samtools-* graphmap  
+
+#ENV PATH "/project/ont-guppy_3.1.5_linux64/ont-guppy/bin/:${PATH}" 
+ENV SAM2TSV "java -jar /project/jvarkit/dist/sam2tsv.jar"
+ENV PICARD "java -jar /usr/local/bin/picard.jar"
+ENV LC_ALL=en_US.utf8
+ENV LANG=en_US.utf8
