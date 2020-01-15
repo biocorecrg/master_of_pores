@@ -13,8 +13,8 @@ parser.add_argument ('-w','--wildtype', required=True, dest='wts', action='appen
 parser.add_argument ('-c','--coverage', nargs = '?', const=5, default=5,type = int, help='minimum coverage to be considered as valid, default is 5')
 parser.add_argument ('-o','--output', required = True, help= 'output file name')
 parser.add_argument ('-m','--motif', type=str, default='[AGCTUagctu]',help='motif to be kept in the final results; default will keep all motifs; "-m [AG][AG]AC[ACT]" will keep RRACH motifs; ')
-parser.add_argument ('-dk','--ko_duplicates', required = True, type=int, default=1, help='a site has to be at least predicted in this many samples to be used to determine final modificaiton status; default is 3')
-parser.add_argument ('-dw','--wt_duplicates', required = True, type=int, default=1, help='a site has to be at least predicted in this many samples to be used to determine final modificaiton status; ddefault is 3')
+parser.add_argument ('-dk','--ko_duplicates', required = True, type=int, default=1, help='a site has to be at least predicted in this many samples to be used to determine final modificaiton status; default is 1')
+parser.add_argument ('-dw','--wt_duplicates', required = True, type=int, default=1, help='a site has to be at least predicted in this many samples to be used to determine final modificaiton status; default is 1')
 parser.add_argument ('-gz', '--gzipped', default=False, dest='isgzip',  action='store_true', help='indicates if the input files are gzipped or not')
 args = parser.parse_args()
 
