@@ -30,6 +30,7 @@ comparison                              : ${params.comparison}
 reference                               : ${params.reference}
 output                                  : ${params.output}
 
+coverage                                : ${params.coverage}
 ************* tombo and epinano params ****************
 tombo_opt                               : ${params.tombo_opt}
 tombo_score                             : ${params.tombo_score}
@@ -207,7 +208,7 @@ process getModifications {
 	mv ${index_A} ${folder_name_A}
 	mv ${fast5s_B} ${folder_name_B}
 	mv ${index_B} ${folder_name_B}
-	tombo detect_modifications model_sample_compare --fast5-basedirs ${folder_name_A}/* --control-fast5-basedirs ${folder_name_B}/* --statistics-file-basename ${folder_name_A}_${folder_name_B}_model_sample_compare --rna --per-read-statistics-basename ${folder_name_A}_${folder_name_B}_per-read-statistics --processes ${task.cpus}
+	tombo detect_modifications model_sample_compare --minimum-test-reads ${params.coverage} --fast5-basedirs ${folder_name_A}/* --control-fast5-basedirs ${folder_name_B}/* --statistics-file-basename ${folder_name_A}_${folder_name_B}_model_sample_compare --rna --per-read-statistics-basename ${folder_name_A}_${folder_name_B}_per-read-statistics --processes ${task.cpus}
 	tombo text_output signif_sequence_context ${tombo_opt} --num-regions 1000000000 --statistics-filename ${folder_name_A}_${folder_name_B}_model_sample_compare.tombo.stats  --genome-fasta reference.fa --fast5-basedirs ${folder_name_A} --sequences-filename ${folder_name_A}_${folder_name_B}.significant_regions.fasta 
 	rm reference.fa
 	"""
@@ -285,6 +286,7 @@ process calc_var_frequencies {
 */
 
 process predict_with_EPInano {
+	publishDir outputEpinano,  mode: 'copy'
 
     tag {"${sampleID}"}  
     label 'single_cpu_long'
@@ -294,11 +296,12 @@ process predict_with_EPInano {
     set val(sampleID), file(per_site_var) from per_site_vars
 
     output:
-    file("*.dump.csv") into epi_predictions
+    file("*.dump.csv.gz") into epi_predictions
   
     script:
 	"""
 	SVM.py -M ${model_folder}/model2.1-mis3.del3.q3.poly.dump -p ${per_site_var} -cl 7,12,22 ${params.epinano_opt} -o ${sampleID}.prediction
+	gzip *.poly.dump.csv
 	"""
 }
 
@@ -360,8 +363,9 @@ process filter_EPInano_pred {
     }
 	"""
 	for i in *.prediction.*; do ln -s \$i `echo \$i| awk -F "." '{print \$1}'`; done
-	epinano_paired.py -k ${ko_list} -w ${sample_list} -dk ${params.ko_num} -dw ${params.wt_num} -c ${params.epinano_score} -o output_epi_raw.txt ${motif_epi} 
-	grep "YES" output_epi_raw.txt > output_epi.txt
+	epinano_paired.py -k ${ko_list} -w ${sample_list} -dk ${params.ko_num} -dw ${params.wt_num} -c ${params.epinano_score} -o output_epi_raw.txt -gz ${motif_epi} 
+	head -n 1 output_epi_raw.txt > output_epi.txt
+	grep "YES" output_epi_raw.txt >> output_epi.txt
 	"""
 }
 
@@ -384,8 +388,8 @@ process join_results {
 
     script:
 	"""
-	awk -F"," '{print \$1"-"\$2}' ${output_epinano} > epinano.txt
-	awk -F"," '{print \$1"-"\$2}' ${tombo_output} > tombo.txt
+	awk -F"," '{if (\$1!~"position") print \$1"-"\$2}' ${output_epinano} > epinano.txt
+	awk -F"," '{if (\$1!~"position") print \$1"-"\$2}' ${tombo_output} > tombo.txt
 	Rscript --vanilla ${joinScript} epinano.txt tombo.txt "RNA modifications" 
 	"""
 }

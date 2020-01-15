@@ -325,7 +325,7 @@ if(demultiplexer == "deeplexicon") {
 	process extracting_demultiplexed_fast5 {
 
 		label 'basecall_cpus'
-   	    tag {"${demultiplexer}-${idfile}"}  
+   	    tag { demultiplexer }  
 		publishDir outputFast5,  mode: 'copy'
 				
 		input:
@@ -333,15 +333,16 @@ if(demultiplexer == "deeplexicon") {
     	file("*") from fast5_files_for_demultiplexing.collect()
 
 		output:
-        file("dem_*")
+        file("*")
         
 		script:
 		"""
 		cat demux_* | grep -v ReadID >> dem.files
 		awk '{print \$2 > \$3".list" }' dem.files
-		for i in *.list; do mkdir dem_`basename \$i .list`; done
-		for i in *.list; do fast5_subset --input ./ --save_path dem_`basename \$i .list`/ --read_id_list \$i --batch_size 4000 -t ${task.cpus}; done 
- 		rm dem_*/filename_mapping.txt
+		for i in *.list; do mkdir `basename \$i .list`; fast5_subset --input ./ --save_path `basename \$i .list`/ --read_id_list \$i --batch_size 4000 -t ${task.cpus}; done 
+ 		rm *.list
+ 		rm */filename_mapping.txt
+ 		rm dem.files 
  		"""
 	} 
 	
