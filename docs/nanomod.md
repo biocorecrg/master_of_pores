@@ -49,21 +49,21 @@ Three folders are produced by this module:
 1. Epinano, containing the results obtained with this method. You have a single file with already filtered modifications. 
 
 ```bash
-geneA,126771,GAACT,5.0,0.7865299392210111,6.0,7.650999662942007e-06,YES
-geneA,139467,AGACA,26.0,1.2631007354786662e-05,34.0,9.22202894828834e-14,YES
-geneA,139625,AGACA,17.0,0.012299404049052885,20.0,4.64573431891912e-06,YES
-geneA,192033,AGACC,11.0,1.849874054901369e-12,11.0,3.00000089999998e-14,YES
-geneA,192201,AGACA,14.0,0.01469732206992497,16.0,3.00000089999998e-14,YES
+chrIX,126771,GAACT,5.0,0.7865299392210111,6.0,7.650999662942007e-06,YES
+chrIX,139467,AGACA,26.0,1.2631007354786662e-05,34.0,9.22202894828834e-14,YES
+chrIX,139625,AGACA,17.0,0.012299404049052885,20.0,4.64573431891912e-06,YES
+chrIX,192033,AGACC,11.0,1.849874054901369e-12,11.0,3.00000089999998e-14,YES
+chrIX,192201,AGACA,14.0,0.01469732206992497,16.0,3.00000089999998e-14,YES
 ...
 ```
 2. Tombo, containing the results obtained with this method. You have one file for each comparison WT vs KO and a final one, **tombo_all.txt**, with the intersection after filtering per score. Here an example of tombo_all.txt file:
 
 ```bash
->geneA:549289:+
+>chrIX:549289:+
 CTGAC
->geneA:478105:+
+>chrIX:478105:+
 GAGCT
->geneA:426607:-
+>chrIX:426607:-
 TTTTT
 ...
 ```
