@@ -12,15 +12,16 @@ This module allows to predict the loci with RNA modifications. Data produced by 
 <img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/dag_mod.png" width="600" align="middle">
 
 
-1. **index_reference** index the reference file for Epinano
-1. **call_variants** uses Samtools for calling the variants for Epinano
-1. **calc_var_frequencies** it uses TSV_to_Variants_Freq.py3 for calculating the frequencies of each variants for Epinano
-1. **predict_with_EPInano** It predicts the modifications with Epinano
-1. **filter_EPInano_pred** It filers the results from Epinano using replicates if avialable
-1. **resquiggling** resquiggle fast5 files for Tombo
-1. **getModifications** it estimates the modifications using Tombo comparing WT vs KO
-1. **cross_tombo_pred** it gets the intersection between differen replicates
-1. **join_results** it gets the intersection between the Epinano and Tombo predictions
+* **index_reference** index the reference file for Epinano
+* **call_variants** uses Samtools for calling the variants for Epinano
+* **calc_var_frequencies** it uses TSV_to_Variants_Freq.py3 for calculating the frequencies of each variants for Epinano
+* **predict_with_EPInano** It predicts the modifications with Epinano
+* **filter_EPInano_pred** It filers the results from Epinano using replicates if avialable
+
+* **resquiggling** resquiggle fast5 files for Tombo
+* **getModifications** it estimates the modifications using Tombo comparing WT vs KO
+* **cross_tombo_pred** it gets the intersection between differen replicates
+* **join_results** it gets the intersection between the Epinano and Tombo predictions
 
 ## Input Parameters
 1. **input_folders** path to the folders produced by NanoPreprocessing step.
