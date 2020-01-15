@@ -23,7 +23,7 @@ This module allows to predict the loci with RNA modifications. Data produced by 
 * **join_results** it gets the intersection between the Epinano and Tombo predictions
 
 ## Input Parameters
-1. **input_folders** path to the folders produced by NanoPreprocessing step.
+1. **input_path** path to the folders produced by NanoPreprocessing step.
 1. **comparison** tab separated text file containing the list of comparison. Here an example:
 ```bash
 WT1 KO1
