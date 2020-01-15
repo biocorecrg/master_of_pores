@@ -17,14 +17,18 @@ navigation: 1
 # ![Nanopore analysis pipeline](https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/logo_master.jpg) 
 
 # Nanopore analysis pipeline
+Nextflow pipeline for analysis of Nanopore data from direct RNA sequencing. This is a joint project between [CRG bioinformatics core](https://biocore.crg.eu/) and [Epitranscriptomics and RNA Dynamics research group](https://www.crg.eu/en/programmes-groups/novoa-lab).  
+
+## Documentation
+Please read the documentation here: https://biocorecrg.github.io/master_of_pores/
+
 
 ## Reference
 If you use this tool please cite our pre-print:
 
-Parallel and scalable workflow for the analysis of Oxford Nanopore direct RNA sequencing datasets
+[Parallel and scalable workflow for the analysis of Oxford Nanopore direct RNA sequencing datasets
 Luca Cozzuto, Huanle Liu, Leszek P. Pryszcz, Toni Hermoso Pulido, Julia Ponomarenko, Eva Maria Novoa
-[doi: https://doi.org/10.1101/818336](https://www.biorxiv.org/content/10.1101/818336v1)
-
+doi: https://doi.org/10.1101/818336](https://www.biorxiv.org/content/10.1101/818336v1)
 
 
 
