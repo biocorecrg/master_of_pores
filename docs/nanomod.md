@@ -17,7 +17,6 @@ This module allows to predict the loci with RNA modifications. Data produced by 
 * **calc_var_frequencies** it uses TSV_to_Variants_Freq.py3 for calculating the frequencies of each variants for Epinano
 * **predict_with_EPInano** It predicts the modifications with Epinano
 * **filter_EPInano_pred** It filers the results from Epinano using replicates if avialable
-
 * **resquiggling** resquiggle fast5 files for Tombo
 * **getModifications** it estimates the modifications using Tombo comparing WT vs KO
 * **cross_tombo_pred** it gets the intersection between differen replicates
