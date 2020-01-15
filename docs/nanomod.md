@@ -33,10 +33,14 @@ WT3 KO3
 ```
 1. **reference** reference transcriptome
 1. **output** folder
+1. **coverage** read coverage threshold for prediction
 1. **tombo_opt** options for tombo
 1. **epinano_opt** options for epinano
 1. **tombo_score** score for filtering reliable modifications (from 0.5 to 1)
-1. **epinano_score** coverage score for epinano for filtering reliable modifications (integer)  
+1. **epinano_score** coverage score for epinano for filtering reliable modifications (integer)
+1. **mofit** motif to be found (example: "[AG][AG]AC[ACT]")
+1. **wt_num** number of wt samples containing that modification
+1. **ko_num** number of ko samples not containing that modification
 1. **email**
 
 ## Results
