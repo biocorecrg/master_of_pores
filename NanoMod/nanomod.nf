@@ -23,7 +23,7 @@ BIOCORE@CRG NanoDirectRNA. Detection of modification and polyA length (RNA) - N 
 ====================================================
 
 *****************   Input files    *******************
-input_folders                           : ${params.input_folders}
+input_path                              : ${params.input_path}
 comparison                              : ${params.comparison}
 
 ********** reference has to be the genome *************
@@ -123,11 +123,11 @@ if( !compfile.exists() ) exit 1, "Missing comparison file: ${compfile}. Specify 
     .set{ ko_for_epinano_filtering }
 
 id_for_resquiggling.flatten().unique().map {
-    [it, file("${params.input_folders}/${it}/fast5_files/*.fast5")]
+    [it, file("${params.input_path}/${it}/fast5_files/*.fast5")]
 }.transpose().set{fast5_for_resquiggling}
 
 id_to_epinano.flatten().unique().map {
-    [it, file("${params.input_folders}/${it}/alignment/*.bam")]
+    [it, file("${params.input_path}/${it}/alignment/*.bam")]
 }.transpose().set{bams_for_variant_calling}
 
 /*
