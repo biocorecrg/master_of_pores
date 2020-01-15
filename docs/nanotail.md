@@ -7,7 +7,9 @@ navigation: 4
 # NanoTail
 This module allows to estimates polyA sizes by using two different methods (nanopolish and talifindr). it reads directly the output produced by NanoPreprocess and in particular it needs the read counts / assignment.
 
-## Steps
+# Workflow
+
+<img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/dag_nanotail.png" width="600" align="middle">
 
  1. **check_reference** It verifies whether the reference is zipped and eventually unzip it
  1. **tailfindr** it runs *tailfindr* tool in parallel.
