@@ -14,11 +14,14 @@
 
 
 # Nanopore analysis pipeline
-Nextflow pipeline for analysis of Nanopore reads (from RNA/cDNA/DNA). This project is in collaboration with [Eva Novoa's group](https://www.crg.eu/en/programmes-groups/novoa-lab). If you use this tool you can cite our pre-print:
+Nextflow pipeline for analysis of direct RNA Nanopore reads. This project is in collaboration with [Eva Novoa's group](https://www.crg.eu/en/programmes-groups/novoa-lab). If you use this tool you can cite our pre-print:
 
 [Parallel and scalable workflow for the analysis of Oxford Nanopore direct RNA sequencing datasets
 Luca Cozzuto, Huanle Liu, Leszek P. Pryszcz, Toni Hermoso Pulido, Julia Ponomarenko, Eva Maria Novoa
 doi: https://doi.org/10.1101/818336](https://www.biorxiv.org/content/10.1101/818336v1)
+
+## Documentation
+Please read the documentation here: https://biocorecrg.github.io/master_of_pores/
 
 
 ## Pre-requisites
@@ -41,7 +44,7 @@ git clone --depth 1 https://github.com/biocorecrg/master_of_pores.git
 Because of redistribution restriction of the basecallers **Albacore** and **Guppy** we cannot provide them inside the docker image, so you would need to download the binaries from the official website https://nanoporetech.com and place them inside the **master_of_pores/bin** folder.
 
 #### Albacore
-Download the whel file.
+Download the wheel file.
 
 ```bash
 pip3 install --target=./albacore ont_albacore-2.1.7-cp36-cp36m-manylinux1_x86_64.whl
@@ -49,7 +52,7 @@ $ ln -s albacore/bin/multi_to_single_fast5
 $ ln -s albacore/bin/read_fast5_basecaller.py
 ```
 #### Guppy
-There are two version fo Guppy, one that runs on CPUs and the other works on both CPUs and GPUs. The difference of speed between GPUs and GPU is more than 10 times.
+Guppy can be ran on either CPUs or GPUs. The difference of speed between GPUs and GPU is more than 10 times.
 
 ```bash
 cd master_of_pores/bin
@@ -61,7 +64,7 @@ https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html
 
 ### Running the pipeline
 
-Input files are either multifast5 or single fast5 files containing reads from genomic DNA, cDNA or RNA sequencing. 
+Input files are either multifast5 or single fast5 files containing reads from direct RNA sequencing. 
 They will be basecalled and eventually demultiplexed and aligned to a reference sequence (genome or transcriptome).
 
 Steps:
@@ -74,6 +77,7 @@ Steps:
   - Mapping with **minimap2** or **graphmap**. **Samtools** is the used for conversion.
   - QC of aligned reads with custom script **bam2stats**.
   - QC of aligned reads with **NanoPlot**.
+  - Per-gene or per-transcript counts with **HT-Seq** or **NanoCount**
   - Final report with **multiQC**
   
 
@@ -88,11 +92,11 @@ Launching `biocorecrg/master_of_pores` [pensive_boyd] - revision: fc7613225b [ma
 ║║║├─┤└─┐ │ ├┤ ├┬┘  │ │├┤   ╠═╝║ ║╠╦╝║╣ ╚═╗
 ╩ ╩┴ ┴└─┘ ┴ └─┘┴└─  └─┘└    ╩  ╚═╝╩╚═╚═╝╚═╝
                                                                                        
-====================================================
-BIOCORE@CRG Preprocessing of Nanopore data (gDNA, cDNA or RNA) - N F  ~  version 0.1
-====================================================
+================================================================================
+BIOCORE@CRG Preprocessing of Nanopore direct RNA data  - N F  ~  version 0.1
+================================================================================
 
-kit                       : SQK-RNA001
+kit                       : SQK-RNA002
 flowcell                  : FLO-MIN106
 fast5                     : ./data/multifast/*.fast5
 multi5                    : YES
@@ -103,14 +107,14 @@ output                    : output
 granularity               : 1
 qualityqc                 : 5
 
-basecaller                : albacore
+basecaller                : guppy
 basecaller_opt            : 
 GPU                       : OFF
 demultiplexing            :  
 demultiplexing_opt        :  
 barcodekit                : 
 filter                    : nanofilt
-filter_opt                : -q 0 --headcrop 5 --tailcrop 3 --readtype 1D
+filter_opt                : 
 mapper                    : minimap2
 mapper_opt                : 
 map_type                  : spliced
