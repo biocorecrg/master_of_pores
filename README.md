@@ -20,6 +20,9 @@ Nextflow pipeline for analysis of direct RNA Nanopore reads. This project is in 
 Luca Cozzuto, Huanle Liu, Leszek P. Pryszcz, Toni Hermoso Pulido, Julia Ponomarenko, Eva Maria Novoa
 doi: https://doi.org/10.1101/818336](https://www.biorxiv.org/content/10.1101/818336v1)
 
+## Documentation
+Please read the documentation here: https://biocorecrg.github.io/master_of_pores/
+
 
 ## Pre-requisites
 For using the pipeline [Nextflow](https://www.nextflow.io/) and a linux container engine (either [Docker](https://www.docker.com/) or [Singularity](https://sylabs.io/guides/3.1/user-guide/cli/singularity_apps.html)) need to be installed. 
@@ -89,9 +92,9 @@ Launching `biocorecrg/master_of_pores` [pensive_boyd] - revision: fc7613225b [ma
 ║║║├─┤└─┐ │ ├┤ ├┬┘  │ │├┤   ╠═╝║ ║╠╦╝║╣ ╚═╗
 ╩ ╩┴ ┴└─┘ ┴ └─┘┴└─  └─┘└    ╩  ╚═╝╩╚═╚═╝╚═╝
                                                                                        
-====================================================
+================================================================================
 BIOCORE@CRG Preprocessing of Nanopore direct RNA data  - N F  ~  version 0.1
-====================================================
+================================================================================
 
 kit                       : SQK-RNA002
 flowcell                  : FLO-MIN106
