@@ -475,10 +475,10 @@ process mapping {
 
     script:    
     if (mapper == "minimap2") {
-	    def mappars = (params.map_type == "spliced") ? "-ax splice -k14" : "-ax map-ont"
+	    def mappars = (params.map_type == "spliced") ? "-ax splice" : "-ax map-ont"
 	    mappars += " ${mapper_opt} "
  	    """
-        minimap2 -t ${task.cpus} ${mappars} -uf ${reference} ${fastq_file} | samtools view -@ ${task.cpus} -F4 -hSb - > reads.mapped.bam
+        minimap2 -t ${task.cpus} ${mappars} ${reference} ${fastq_file} | samtools view -@ ${task.cpus} -F4 -hSb - > reads.mapped.bam
         samtools sort -@ ${task.cpus} -o ${idfile}.${mapper}.sorted.bam reads.mapped.bam
         rm reads.mapped.bam
         """
