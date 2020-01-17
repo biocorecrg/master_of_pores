@@ -5,22 +5,20 @@ navigation: 5
 ---
 
 # NanoMod
-This module allows to predict the loci with RNA modifications. Data produced by NanoPreprocess are needed and in particular the reads must be aligned to the transcriptome.
+This module allows to predict the loci with RNA modifications starting from data produced by NanoPreprocess.
 
 ## Workflow
 
-<img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/dag_mod.png" width="600" align="middle">
+<img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/dag_mod_2.png" width="600" align="middle">
 
 
 * **index_reference** index the reference file for Epinano
 * **call_variants** uses Samtools for calling the variants for Epinano
 * **calc_var_frequencies** it uses TSV_to_Variants_Freq.py3 for calculating the frequencies of each variants for Epinano
-* **predict_with_EPInano** It predicts the modifications with Epinano
-* **filter_EPInano_pred** It filers the results from Epinano using replicates if avialable
+* **predict_with_EPInano** It predicts the modifications with Epinano in parallel splitting the input file in 1 million rows
+* **combineEpinanoPred** It combine the results from Epinano 
 * **resquiggling** resquiggle fast5 files for Tombo
 * **getModifications** it estimates the modifications using Tombo comparing WT vs KO
-* **cross_tombo_pred** it gets the intersection between differen replicates
-* **join_results** it gets the intersection between the Epinano and Tombo predictions
 
 ## Input Parameters
 1. **input_path** path to the folders produced by NanoPreprocessing step.
@@ -35,45 +33,36 @@ WT3 KO3
 1. **coverage** read coverage threshold for prediction
 1. **tombo_opt** options for tombo
 1. **epinano_opt** options for epinano
-1. **tombo_score** score for filtering reliable modifications (from 0.5 to 1)
-1. **epinano_score** coverage score for epinano for filtering reliable modifications (integer)
-1. **mofit** motif to be found (example: "[AG][AG]AC[ACT]")
-1. **wt_num** number of wt samples containing that modification 
-1. **ko_num** number of ko samples containing that modification (only Epinano)
 1. **email**
 
 ## Results
 Three folders are produced by this module:
 
-1. Epinano, containing the results obtained with this method. You have a single file with already filtered modifications. 
+1. Epinano, containing the results obtained with this method. You have a single file with putative modifications. 
 
 ```bash
-chrIX,126771,GAACT,5.0,0.7865299392210111,6.0,7.650999662942007e-06,YES
-chrIX,139467,AGACA,26.0,1.2631007354786662e-05,34.0,9.22202894828834e-14,YES
-chrIX,139625,AGACA,17.0,0.012299404049052885,20.0,4.64573431891912e-06,YES
-chrIX,192033,AGACC,11.0,1.849874054901369e-12,11.0,3.00000089999998e-14,YES
-chrIX,192201,AGACA,14.0,0.01469732206992497,16.0,3.00000089999998e-14,YES
+#Kmer,Window,Ref,Coverage,q1,q2,q3,q4,q5,mis1,mis2,mis3,mis4,mis5,ins1,ins2,ins3,ins4,ins5,del1,del2,del3,del4,del5,prediction,dist,ProbM,Pro
+bU
+AGTGG,394404:394405:394406:394407:394408,chr2,8.0:8.0:7.0:7.0:7.0,21.5,21.25,19.857,23.0,16.285999999999998,0.0,0.0,0.0,0.0,0.0,0.0,0.062,0.0
+71,0.0,0.0,0.0,0.0,0.0,0.0,0.0,unm,19.26143361547619,3.00000089999998e-14,0.9999999999999699
+TTTTT,12150:12151:12152:12153:12154,chr8,3.0:3.0:3.0:3.0:3.0,0.0,16.5,18.5,16.0,16.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.3329999999
+9999996,0.33299999999999996,0.0,0.0,unm,2.5976484688977424,0.06071658133381308,0.9392834186661868
+ACATT,438165:438166:438167:438168:438169,chr13,67.0:67.0:67.0:68.0:68.0,13.635,13.446,9.323,9.6,12.127,0.03,0.045,0.015,0.147,0.0740000000000
+0001,0.0,0.0,0.0,0.0,0.0,0.06,0.03,0.075,0.11800000000000001,0.07400000000000001,unm,0.08435556637195174,0.519879422458087,0.4801205775419129
+5...
+```
+2. Tombo, containing the results obtained with this method in fasta format. You have one file for each comparison WT vs KO
+
+```bash
+>chr11:455562:- Est. Frac. Alternate: 0.98
+TGACA
+>chr12:1008723:- Est. Frac. Alternate: 0.98
+TATCT
+>chr15:491587:+ Est. Frac. Alternate: 0.96
+TATAT
+>chr10:425794:- Est. Frac. Alternate: 0.95
+ATGTT
+>chr13:510759:+ Est. Frac. Alternate: 0.95
 ...
 ```
-2. Tombo, containing the results obtained with this method. You have one file for each comparison WT vs KO and a final one, **tombo_all.txt**, with the intersection after filtering per score. Here an example of tombo_all.txt file:
 
-```bash
->chrIX:549289:+
-CTGAC
->chrIX:478105:+
-GAGCT
->chrIX:426607:-
-TTTTT
-...
-```
-
-3. Comb_mod, containing the all the modifications found in Epinano and Tombo called **RNA_modifications.txt** and a Venn Diagram. Here an example of RNA_modifications.txt file:
-
-
-```bash
-"positions"	"epinano"	"tombo"
-"chrIX-290356"	"1"	"1"
-"chrX-274861"	"1"	"1"
-"chrXV-513509"	"1"	"1"
-"chrI-126771"	"1"	"0"
-```
