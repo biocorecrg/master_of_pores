@@ -144,8 +144,10 @@ if (params.GPU == "YES" && basecaller != "guppy")
 	exit 1, "GPU can be used only with GUPPY basecaller!"
 
 if (params.ref_type == "genome") {
-	annotation = file(params.annotation)
-	if( !annotation.exists() ) exit 1, "Missing annotation file: ${params.annotation}! This is mandatory when ref_type = 'genome'"
+	if (params.annotation != "") {
+		annotation = file(params.annotation)
+		if( !annotation.exists() ) exit 1, "Missing annotation file: ${params.annotation}!"
+	}
 }
 
 
@@ -521,7 +523,7 @@ if ( params.counter == "YES") {
 	samtools view -F 256 ${bamfile} |cut -f 1,3 > ${idfile}.assigned
 			"""
 		} else if (params.ref_type == "genome") {
-			def anno = unzipBash(annotation) 
+			def anno = unzipBash("${params.annotation}") 
 			"""
 			samtools view ${bamfile} |htseq-count -f sam - ${anno} -o ${idfile}.sam > ${idfile}.count
 			awk '{gsub(/XF:Z:/,"",\$NF); print \$1"\t"\$NF}' ${idfile}.sam |grep -v '__' > ${idfile}.assigned
