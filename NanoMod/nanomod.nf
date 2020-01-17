@@ -33,17 +33,8 @@ output                                  : ${params.output}
 coverage                                : ${params.coverage}
 ************* tombo and epinano params ****************
 tombo_opt                               : ${params.tombo_opt}
-tombo_score                             : ${params.tombo_score}
 
 epinano_opt                             : ${params.epinano_opt}
-epinano_score                           : ${params.epinano_score}
-
-******************* filtering ***********************
-wt_num (number of times a modification has to be
- found in wt samples)                   : ${params.wt_num}
-ko_num (number of times a modification has to be 
-found in ko samples / only epinano)     : ${params.ko_num}
-motif(s)                                : ${params.motif}
 
 email                                   : ${params.email}
 """
@@ -281,22 +272,25 @@ process calc_var_frequencies {
 	"""
 }
 
+per_site_vars.map{
+	[ it[0], it[1].splitText( by: 1000000, keepHeader:true, file:true ) ]
+}.transpose().set{per_site_vars_splitted}
+
 /*
 * 
 */
 
 process predict_with_EPInano {
-	publishDir outputEpinano,  mode: 'copy'
 
     tag {"${sampleID}"}  
     label 'single_cpu_long'
     file(model_folder)
 	
     input:
-    set val(sampleID), file(per_site_var) from per_site_vars
+    set val(sampleID), file(per_site_var) from per_site_vars_splitted
 
     output:
-    file("*.dump.csv.gz") into epi_predictions
+    set val(sampleID), file("*.dump.csv.gz") into epi_predictions_to_combine
   
     script:
 	"""
@@ -306,93 +300,36 @@ process predict_with_EPInano {
 }
 
 
-
 /*
-* 
 */
-
-process cross_tombo_pred {
-	publishDir outputtombo,  mode: 'copy'
-
-    label 'single_cpu'
-	
-    input:
-    file(sign_tombo_region) from sign_tombo_regions.collect()
-
-    output:
-    file("tombo_all.txt") into tombo_output
-
-    script:
-    def motif_tombo = ""
-    if (params.motif != "") {
-    	motif_tombo = "-m ${params.motif}"
-    }
-    def sample_list = sign_tombo_region.join(' -t ')
-
-	"""
-	tombo_filter.py -t ${sample_list} -d ${params.wt_num} -o tombo_all.txt -p ${params.tombo_score} ${motif_tombo}
-	"""
-
-}
-
-
-/*
-* 
-*/
-
-process filter_EPInano_pred {
+process combineEpinanoPred {
 	publishDir outputEpinano,  mode: 'copy'
 
-    label 'single_cpu'
+    tag {"${sampleID}"}  
+    label 'single_cpu_long'
+    file(model_folder)
 	
     input:
-    file(epi_prediction) from epi_predictions.collect()
-    val(samples_epi) from samples_for_epinano_filtering.collect()
-    val(kos) from ko_for_epinano_filtering.collect()
-       
+    set val(sampleID), file("epi_split_*") from epi_predictions_to_combine.groupTuple()
+
+
     output:
-    file("output_epi.txt") into output_epinano
-    file("output_epi_raw.txt") 
-
-    script:
-    def sample_list = samples_epi.join(' -w ')
-    def ko_list = kos.join(' -k ')
-    def motif_epi = ""
-    if (params.motif != "") {
-    	motif_epi = "-m ${params.motif}"
-    }
-	"""
-	for i in *.prediction.*; do ln -s \$i `echo \$i| awk -F "." '{print \$1}'`; done
-	epinano_paired.py -k ${ko_list} -w ${sample_list} -dk ${params.ko_num} -dw ${params.wt_num} -c ${params.epinano_score} -o output_epi_raw.txt -gz ${motif_epi} 
-	head -n 1 output_epi_raw.txt > output_epi.txt
-	grep "YES" output_epi_raw.txt >> output_epi.txt
-	"""
-}
-
-/*
-* 
-*/
-
-process join_results {
-	publishDir outputCombined,  mode: 'copy'
-    label 'single_cpu'
-	
-    input:
-    file(output_epinano)
-    file(tombo_output)
- 	file(joinScript)
-   
-    output:
-    file("RNA_modifications.txt")
-    file("venn_diagram.png")
-
+    file("*.dump.csv.gz") into epi_predictions
+  
     script:
 	"""
-	awk -F"," '{if (\$1!~"position") print \$1"-"\$2}' ${output_epinano} > epinano.txt
-	awk -F"," '{if (\$1!~"position") print \$1"-"\$2}' ${tombo_output} > tombo.txt
-	Rscript --vanilla ${joinScript} epinano.txt tombo.txt "RNA modifications" 
+    zcat epi_split_1 | head -n 1 > ${sampleID}.prediction.poly.dump.csv;
+    for i in epi_split_*; do zcat \$i | grep -v "Window" >> ${sampleID}.prediction.poly.dump.csv; done
+    gzip ${sampleID}.prediction.poly.dump.csv
 	"""
+
 }
+
+
+
+
+
+
 
 
 
@@ -418,15 +355,6 @@ def getFolderName(sample) {
    return folder_info[-2]
 }
 
-// Get the channel for modfinder
-def getModfinderChannel(batches, granularity, foldername, ismulti) {
-	def number=0
-	batches.collate(granularity).map { 
-	    number++
-		[foldername, number, ismulti, it]
-	}.set{ fast5_4_modfinder }
-	return fast5_4_modfinder
-}
 
 
 
