@@ -283,7 +283,7 @@ process baseCalling {
 */
 if(demultiplexer == "deeplexicon") {
 	process demultiplexing_with_deeplexicon {
-		label 'basecall_cpus'
+		label 'demulti'
    	    tag {"${demultiplexer}-${idfile}"}  
 				
 		input:
