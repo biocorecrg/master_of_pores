@@ -59,9 +59,9 @@ The NanoMod module predicts RNA modifications using ***Tombo*** (https://github.
 ## Citing this work
 If you use this tool please cite our pre-print:
 
-Parallel and scalable workflow for the analysis of Oxford Nanopore direct RNA sequencing datasets.
-Luca Cozzuto, Huanle Liu, Leszek P. Pryszcz, Toni Hermoso Pulido, Julia Ponomarenko and Eva Maria Novoa.
-doi: [https://doi.org/10.1101/818336](https://www.biorxiv.org/content/10.1101/818336v1)
+["MasterOfPores: A Workflow for the Analysis of Oxford Nanopore Direct RNA Sequencing Datasets"
+Luca Cozzuto, Huanle Liu, Leszek P. Pryszcz, Toni Hermoso Pulido, Anna Delgado-Tejedor, Julia Ponomarenko, Eva Maria Novoa.
+*Front. Genet., 17 March 2020.* https://doi.org/10.3389/fgene.2020.00211]
 
 
 
