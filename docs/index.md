@@ -61,7 +61,7 @@ If you use this tool please cite our pre-print:
 
 ["MasterOfPores: A Workflow for the Analysis of Oxford Nanopore Direct RNA Sequencing Datasets"
 Luca Cozzuto, Huanle Liu, Leszek P. Pryszcz, Toni Hermoso Pulido, Anna Delgado-Tejedor, Julia Ponomarenko, Eva Maria Novoa.
-*Front. Genet., 17 March 2020.* https://doi.org/10.3389/fgene.2020.00211]
+*Front. Genet., 17 March 2020.*](https://doi.org/10.3389/fgene.2020.00211)
 
 
 
