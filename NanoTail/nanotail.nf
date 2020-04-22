@@ -189,8 +189,7 @@ process collect_nanopolish_results {
 
 	script:
 	"""
-	head -n 1 nanopol_1 >> ${sampleID}.polya.estimation.tsv 
-	grep --no-filename  -v "leader_start" nanopol_* | grep -v "READ_FAILED_LOAD" >> ${sampleID}.polya.estimation.tsv 
+	cat nanopol_* | awk '!(NR>1 && /leader_start/)' | grep -v "READ_FAILED_LOAD"  >> ${sampleID}.polya.estimation.tsv	
 	awk -F"\t" '{if (\$10=="PASS") print \$1"\t"\$9}' ${sampleID}.polya.estimation.tsv > ${sampleID}.nanopol.len
 	"""
 
@@ -209,8 +208,7 @@ process collect_tailfindr_results {
 
 	script:
 	"""
-	head -n 1 tailfin_1 >> ${sampleID}_findr.csv
-	grep --no-filename  -v "tail_start" tailfin_* >> ${sampleID}_findr.csv
+	cat tailfin_* | awk '!(NR>1 && /tail_start/)' >>  ${sampleID}_findr.csv
 	awk -F"," '{if (\$5!="" && \$1!="read_id") print \$1"\t"\$5}' ${sampleID}_findr.csv > ${sampleID}.findr.len
 	"""
 
