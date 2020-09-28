@@ -88,7 +88,8 @@ if( !compfile.exists() ) exit 1, "Missing comparison file: ${compfile}. Specify 
             [ sampleID, ctrlID ]
         }
     }
-    .into{ id_to_tombo_fast5; id_to_tombo_idx; id_to_epinano; id_for_resquiggling}
+    .into{ id_to_tombo_fast5; id_to_tombo_idx; luca; id_to_epinano; id_for_resquiggling}
+
 
 /*
  * Creates the channels with samples and KOs for EpiNano
@@ -120,6 +121,8 @@ id_for_resquiggling.flatten().unique().map {
 id_to_epinano.flatten().unique().map {
     [it, file("${params.input_path}/${it}/alignment/*.bam")]
 }.transpose().set{bams_for_variant_calling}
+
+
 
 /*
 * Perform resquiggling
@@ -230,11 +233,12 @@ process index_reference {
 	"""
 }
 
+
 /*
 * Calling variants for Epinano
 */
 
-process call_variants {
+process CallVariantsForEpinano {
 
     tag {"${sampleID}"}  
 	
@@ -252,10 +256,11 @@ process call_variants {
 }
 
 /*
-* 
+* Calc variant frequencies for Epinano
 */
 
-process calc_var_frequencies {
+process calcVarFrequenciesForEpinano {
+	publishDir outputEpinano,  pattern: "*.csv.gz", mode: 'copy'
 
     tag {"${sampleID}"}  
     label 'big_mem_cpus'
@@ -264,66 +269,22 @@ process calc_var_frequencies {
     set val(sampleID), file(tsvfile) from variants_for_frequency
     
     output:
-    set val(sampleID), file("*per_site_var.5mer.csv") into per_site_vars
-   
+    set val(sampleID), file("*per_site_var.5mer.csv.gz") into per_site_vars
+    file("*.csv.gz")
+       
     script:
 	"""
 	TSV_to_Variants_Freq.py3 -f ${tsvfile} -t ${task.cpus}
-	"""
-}
-
-per_site_vars.map{
-	[ it[0], it[1].splitText( by: 1000000, keepHeader:true, file:true ) ]
-}.transpose().set{per_site_vars_splitted}
-
-/*
-* 
-*/
-
-process predict_with_EPInano {
-
-    tag {"${sampleID}"}  
-    label 'single_cpu_long'
-    file(model_folder)
-	
-    input:
-    set val(sampleID), file(per_site_var) from per_site_vars_splitted
-
-    output:
-    set val(sampleID), file("*.dump.csv.gz") into epi_predictions_to_combine
-  
-    script:
-	"""
-	SVM.py -M ${model_folder}/model2.1-mis3.del3.q3.poly.dump -p ${per_site_var} -cl 7,12,22 ${params.epinano_opt} -o ${sampleID}.prediction
-	gzip *.poly.dump.csv
+	for i in *.csv; do gzip \$i; done
 	"""
 }
 
 
-/*
-*/
-process combineEpinanoPred {
-	publishDir outputEpinano,  mode: 'copy'
-
-    tag {"${sampleID}"}  
-    label 'single_cpu_long'
-    file(model_folder)
-	
-    input:
-    set val(sampleID), file("epi_split_*") from epi_predictions_to_combine.groupTuple()
+//per_site_vars.map{
+//	[ it[0], it[1].splitText( by: 1, keepHeader:true, file:true ) ]
+//}.transpose().set{per_site_vars_splitted}
 
 
-    output:
-    file("*.dump.csv.gz") into epi_predictions
-  
-    script:
-	"""
-    zcat epi_split_1 | head -n 1 > ${sampleID}.prediction.poly.dump.csv;
-    for i in epi_split_*; do zcat \$i | grep -v "Window" >> ${sampleID}.prediction.poly.dump.csv; done
-    gzip ${sampleID}.prediction.poly.dump.csv
-	"""
-
-}
 
 
 
@@ -368,7 +329,7 @@ def unzipBash(filename) {
 }
 
 def unzipFile(zipfile, filename) {
-    cmd = "ln -s ${zipfile} ${filename}"
+    cmd = "cp ${zipfile} ${filename}"
     filestring = zipfile.toString()
     if (filestring[-3..-1] == ".gz") {
     	cmd = "zcat ${zipfile} > ${filename}"
