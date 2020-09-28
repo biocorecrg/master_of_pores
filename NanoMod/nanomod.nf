@@ -60,7 +60,6 @@ epinano_opt     = params.epinano_opt
 // Output folders
 outputtombo   = "${params.output}/Tombo"
 outputEpinano      = "${params.output}/Epinano"
-outputCombined      = "${params.output}/Comb_mod"
 //outputReport   = file("${outputMultiQC}/multiqc_report.html")
 
 /*
