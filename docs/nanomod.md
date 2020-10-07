@@ -9,7 +9,7 @@ This module allows to predict the loci with RNA modifications starting from data
 
 ## Workflow
 
-<img src="https://biocorecrg.github.io/master_of_pores_dev/dag_mod_2.png" width="600" align="middle">
+<img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/dag_mod_2.png" width="600" align="middle">
 
 
 * **index_reference** index the reference file for Epinano
