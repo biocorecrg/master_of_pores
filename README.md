@@ -25,11 +25,15 @@ Please read the documentation here: https://biocorecrg.github.io/master_of_pores
 
 
 ## Reference
-If you use this tool please cite our paper:
+If you use this tool, please cite our paper:
 
 ["MasterOfPores: A Workflow for the Analysis of Oxford Nanopore Direct RNA Sequencing Datasets"
 Luca Cozzuto, Huanle Liu, Leszek P. Pryszcz, Toni Hermoso Pulido, Anna Delgado-Tejedor, Julia Ponomarenko, Eva Maria Novoa.
 *Front. Genet., 17 March 2020.* https://doi.org/10.3389/fgene.2020.00211](https://www.frontiersin.org/articles/10.3389/fgene.2020.00211/full)
 
 
+## Contact
+
+Please open an [issue](https://github.com/biocorecrg/master_of_pores/issues) if you encounter any issues/troubles. 
+However, please go over the previous issues (including closed issues) before opening a new issue, as your same exact question might have been already answered previously. Thank you! 
 
