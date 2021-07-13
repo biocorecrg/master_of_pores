@@ -1,0 +1,44 @@
+FROM biocorecrg/centos-perlbrew-pyenv3-java:centos7
+
+# File Author / Maintainer
+MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com> 
+
+ARG NANOPOLISH_VERSION=v0.13.3
+ARG NANOPOLISHCOMP_VERSION=v0.6.2
+
+
+#upgrade pip
+RUN pip install -U pip
+RUN pip install --upgrade setuptools
+
+# Installing 
+RUN pip install NanopolishComp==${NANOPOLISHCOMP_VERSION}
+
+# Installing Nanopolish
+RUN yum install -y wget 
+RUN yum group install "Development Tools" -y
+RUN git clone --recursive https://github.com/jts/nanopolish.git
+RUN cd nanopolish; git checkout ${NANOPOLISH_VERSION}; make all
+RUN cd nanopolish; pip install -r scripts/requirements.txt 
+ENV PATH "/project/nanopolish/:${PATH}" 
+
+# install pigz
+RUN yum install -y pigz
+
+# Clean cache
+RUN yum clean all 
+
+#cleaning
+RUN rm -fr *.tar.gz; rm -fr *.bz2; rm -fr ./tmp
+RUN rm -rf /var/cache/yum
+RUN rm -fr fastqc.zip  samtools-* 
+
+#plugin
+RUN yum install -y wget
+RUN wget https://github.com/nanoporetech/vbz_compression/releases/download/v1.0.1/ont-vbz-hdf-plugin-1.0.1-Linux-x86_64.tar.gz; tar -zvxf ont-vbz-hdf-plugin-1.0.1-Linux-x86_64.tar.gz
+RUN mv ont-vbz-hdf-plugin-1.0.1-Linux/usr/local/hdf5/ /usr/local/  
+ENV HDF5_PLUGIN_PATH "/usr/local/hdf5/lib/plugin"
+#ENV LD_LIBRARY_PATH "/usr/local/hdf5/lib/plugin"
+
+ENV LC_ALL=en_US.utf8
+ENV LANG=en_US.utf8

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # coding: utf-8
 
 import warnings
@@ -203,7 +203,7 @@ def main():
     if args.segment:
         seg_file = args.segment
         with open(seg_file, 'a') as f:
-            f.write("{}\t{}\n".format("ReadID", "start", "stop"))
+            f.write("{}\t{}\t{}\n".format("ReadID", "start", "stop"))
     else:
         seg_file = ''
 
@@ -343,7 +343,7 @@ def get_single_fast5_signal(read_filename, w, squig_file, seg_file):
             f.write("{}\t{}\n".format(readID, "\t".join(pA_signal)))
     if seg_file:
         with open(seg_file, 'a') as f:
-            f.write("{}\t{}\n".format(readID, seg[0], seg[1]))
+            f.write("{}\t{}\t{}\n".format(readID, seg[0], seg[1]))
     # return signal/signals
     return readID, pA_signal[seg[0]:seg[1]]
 
@@ -376,7 +376,7 @@ def get_multi_fast5_signal(read_filename, w, squig_file, seg_file):
                 f.write("{}\t{}\n".format(readID, "\t".join(pA_signal)))
         if seg_file:
             with open(seg_file, 'a') as f:
-                f.write("{}\t{}\n".format(readID, seg[0], seg[1]))
+                f.write("{}\t{}\t{}\n".format(readID, seg[0], seg[1]))
         pA_signals[readID] = pA_signal[seg[0]:seg[1]]
         seg_dic[readID] = seg
     # return signal/signals
@@ -599,7 +599,9 @@ def confidence_margin(npa):
 
 def classify(model, labels, image, subtract_pixel_mean, threshold):
     input_shape = image.shape[1:]
-    x = image.astype('float32') / 255
+    # x = image.astype('float32') / 255
+    x = image.astype('float32') + 1
+    x = x / 2
 
     # If subtract pixel mean is enabled
     if subtract_pixel_mean:

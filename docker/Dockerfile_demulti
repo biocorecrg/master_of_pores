@@ -4,6 +4,7 @@ MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com>
 
 ARG PYTHON_VERSION=3.7.6
 ARG DEBIAN_FRONTEND=noninteractive
+ARG READUCKS_VERSION=c2f59c3
 
 
 RUN apt-get update
@@ -11,6 +12,14 @@ RUN apt-get install -y build-essential zlib1g-dev curl  libreadline-gplv2-dev li
 RUN curl https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz -o Python-${PYTHON_VERSION}.tgz
 RUN tar -zxf Python-${PYTHON_VERSION}.tgz; rm Python-${PYTHON_VERSION}.tgz ; cd Python-${PYTHON_VERSION}; ./configure; make; make install
 RUN ln -s /usr/local/bin/python3 /usr/local/bin/python; ln -s /usr/local/bin/pip3 /usr/local/bin/pip
+
+RUN pip install --upgrade pip
+RUN pip install wheel biopython 
+RUN pip install parasail
+RUN apt-get install -y git
+RUN git clone https://github.com/rambaut/readucks.git
+RUN cd readucks; git checkout ${READUCKS_VERSION}; python setup.py install
+
 
 #Installing modules for Deeplexicon
 RUN pip install --upgrade pip setuptools
