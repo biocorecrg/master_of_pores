@@ -40,7 +40,6 @@ basecaller_opt            : ${params.basecaller_opt}
 GPU                       : ${params.GPU}
 demultiplexing            : ${params.demultiplexing} 
 demultiplexing_opt        : ${params.demultiplexing_opt} 
-demulti_fast5		      : ${params.demulti_fast5}
 
 filter                    : ${params.filter}
 filter_opt                : ${params.filter_opt}
@@ -48,13 +47,8 @@ mapper                    : ${params.mapper}
 mapper_opt                : ${params.mapper_opt}
 map_type                  : ${params.map_type}
 
-counter                   : ${params.counter}
-counter_opt               : ${params.counter_opt}
-
-downsampling			  : ${params.downsampling}
-
-variant_caller            : ${params.variant_caller}
-variant_opt               : ${params.variant_opt}
+counter                   : ${ params.counter}
+counter_opt               : ${ params.counter_opt}
 
 email                     : ${params.email}
 """
@@ -101,9 +95,7 @@ outputFast5    = "${params.output}/fast5_files"
 outputQual     = "${params.output}/QC_files"
 outputMultiQC  = "${params.output}/report"
 outputMapping  = "${params.output}/alignment"
-outputCRAM     = "${params.output}/cram_files"
 outputCounts   = "${params.output}/counts"
-outputVars     = "${params.output}/variants"
 outputAssigned = "${params.output}/assigned"
 outputReport   = file("${outputMultiQC}/multiqc_report.html")
 
@@ -121,7 +113,7 @@ if( outputReport.exists() ) {
 Channel
     .fromPath( params.fast5)                                             
     .ifEmpty { error "Cannot find any file matching: ${params.fast5}" }
-    .into {fast5_4_name; fast5_4_testing; fast5_4_granularity; fast5_4_variant}
+    .into {fast5_4_name; fast5_4_testing; fast5_4_granularity}
 
 /*
  * Get the name from the folder
@@ -145,8 +137,8 @@ if (demultiplexer == "") {
 	demultiplexer = "OFF"
 }
 
-//if (demultiplexer != "OFF" && demultiplexer != "deeplexicon")
-//exit 1, "Demultiplexing of RNA can be performed only with deeplexicon. Current value is ${demultiplexer}"
+if (demultiplexer != "OFF" && demultiplexer != "deeplexicon")
+exit 1, "Demultiplexing of RNA can be performed only with deeplexicon. Current value is ${demultiplexer}"
 
 if (params.GPU == "YES" && basecaller != "guppy")
 	exit 1, "GPU can be used only with GUPPY basecaller!"
@@ -193,27 +185,6 @@ fast5_batches.map {
 /*
 *  Perform base calling using albacore or guppy on raw fas5 files
 */
-
-process logBaseCalling {
-    label (params.GPU == "ON" ? 'basecall_gpus': 'basecall_cpus')
-    echo true
-    
-    script:
-    if (basecaller == "albacore") {
- 	    """
- 	    echo "no"
- 	    #export PYTHONPATH=$baseDir/bin/albacore:\$PYTHONPATH
-		#read_fast5_basecaller.py 
-        """
-   } else if (basecaller == "guppy"){
-		"""
-		echo '*********************************'
-		guppy_basecaller --version
-		guppy_basecaller --print_workflows | grep ${params.flowcell} | grep ${params.kit}
-		echo '*********************************'
-		"""
-   }
-}
 
 process baseCalling {
     tag {"${basecaller}-${folder_name}-${idfile}"}  
@@ -268,8 +239,7 @@ process baseCalling {
         def gpu_prefix = ""
         if (params.GPU == "ON") {
             gpu_prefix = 'export LD_LIBRARY_PATH="/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/.singularity.d/libs"'
-         	//gpu_cmd = '-x "cuda:0"'
-                gpu_cmd = '-x auto'
+         	gpu_cmd = '-x "cuda:0"'
         }
         // in case input files are single fast5 group them in multifast5 at the end
         if (multi5 == 0) {
@@ -279,7 +249,7 @@ process baseCalling {
         if (demultiplexer == "guppy") {
 			"""
                 ${gpu_prefix}
-				guppy_basecaller ${gpu_cmd} ${basecaller_opt} ${demultiplexer_opt} --flowcell ${params.flowcell} --kit ${params.kit} --num_barcode_threads ${task.cpus} --barcode_kits ${params.barcodekit} --trim_barcodes  --fast5_out -i ${infolder} --save_path ./${idfile}_out --cpu_threads_per_caller 1 --gpu_runners_per_device 1 --num_callers ${task.cpus} 
+				guppy_basecaller ${gpu_cmd} ${basecaller_opt} ${demultiplexer_opt} --flowcell ${params.flowcell} --kit ${params.kit} --num_barcode_threads ${task.cpus} --barcode_kits ${params.barcodekit} --trim_barcodes  --fast5_out -i ${infolder} --save_path ./${idfile}_out --cpu_threads_per_caller 1  --num_callers ${task.cpus} 
 				cd ${idfile}_out; 
 				if [ -d barcode01 ]; then
 					for d in barcode*; do echo \$d; cat \$d/*.fastq ${RNA_conv_cmd} > ../${idfile}.\$d.fastq; done;
@@ -289,23 +259,10 @@ process baseCalling {
 				${multi_cmd}
 			"""
         }
-        else if (demultiplexer == "guppy-readucks") {
-        	"""
-                ${gpu_prefix}
-				guppy_basecaller ${gpu_cmd} ${basecaller_opt} ${demultiplexer_opt} --flowcell ${params.flowcell} --kit ${params.kit} --num_barcode_threads ${task.cpus} --barcode_kits ${params.barcodekit} --trim_barcodes  --fast5_out -i ${infolder} --save_path ./${idfile}_out --gpu_runners_per_device 1 --cpu_threads_per_caller 1  --num_callers ${task.cpus} 
-				cd ${idfile}_out; 
-				if [ -d barcode01 ]; then
-					for d in barcode*; do echo \$d; cat \$d/*.fastq ${RNA_conv_cmd} > ../${idfile}.\$d.fastq; done;
-				fi
-				cat unclassified/*.fastq ${RNA_conv_cmd} > ../${idfile}.unclassified.fastq; cd ../
-				for i in *.fastq; do gzip \$i; done
-				${multi_cmd}        		
-        	"""
-        }
         else  {
 			"""
             ${gpu_prefix}
-			guppy_basecaller ${gpu_cmd} --flowcell ${params.flowcell} --kit ${params.kit} --fast5_out ${basecaller_opt} -i ${infolder} --save_path ./${idfile}_out --cpu_threads_per_caller 1 --gpu_runners_per_device 1 --num_callers  ${task.cpus} 
+			guppy_basecaller ${gpu_cmd} --flowcell ${params.flowcell} --kit ${params.kit} --fast5_out ${basecaller_opt} -i ${infolder} --save_path ./${idfile}_out --cpu_threads_per_caller 1  --num_callers  ${task.cpus} 
 			cat ${idfile}_out/*.fastq ${RNA_conv_cmd} >> ${idfile}.fastq
 			rm ${idfile}_out/*.fastq
 			gzip ${idfile}.fastq
@@ -340,16 +297,13 @@ if(demultiplexer == "deeplexicon") {
 
 		script:
 		def model = ''
-		def executable = 'deeplexicon.py -f multi'
+		def deep_option = 'multi'
 		if (multi5 == 0){
-			executable = 'deeplexicon.py -f single'
-		}
- 		if (demultiplexer_opt.contains("pAmps-final-actrun_newdata_nanopore_UResNet20v2_model.030.h5")){
-			executable = 'cmd_line_deeplexicon_caller_2019_09_12.py'
+			deep_option = 'single'
 		}
 		"""
 		    ln -s ${deeplexicon_folder}/* .
-            ${executable} -p ./ ${demultiplexer_opt}  -b 4000 -v > ${idfile}_demux.tsv
+            deeplexicon.py -p ./ ${demultiplexer_opt} -f ${deep_option} -b 4000 -v > ${idfile}_demux.tsv
  		"""
 	} 
 	
@@ -375,10 +329,7 @@ if(demultiplexer == "deeplexicon") {
 		label 'basecall_cpus'
    	    tag { demultiplexer }  
 		publishDir outputFast5,  mode: 'copy'
-	
-		when: 
-		params.demulti_fast5 == "ON"
-		
+				
 		input:
     	file("demux_*") from demux_for_fast5_extraction.collect()
     	file("*") from fast5_files_for_demultiplexing.collect()
@@ -449,7 +400,7 @@ process concatenateFastQFiles {
     set idfile, file(fastq_files) from fastq_files_for_grouping
 
     output:
-    set idfile, file("${idfile}.fq.gz") into fastq_files_for_fastqc, fastq_files_for_mapping, fastq_files_for_variants
+    set idfile, file("${idfile}.fq.gz") into fastq_files_for_fastqc, fastq_files_for_mapping
 
     script:
     """
@@ -472,7 +423,6 @@ process QC {
 
     output:
     file ("${folder_name}_QC") into QC_folders
-    file ("final_summary.stats") into stat_for_variants
 
     script:
     """
@@ -522,20 +472,14 @@ process mapping {
     
     output:
     set idfile, file("${idfile}.${mapper}.sorted.bam") optional true into aligned_reads, aligned_reads_for_QC, aligned_reads_for_QC2, aligned_reads_for_counts
-    set idfile, mapper, file("${idfile}.${mapper}.sorted.bam"), file("${idfile}.${mapper}.sorted.bam.bai") optional true  into aligned_reads_for_crams
-	set idfile, file("${idfile}.${mapper}.sorted.bam"), file("${idfile}.${mapper}.sorted.bam.bai") optional true  into aligned_reads_for_vars    
-    file("${idfile}.${mapper}.sorted.bam*") optional true 
 
     script:    
     if (mapper == "minimap2") {
-	    def mappars = (params.map_type == "spliced") ? "-ax splice -k14" : "-ax map-ont"
+	    def mappars = (params.map_type == "spliced") ? "-ax splice" : "-ax map-ont"
 	    mappars += " ${mapper_opt} "
  	    """
-        minimap2 -t ${task.cpus} ${mappars} -uf ${reference} ${fastq_file} > reads.mapped.sam
-	samtools view -@ ${task.cpus} -F4 -hSb reads.mapped.sam > reads.mapped.bam
-	rm reads.mapped.sam
+        minimap2 -t ${task.cpus} ${mappars} ${reference} ${fastq_file} | samtools view -@ ${task.cpus} -F4 -hSb - > reads.mapped.bam
         samtools sort -@ ${task.cpus} -o ${idfile}.${mapper}.sorted.bam reads.mapped.bam
-        samtools index -@ ${task.cpus} ${idfile}.${mapper}.sorted.bam 
         rm reads.mapped.bam
         """
    }
@@ -545,62 +489,14 @@ process mapping {
         """
         graphmap2 align -t ${task.cpus} -r ${reference} ${mappars} -d ${fastq_file}  | samtools view -@ ${task.cpus} -F4 -hSb - > reads.mapped.bam
         samtools sort -@ ${task.cpus} -o ${idfile}.${mapper}.sorted.bam reads.mapped.bam
-        samtools index -@ ${task.cpus} ${idfile}.${mapper}.sorted.bam 
         rm reads.mapped.bam
         """
-   }
-   else if (mapper == "graphmap"){
-        """
-        graphmap align -t ${task.cpus} ${mapper_opt} -r ${reference} -d ${fastq_file}  | samtools view -@ ${task.cpus} -F4 -hSb - > reads.mapped.bam
-        samtools sort -@ ${task.cpus} -o ${idfile}.${mapper}.sorted.bam reads.mapped.bam
-        samtools index -@ ${task.cpus} ${idfile}.${mapper}.sorted.bam 
-		rm reads.mapped.bam
-        """
-   }   
-    else {
+   } else {
         """
  		echo "nothing to do!"
         """
    }     
 }
-
-/*
-*  Perform mapping and sorting
-*/
-process cram_conversion {
-    tag {"${mapper}-${idfile}"}  
-    publishDir outputCRAM, mode: 'copy'
-    label 'big_mem_cpus'
-
-    input:
-    file(reference)
-    set idfile, val(mapper), file(aln), file(index) from aligned_reads_for_crams
-    
-    output:
-    file("${idfile}.${mapper}.sorted.cram*") optional true 
-    script:
-    def downcmd = ""
-    def input = aln
-    def cleancmd = ""
-	gzipcmd = unzipCmd(reference, "myreference.fasta")
-	gzipclean = "rm myreference.fasta"  
-	if (params.downsampling != "") {
-		def perc = params.downsampling/100
-		downcmd = "samtools view -@ ${task.cpus} -bs ${perc} ${aln} > subsample.bam"
-		input = "subsample.bam"
-		cleancmd = "rm subsample.bam"
-	}
- 	"""
- 		${downcmd}
- 		${gzipcmd}
-		samtools view  -@ ${task.cpus} -C ${input} -T  myreference.fasta -o ${idfile}.${mapper}.sorted.cram
-		samtools index -@ ${task.cpus} ${idfile}.${mapper}.sorted.cram
-		${cleancmd} 
-		${gzipclean}
-    """
-}
-
-
 
 /*
 *  Perform counting (optional)
@@ -622,14 +518,14 @@ if ( params.counter == "YES") {
 		script:    
 		if (params.ref_type == "transcriptome") {
 			"""
-			NanoCount -i ${bamfile} ${counter_opt} -o ${idfile}.count ${counter_opt};
+			NanoCount -i ${bamfile} -o ${idfile}.count ${counter_opt};
 	awk '{sum+=\$3}END{print FILENAME"\t"sum}' ${idfile}.count |sed s@.count@@g > ${idfile}.stats
 	samtools view -F 256 ${bamfile} |cut -f 1,3 > ${idfile}.assigned
 			"""
 		} else if (params.ref_type == "genome") {
 			def anno = unzipBash("${params.annotation}") 
 			"""
-			samtools view ${bamfile} |htseq-count -f sam - ${anno} ${counter_opt} -o ${idfile}.sam > ${idfile}.count
+			samtools view ${bamfile} |htseq-count -f sam - ${anno} -o ${idfile}.sam > ${idfile}.count
 			awk '{gsub(/XF:Z:/,"",\$NF); print \$1"\t"\$NF}' ${idfile}.sam |grep -v '__' > ${idfile}.assigned
 			rm ${idfile}.sam
 			"""		
@@ -734,39 +630,6 @@ process alnQC2 {
 QC_folders.mix(fastqc_for_multiqc,qc2_for_multiqc,read_counts,count_repo_for_multiQC,alnQC_for_multiQC).set{files_for_report}
 
 /*
-*  Perform viral variant call (experimental)
-*/
-
-if ( params.variant_caller == "YES" && params.seq_type != "RNA") {
-
-	process variant_calling {
-		tag {"${idfile}"}  
-		publishDir outputVars, pattern: "*.vcf", mode: 'copy'
-		label 'big_cpus'
-
-		input:
-		set idfile, file(bamfile), file(bai) from aligned_reads_for_vars
-        file(reference) 
-        
-		output:
-		file("*.vcf")
-		
-		script:
-		gzipcmd = unzipCmd(reference, "myreference.fasta", "yes")
-		gzipclean = "rm myreference.fasta"  
-		"""
-			${gzipcmd}
-			medaka_variant ${params.variant_opt} -i ${bamfile} -f myreference.fasta -d -t ${task.cpus} -o ./out
-			mv `ls -t out/round_*.vcf| head -n1 ` .
-			${gzipclean}
-		"""
-		}
-	}
-
-
-
-
-/*
 *  Perform multiQC report
 */
 process multiQC {
@@ -820,22 +683,8 @@ workflow.onComplete {
 }
 
 // make named pipe 
-def unzipCmd(filename, unzippedname, copy="") { 
-    def cmd = "ln -s ${filename} ${unzippedname}"
-	if (copy!="") {
-		cmd = "cp ${filename} ${unzippedname}"
-	}
-    def ext = filename.getExtension()
-    if (ext == "gz") {
-    	cmd = "zcat ${filename} > ${unzippedname}"
-    }
-    return cmd
-}
-
-
-// make named pipe 
 def unzipBash(filename) { 
-    def cmd = filename.toString()
+    cmd = filename.toString()
     if (cmd[-3..-1] == ".gz") {
     	cmd = "<(zcat ${filename})"
     }

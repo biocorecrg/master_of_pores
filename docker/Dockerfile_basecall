@@ -5,6 +5,7 @@ MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com>
 
 ARG GUPPY_VERSION=3.1.5
 ARG ALBACORE_VERSION=2.1.7
+ARG PORECHOP_VERSION=0.2.4
 
 # Install Python3 & pip, curl
 RUN apt update && apt install -y python3-setuptools curl
@@ -15,7 +16,6 @@ RUN mkdir -p /project
 WORKDIR /project
 
 #Installing ont_fast5_api
-RUN pip install --upgrade pip
 RUN pip install ont-fast5-api
 
 # Install guppy's dependencies

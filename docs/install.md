@@ -29,7 +29,7 @@ git clone --depth 1 https://github.com/biocorecrg/master_of_pores.git
 - Singularity: https://sylabs.io/guides/2.6/user-guide/quick_start.html#quick-installation-steps (version 2.6.1 or 3.2.1 is required)
 
 ### 4. Download Nanopore base-calling algorithms
-Because of redistribution restriction of the basecallers **Albacore** and **Guppy** we cannot provide them inside the docker image, so you would need to download the binaries from the official website https://nanoporetech.com and place them inside the **master_of_pores/NanoPreprocess/bin** folder.
+Because of redistribution restriction of the basecallers **Albacore** and **Guppy** we cannot provide them inside the docker image, so you would need to download the binaries from the official website https://nanoporetech.com and place them inside the **master_of_pores/NanoPreprocess/bin** folder. For installing Guppy you need to install the tarball file.
 
 #### a) Both Albacore and Guppy
 ```bash
@@ -51,7 +51,7 @@ $ ln -s albacore/bin/read_fast5_basecaller.py .
 ```
 #### c) Guppy
 Please note Guppy versions older than 3.1 (e.g. 3.0.3) only runs on CPUs.
-Newer versions (e.g. 3.1.5 and above) works on both CPUs and GPUs. The difference of speed between CPUs and GPU is more than 10 times.
+Newer versions (e.g. 3.1.5 and above) works on both CPUs and GPUs. The difference of speed between CPUs and GPU is more than 10 times. You need to install the tarball file of Guppy.
 
 ```bash
 cd master_of_pores/NanoPreprocess/bin
