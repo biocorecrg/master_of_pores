@@ -1,0 +1,30 @@
+FROM biocorecrg/centos-perlbrew-pyenv3-java:centos7
+
+# File Author / Maintainer
+MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com> 
+
+ARG EPINANO_VERSION=1.1.1
+
+
+#upgrade pip
+RUN pip install -U pip
+RUN pip install --upgrade setuptools
+
+# Installing modules for EPINANO
+RUN pip install h5py==2.8.0 numpy==1.16.1 pandas==0.23.4 scikit-learn==0.20.2
+RUN yum install -y wget 
+RUN wget https://github.com/enovoa/EpiNano/archive/refs/tags/epinano${EPINANO_VERSION}.tar.gz
+RUN tar -zvxf epinano${EPINANO_VERSION}.tar.gz; cd EpiNano-epinano${EPINANO_VERSION}/
+RUN chmod +x /project/EpiNano-epinano${EPINANO_VERSION}/scripts/*
+ENV PATH "/project/EpiNano-epinano${EPINANO_VERSION}/scripts/" 
+
+# Clean cache
+RUN yum clean all 
+
+#cleaning
+RUN rm -fr *.tar.gz; rm -fr *.bz2; rm -fr ./tmp
+RUN rm -rf /var/cache/yum
+
+ENV LC_ALL=en_US.utf8
+ENV LANG=en_US.utf8
+

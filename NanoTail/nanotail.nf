@@ -67,11 +67,11 @@ Channel
     .into{folders_for_fastq; folders_for_analyisis; folders_for_genes; folders_for_bam_filtering}
     
 folders_for_analyisis.map {  
-        [ it[0], file("${it[1][0]}/fast5_files/*") ]
-    }.transpose().into{data_for_tailfindr; data_for_nanopolish_raw}
+        [ it[0], file("${it[1][0]}/fast5_files/*.fast5") ]
+    }.transpose().into{data_for_tailfindr; data_for_nanopolish_raw; ciccio}
 
 folders_for_bam_filtering.map {  
-        [ it[0], file("${it[1][0]}/alignment/*") ]
+        [ it[0], file("${it[1][0]}/alignment/*.bam") ]
     }.set{data_for_bam_filtering}
 
 folders_for_fastq.map {
@@ -109,7 +109,7 @@ process check_reference {
 
 process tailfindr {
 	tag "${sampleID}-${fast5.simpleName}"  
-	label 'big_mem_cpus'
+	label 'big_mem_cpus_time'
 	
 	input:
 	set val(sampleID), file(fast5) from data_for_tailfindr
@@ -148,17 +148,17 @@ process filter_bam {
 
 
 data_for_nanopolish_raw.combine(filt_bam_for_nanopolish, by:0).combine(fastq_data, by:0)
-.set{data_for_nanopolish}
+.into{data_for_nanopolish; ciccio1}
 
-
+ciccio.println()
 
 /*
 * Estimate polyA tail size with nanopolish
 */
 process tail_nanopolish {
 	tag "${sampleID}-${fast5.simpleName}"  
-	label 'big_mem_cpus_time'
-	
+	label 'big_mem_cpus_time_np'
+  
 	input:
 	file(checked_ref)
 	set val(sampleID), file(fast5), file(alignment), file(alnindex), file(fastq) from data_for_nanopolish
@@ -221,7 +221,9 @@ process collect_tailfindr_results {
 /*
 */
 process join_results {
-	publishDir outputFinal,  mode: 'copy'
+	container "biocorecrg/mopnanotail:0.2"
+
+    publishDir outputFinal,  mode: 'copy'
 	tag { sampleID }  
 	
 	input:
