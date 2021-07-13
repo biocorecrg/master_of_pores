@@ -181,6 +181,7 @@ process getModifications {
     label 'big_mem_cpus'
     tag {"${combID}"}  
 	publishDir outputtombo, pattern: "*.significant_regions.fasta",  mode: 'copy'
+	publishDir outputtombo, pattern: "*.significant_regions.bed",  mode: 'copy'
         
     input:
     file(reference)
@@ -188,6 +189,7 @@ process getModifications {
     
     output:
     file ("*.significant_regions.fasta") into sign_tombo_regions
+    file ("*.significant_regions.bed")
 
     script:
 	def reference_cmd = unzipFile(reference, "reference.fa")
@@ -204,6 +206,8 @@ process getModifications {
 	tombo detect_modifications model_sample_compare --minimum-test-reads ${params.coverage} --fast5-basedirs ${folder_name_A}/* --control-fast5-basedirs ${folder_name_B}/* --statistics-file-basename ${folder_name_A}_${folder_name_B}_model_sample_compare --rna --per-read-statistics-basename ${folder_name_A}_${folder_name_B}_per-read-statistics --processes ${task.cpus}
 	tombo text_output signif_sequence_context ${tombo_opt} --num-regions 1000000000 --statistics-filename ${folder_name_A}_${folder_name_B}_model_sample_compare.tombo.stats  --genome-fasta reference.fa --fast5-basedirs ${folder_name_A} --sequences-filename ${folder_name_A}_${folder_name_B}.significant_regions.fasta 
 	rm reference.fa
+	
+	tombo_2_bed.sh ${folder_name_A}_${folder_name_B}.significant_regions.fasta  ${folder_name_A}_${folder_name_B}.significant_regions.bed
 	"""
 }
 
