@@ -250,7 +250,7 @@ process CallVariantsForEpinano {
    
     script:
 	"""
-	samtools view -h ${alnfile} -F 256 | \$SAM2TSV -r ${reference} >${sampleID}.tsv
+	samtools view -h ${alnfile} -F 256 | \$SAM2TSV -R ${reference} | cut -f 3 --complement  > ${sampleID}.tsv
 	"""
 }
 
@@ -260,6 +260,7 @@ process CallVariantsForEpinano {
 
 process calcVarFrequenciesForEpinano {
 	publishDir outputEpinano,  pattern: "*.csv.gz", mode: 'copy'
+	container "biocorecrg/mopepinano:0.1"
 
     tag {"${sampleID}"}  
     label 'big_mem_cpus'
