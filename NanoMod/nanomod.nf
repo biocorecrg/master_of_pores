@@ -57,6 +57,8 @@ joinScript = file("$baseDir/bin/join.r")
 tombo_opt    	= params.tombo_opt
 epinano_opt     = params.epinano_opt
 
+epinanoScript = file("$baseDir/bin/epinano_scatterplot.R")
+
 // Output folders
 outputtombo   = "${params.output}/Tombo"
 outputEpinano      = "${params.output}/Epinano"
@@ -87,7 +89,7 @@ if( !compfile.exists() ) exit 1, "Missing comparison file: ${compfile}. Specify 
             [ sampleID, ctrlID ]
         }
     }
-    .into{ id_to_tombo_fast5; id_to_tombo_idx; luca; id_to_epinano; id_for_resquiggling}
+    .into{ id_to_tombo_fast5; id_to_tombo_idx; id_to_epinano; id_to_epinano_plots; id_for_resquiggling}
 
 
 /*
@@ -273,13 +275,74 @@ process calcVarFrequenciesForEpinano {
     set val(sampleID), file(tsvfile) from variants_for_frequency
     
     output:
-    set val(sampleID), file("*per_site_var.5mer.csv.gz") into per_site_vars
+    set val(sampleID), file("*.tsv.per.site.var.csv.gz") into per_site_vars_A, per_site_vars_B
     file("*.csv.gz")
        
     script:
 	"""
 	TSV_to_Variants_Freq.py3 -f ${tsvfile} -t ${task.cpus}
 	for i in *.csv; do gzip \$i; done
+	"""
+}
+
+per_site_vars_A.combine(per_site_vars_B).map {
+	[ it[0], it[2], it[1], it[3] ]
+}.set{per_site_combs}
+
+per_site_combs.join(id_to_epinano_plots, by:[0,1])
+.into{per_site_for_plotsA; per_site_for_plotsB; per_site_for_plotsC}
+
+process makeEpinanoPlotsMis {
+	publishDir outputEpinano, mode: 'copy'
+	container "biocorecrg/mopnanotail:0.3"
+
+    tag {"${sampleIDA}--${sampleIDB}"}  
+	
+    input:
+    set val(sampleIDA), val(sampleIDB), file(per_site_varA), file(per_site_varB) from per_site_for_plotsA
+    
+    output:
+    file("*.pdf")
+       
+    script:
+	"""
+	Rscript --vanilla ${epinanoScript} ${per_site_varA} ${sampleIDA} ${per_site_varB} ${sampleIDB} mis  
+	"""
+}
+
+process makeEpinanoPlotsIns {
+	publishDir outputEpinano, mode: 'copy'
+	container "biocorecrg/mopnanotail:0.3"
+
+    tag {"${sampleIDA}--${sampleIDB}"}  
+	
+    input:
+    set val(sampleIDA), val(sampleIDB), file(per_site_varA), file(per_site_varB) from per_site_for_plotsB
+    
+    output:
+    file("*.pdf")
+       
+    script:
+	"""
+	Rscript --vanilla ${epinanoScript} ${per_site_varA} ${sampleIDA} ${per_site_varB} ${sampleIDB} ins  
+	"""
+}
+
+process makeEpinanoPlotsDel {
+	publishDir outputEpinano, mode: 'copy'
+	container "biocorecrg/mopnanotail:0.3"
+
+    tag {"${sampleIDA}--${sampleIDB}"}  
+	
+    input:
+    set val(sampleIDA), val(sampleIDB), file(per_site_varA), file(per_site_varB) from per_site_for_plotsC
+    
+    output:
+    file("*.pdf")
+       
+    script:
+	"""
+	Rscript --vanilla ${epinanoScript} ${per_site_varA} ${sampleIDA} ${per_site_varB} ${sampleIDB} del  
 	"""
 }
 
