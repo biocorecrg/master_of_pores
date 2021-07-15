@@ -19,9 +19,12 @@ navigation: 1
 
 # Nanopore analysis pipeline
 Nextflow pipeline for analysis of Nanopore data from direct RNA sequencing. This is a joint project between [CRG bioinformatics core](https://biocore.crg.eu/) and [Epitranscriptomics and RNA Dynamics research group](https://www.crg.eu/en/programmes-groups/novoa-lab).  
+The current version is the 1.1. The original 1.0 published in the paper is [here](https://github.com/biocorecrg/master_of_pores/releases/tag/v1.0)
+
 
 ## Documentation
 Please read the documentation here: https://biocorecrg.github.io/master_of_pores/
+
 
 
 ## Reference
