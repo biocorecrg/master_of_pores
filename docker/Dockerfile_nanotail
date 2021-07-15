@@ -1,0 +1,70 @@
+FROM biocorecrg/centos-perlbrew-pyenv3-java:centos7
+
+# File Author / Maintainer
+MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com> 
+
+ARG R_VERSION=3.6.0
+ARG TAILFINDR_VERSION=af56cce
+
+#Installing R
+RUN yum install -y epel-release libxml2-devel libcurl-devel libcurl libcurl-devel
+RUN yum install R-${R_VERSION} -y
+RUN mkdir -p /usr/share/doc/R-${R_VERSION}/html
+# problem with curl 4.1 // must use 4.0
+RUN Rscript -e "install.packages('https://cran.r-project.org/src/contrib/Archive/curl/curl_4.0.tar.gz',repo=NULL,type='source')"
+
+RUN Rscript -e "install.packages(c('data.table','flexdashboard','dplyr','plyr','ggExtra','ggplot2','hexbin','knitr','optparse','RColorBrewer','reshape2'), repos='http://cran.us.r-project.org')"
+RUN Rscript -e "install.packages(c('devtools', 'futile.logger','readr','scales','viridis','yaml', 'ggplot2'), dependencies = TRUE, repos='http://cran.us.r-project.org')"
+RUN Rscript -e "install.packages(c('BiocManager', 'snow'), repos='http://cran.us.r-project.org')"; Rscript -e "BiocManager::install()"
+
+# Installing tailfindr 
+
+#plugin
+RUN pip install --upgrade pip
+
+RUN yum install -y hdf5-devel wget
+RUN wget https://github.com/nanoporetech/vbz_compression/releases/download/v1.0.1/ont-vbz-hdf-plugin-1.0.1-Linux-x86_64.tar.gz; tar -zvxf ont-vbz-hdf-plugin-1.0.1-Linux-x86_64.tar.gz
+RUN mv ont-vbz-hdf-plugin-1.0.1-Linux/usr/local/hdf5/ /usr/local/
+ENV HDF5_PLUGIN_PATH "/usr/local/hdf5/lib/plugin"
+#ENV LD_LIBRARY_PATH "/usr/local/hdf5/lib" 
+
+
+
+RUN Rscript -e "BiocManager::install(c('BiocGenerics', 'Biostrings', 'IRanges', 'zlibbioc', 'XVector', 'bit', 'pryr'))"
+
+#RUN yum install -y hdf5-devel
+RUN bash -c 'curl -k -L https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.21/src/hdf5-1.8.21.tar.gz > hdf5-1.8.21.tar.gz'
+RUN tar -zvxf hdf5-1.8.21.tar.gz; cd hdf5-1.8.21; \
+./configure --prefix=/usr/local/hdf5 --enable-fortran --enable-cxx; make; make install
+ENV LD_LIBRARY_PATH "/usr/local/hdf5/lib" 
+ENV PATH "/usr/local/hdf5/bin":${PATH} 
+
+RUN wget https://github.com/nanoporetech/vbz_compression/releases/download/v1.0.1/ont-vbz-hdf-plugin-1.0.1-Linux-x86_64.tar.gz; tar -zvxf ont-vbz-hdf-plugin-1.0.1-Linux-x86_64.tar.gz
+RUN mv ont-vbz-hdf-plugin-1.0.1-Linux/usr/local/hdf5/lib/plugin/* /usr/local/lib/plugin
+ENV HDF5_PLUGIN_PATH "/usr/local/hdf5/lib/plugin"
+
+
+RUN Rscript -e "BiocManager::install(c('hdf5r'))"
+#RUN ciccio
+
+RUN Rscript -e "BiocManager::install(c('foreach', 'doParallel', 'doSNOW', 'rbokeh', 'psych', 'gistr', 'mnormt'))"
+
+RUN Rscript -e "BiocManager::install(c('Rsamtools'))"
+RUN Rscript -e "BiocManager::install(c('tidyr'))"
+RUN Rscript -e "devtools::install_github(\"adnaniazi/tailfindr\", dependencies=FALSE, INSTALL_opts=c(\"--no-docs\", \"--no-help\"))"
+
+# Installing vennDiagram
+RUN Rscript -e "install.packages(c('argparse', 'gplots', 'VennDiagram'), dependencies = TRUE, repos='http://cran.us.r-project.org')"
+RUN Rscript -e "install.packages(c('ggrepel', 'MASS', 'reshape2'), repos='http://cran.us.r-project.org')"; Rscript -e "BiocManager::install()"
+
+
+# Clean cache
+RUN yum clean all 
+
+#cleaning
+RUN rm -fr *.tar.gz; rm -fr *.bz2; rm -fr ./tmp
+RUN rm -rf /var/cache/yum
+
+ENV LC_ALL=en_US.utf8
+ENV LANG=en_US.utf8
+

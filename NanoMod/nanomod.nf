@@ -57,6 +57,8 @@ joinScript = file("$baseDir/bin/join.r")
 tombo_opt    	= params.tombo_opt
 epinano_opt     = params.epinano_opt
 
+epinanoScript = file("$baseDir/bin/epinano_scatterplot.R")
+
 // Output folders
 outputtombo   = "${params.output}/Tombo"
 outputEpinano      = "${params.output}/Epinano"
@@ -87,7 +89,7 @@ if( !compfile.exists() ) exit 1, "Missing comparison file: ${compfile}. Specify 
             [ sampleID, ctrlID ]
         }
     }
-    .into{ id_to_tombo_fast5; id_to_tombo_idx; luca; id_to_epinano; id_for_resquiggling}
+    .into{ id_to_tombo_fast5; id_to_tombo_idx; id_to_epinano; id_to_epinano_plots; id_for_resquiggling}
 
 
 /*
@@ -181,6 +183,7 @@ process getModifications {
     label 'big_mem_cpus'
     tag {"${combID}"}  
 	publishDir outputtombo, pattern: "*.significant_regions.fasta",  mode: 'copy'
+	publishDir outputtombo, pattern: "*.significant_regions.bed",  mode: 'copy'
         
     input:
     file(reference)
@@ -188,6 +191,7 @@ process getModifications {
     
     output:
     file ("*.significant_regions.fasta") into sign_tombo_regions
+    file ("*.significant_regions.bed")
 
     script:
 	def reference_cmd = unzipFile(reference, "reference.fa")
@@ -204,6 +208,8 @@ process getModifications {
 	tombo detect_modifications model_sample_compare --minimum-test-reads ${params.coverage} --fast5-basedirs ${folder_name_A}/* --control-fast5-basedirs ${folder_name_B}/* --statistics-file-basename ${folder_name_A}_${folder_name_B}_model_sample_compare --rna --per-read-statistics-basename ${folder_name_A}_${folder_name_B}_per-read-statistics --processes ${task.cpus}
 	tombo text_output signif_sequence_context ${tombo_opt} --num-regions 1000000000 --statistics-filename ${folder_name_A}_${folder_name_B}_model_sample_compare.tombo.stats  --genome-fasta reference.fa --fast5-basedirs ${folder_name_A} --sequences-filename ${folder_name_A}_${folder_name_B}.significant_regions.fasta 
 	rm reference.fa
+	
+	tombo_2_bed.sh ${folder_name_A}_${folder_name_B}.significant_regions.fasta  ${folder_name_A}_${folder_name_B}.significant_regions.bed
 	"""
 }
 
@@ -250,7 +256,7 @@ process CallVariantsForEpinano {
    
     script:
 	"""
-	samtools view -h ${alnfile} -F 256 | \$SAM2TSV -r ${reference} >${sampleID}.tsv
+	samtools view -h ${alnfile} -F 256 | \$SAM2TSV -R ${reference} | cut -f 3 --complement  > ${sampleID}.tsv
 	"""
 }
 
@@ -260,6 +266,7 @@ process CallVariantsForEpinano {
 
 process calcVarFrequenciesForEpinano {
 	publishDir outputEpinano,  pattern: "*.csv.gz", mode: 'copy'
+	container "biocorecrg/mopepinano:0.1"
 
     tag {"${sampleID}"}  
     label 'big_mem_cpus'
@@ -268,13 +275,74 @@ process calcVarFrequenciesForEpinano {
     set val(sampleID), file(tsvfile) from variants_for_frequency
     
     output:
-    set val(sampleID), file("*per_site_var.5mer.csv.gz") into per_site_vars
+    set val(sampleID), file("*.tsv.per.site.var.csv.gz") into per_site_vars_A, per_site_vars_B
     file("*.csv.gz")
        
     script:
 	"""
 	TSV_to_Variants_Freq.py3 -f ${tsvfile} -t ${task.cpus}
 	for i in *.csv; do gzip \$i; done
+	"""
+}
+
+per_site_vars_A.combine(per_site_vars_B).map {
+	[ it[0], it[2], it[1], it[3] ]
+}.set{per_site_combs}
+
+per_site_combs.join(id_to_epinano_plots, by:[0,1])
+.into{per_site_for_plotsA; per_site_for_plotsB; per_site_for_plotsC}
+
+process makeEpinanoPlotsMis {
+	publishDir outputEpinano, mode: 'copy'
+	container "biocorecrg/mopnanotail:0.3"
+
+    tag {"${sampleIDA}--${sampleIDB}"}  
+	
+    input:
+    set val(sampleIDA), val(sampleIDB), file(per_site_varA), file(per_site_varB) from per_site_for_plotsA
+    
+    output:
+    file("*.pdf")
+       
+    script:
+	"""
+	Rscript --vanilla ${epinanoScript} ${per_site_varA} ${sampleIDA} ${per_site_varB} ${sampleIDB} mis  
+	"""
+}
+
+process makeEpinanoPlotsIns {
+	publishDir outputEpinano, mode: 'copy'
+	container "biocorecrg/mopnanotail:0.3"
+
+    tag {"${sampleIDA}--${sampleIDB}"}  
+	
+    input:
+    set val(sampleIDA), val(sampleIDB), file(per_site_varA), file(per_site_varB) from per_site_for_plotsB
+    
+    output:
+    file("*.pdf")
+       
+    script:
+	"""
+	Rscript --vanilla ${epinanoScript} ${per_site_varA} ${sampleIDA} ${per_site_varB} ${sampleIDB} ins  
+	"""
+}
+
+process makeEpinanoPlotsDel {
+	publishDir outputEpinano, mode: 'copy'
+	container "biocorecrg/mopnanotail:0.3"
+
+    tag {"${sampleIDA}--${sampleIDB}"}  
+	
+    input:
+    set val(sampleIDA), val(sampleIDB), file(per_site_varA), file(per_site_varB) from per_site_for_plotsC
+    
+    output:
+    file("*.pdf")
+       
+    script:
+	"""
+	Rscript --vanilla ${epinanoScript} ${per_site_varA} ${sampleIDA} ${per_site_varB} ${sampleIDB} del  
 	"""
 }
 
