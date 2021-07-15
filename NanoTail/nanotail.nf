@@ -148,9 +148,8 @@ process filter_bam {
 
 
 data_for_nanopolish_raw.combine(filt_bam_for_nanopolish, by:0).combine(fastq_data, by:0)
-.into{data_for_nanopolish; ciccio1}
+.set{data_for_nanopolish}
 
-ciccio.println()
 
 /*
 * Estimate polyA tail size with nanopolish
