@@ -38,7 +38,7 @@ WT3 KO3
 ## Results
 Three folders are produced by this module:
 
-1. Epinano, containing the results obtained with this method. You have a single file with putative modifications. 
+1. Epinano, containing the results obtained with this method. You have a single file with putative modifications: 
 
 ```bash
 #Kmer,Window,Ref,Coverage,q1,q2,q3,q4,q5,mis1,mis2,mis3,mis4,mis5,ins1,ins2,ins3,ins4,ins5,del1,del2,del3,del4,del5,prediction,dist,ProbM,Pro
@@ -51,6 +51,12 @@ ACATT,438165:438166:438167:438168:438169,chr13,67.0:67.0:67.0:68.0:68.0,13.635,1
 0001,0.0,0.0,0.0,0.0,0.0,0.06,0.03,0.075,0.11800000000000001,0.07400000000000001,unm,0.08435556637195174,0.519879422458087,0.4801205775419129
 5...
 ```
+
+and three plots in pdf indicating possible events related to insertion, deletion and mismatches, see the example below. 
+
+<img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/nanomod_pl.png" width="600" align="middle">
+
+
 2. Tombo, containing the results obtained with this method in fasta format. You have one file for each comparison WT vs KO
 
 ```bash
@@ -65,4 +71,4 @@ ATGTT
 >chr13:510759:+ Est. Frac. Alternate: 0.95
 ...
 ```
-
+And for convenience a 6 bed files with the coordinates of the event.
