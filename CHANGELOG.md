@@ -3,6 +3,7 @@
 * Added support to vbz compressed fast5 https://github.com/nanoporetech/vbz_compression in NanoPreprocess, NanoMod and NanoTail
 * NanoPreprocess now outputs also CRAM files and can do downsampling with the parameter --downsampling
 * NanoPreprocess allows performing variant calling using medaka (BETA)
+* NanoPreprocess allows performing demuliplexing with GUPPY
 * Added plots for Epinano output in NanoMod
 * Added a conversion of Tombo results in bed format in NanoMod
 * Added a INSTALL.sh file for automatically retrieve guppy 3.4.5 from https://mirror.oxfordnanoportal.com/, place it in NanoPreprocess/bin and making the required links
