@@ -23,11 +23,13 @@ This module allows to predict the loci with RNA modifications starting from data
 ## Input Parameters
 1. **input_path** path to the folders produced by NanoPreprocessing step.
 1. **comparison** tab separated text file containing the list of comparison. Here an example:
+
 ```bash
 WT1 KO1
 WT2 KO2
 WT3 KO3
 ```
+
 1. **reference** reference transcriptome
 1. **output** folder
 1. **coverage** read coverage threshold for prediction
