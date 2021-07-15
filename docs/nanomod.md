@@ -23,11 +23,13 @@ This module allows to predict the loci with RNA modifications starting from data
 ## Input Parameters
 1. **input_path** path to the folders produced by NanoPreprocessing step.
 1. **comparison** tab separated text file containing the list of comparison. Here an example:
+
 ```bash
 WT1 KO1
 WT2 KO2
 WT3 KO3
 ```
+
 1. **reference** reference transcriptome
 1. **output** folder
 1. **coverage** read coverage threshold for prediction
@@ -54,7 +56,7 @@ ACATT,438165:438166:438167:438168:438169,chr13,67.0:67.0:67.0:68.0:68.0,13.635,1
 
 and three plots in pdf indicating possible events related to insertion, deletion and mismatches, see the example below. 
 
-<img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/nanomod_pl.png" width="600" align="middle">
+<img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/v1.1/docs/nanomod_pl.png" width="600" align="middle">
 
 
 2. Tombo, containing the results obtained with this method in fasta format. You have one file for each comparison WT vs KO
