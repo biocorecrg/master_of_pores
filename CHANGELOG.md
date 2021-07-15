@@ -1,6 +1,8 @@
 ## Version 1.1
 * Added a new module called NanoPreprocessSimple that starts from fastq files instead of fast5 files. It allows the analysis of multiple files at a time.
 * Added support to vbz compressed fast5 https://github.com/nanoporetech/vbz_compression in NanoPreprocess, NanoMod and NanoTail
+* NanoPreprocess now outputs also CRAM files and can do downsampling with the parameter --downsampling
+* NanoPreprocess allows performing variant calling using medaka (BETA)
 * Added plots for Epinano output in NanoMod
 * Added a conversion of Tombo results in bed format in NanoMod
 * Added a INSTALL.sh file for automatically retrieve guppy 3.4.5 from https://mirror.oxfordnanoportal.com/, place it in NanoPreprocess/bin and making the required links
