@@ -56,7 +56,7 @@ ACATT,438165:438166:438167:438168:438169,chr13,67.0:67.0:67.0:68.0:68.0,13.635,1
 
 and three plots in pdf indicating possible events related to insertion, deletion and mismatches, see the example below. 
 
-<img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/nanomod_pl.png" width="600" align="middle">
+<img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/v1.1/docs/nanomod_pl.png" width="600" align="middle">
 
 
 2. Tombo, containing the results obtained with this method in fasta format. You have one file for each comparison WT vs KO
