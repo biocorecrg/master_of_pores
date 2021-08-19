@@ -18,5 +18,5 @@ install:
  
 # Run the pipeline
 script:
-   - cd master_of_pores/NanoPreprocess
+   - cd NanoPreprocess
    - nextflow run nanopreprocess.nf -with-docker -profile local
