@@ -12,7 +12,7 @@ install:
   - sudo ln -s $PWD/nextflow /usr/local/bin/nextflow
 
 # Install Master Of Porse
-  - git clone github.com:biocorecrg/master_of_pores
+  - git clone https://github.com/biocorecrg/master_of_pores.git
   - cd master_of_pores
   - sh INSTALL.sh
  
