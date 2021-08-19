@@ -9,6 +9,8 @@ navigation: 1
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3518291.svg)](https://doi.org/10.5281/zenodo.3518291)
 [![Nextflow version](https://img.shields.io/badge/Nextflow-21.04.1-brightgreen)](https://www.nextflow.io/)
 [![Singularity version](https://img.shields.io/badge/Singularity-v3.2.1-green.svg)](https://www.sylabs.io/)
+[![Build Status](https://travis-ci.com/biocorecrg/master_of_pores.svg?branch=v1.1)](https://travis-ci.com/biocorecrg/master_of_pores)
+
 [![Docker version](https://img.shields.io/badge/Docker-v19.03-blue)](https://www.docker.com/)
 <img align="right" href="https://biocore.crg.eu/" src="https://raw.githubusercontent.com/CRG-CNAG/BioCoreMiscOpen/master/logo/biocore-logo_small.png" />
 
