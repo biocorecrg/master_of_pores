@@ -340,16 +340,17 @@ if(demultiplexer == "deeplexicon") {
 
 		script:
 		def model = ''
-		def executable = 'deeplexicon.py -f multi'
+		def executable = 'deeplexicon_sub.py dmux -f multi'
 		if (multi5 == 0){
-			executable = 'deeplexicon.py -f single'
+			executable = 'deeplexicon_sub.py dmux -f single'
 		}
  		if (demultiplexer_opt.contains("pAmps-final-actrun_newdata_nanopore_UResNet20v2_model.030.h5")){
 			executable = 'cmd_line_deeplexicon_caller_2019_09_12.py'
 		}
 		"""
 		    ln -s ${deeplexicon_folder}/* .
-            ${executable} -p ./ ${demultiplexer_opt}  -b 4000 -v > ${idfile}_demux.tsv
+                    ${executable} -p ./ ${demultiplexer_opt} > ${idfile}_demux.tsv
+                    #${executable} -p ./ ${demultiplexer_opt}  -b 4000 -v > ${idfile}_demux.tsv
  		"""
 	} 
 	
@@ -566,7 +567,7 @@ process mapping {
 
 /*
 *  Perform mapping and sorting
-*/
+
 process cram_conversion {
     tag {"${mapper}-${idfile}"}  
     publishDir outputCRAM, mode: 'copy'
@@ -599,7 +600,7 @@ process cram_conversion {
 		${gzipclean}
     """
 }
-
+*/
 
 
 /*
