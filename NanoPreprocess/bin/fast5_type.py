@@ -24,7 +24,7 @@ if len (sys.argv) !=2:
 
 def check_file_type(f5_file):
 	try:
-		return _clean(f5_file.handle.attrs['file_type'])
+		return 1 if  _clean(f5_file.handle.attrs['file_type']).startswith('multi') else 0 
 	except KeyError:
 		if len(f5_file.handle) == 0 :
 			return 1 
@@ -38,7 +38,7 @@ def check_file_type(f5_file):
 filepath = sys.argv[1]
 f5_file = MultiFast5File (filepath, mode='r') 
 filetype = check_file_type (f5_file)
-filetype = 1 if filetype.startswith ('multi') else 0
+#filetype = 1 if filetype.startswith ('multi') or else 0
 print (filetype)
 
 
