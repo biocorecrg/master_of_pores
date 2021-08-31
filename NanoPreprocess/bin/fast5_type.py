@@ -1,10 +1,13 @@
 #!/usr/bin/env python
-import sys, warnings,os
-import h5py, ont_fast5_api
-from ont_fast5_api.fast5_interface import get_fast5_file
+
+import sys
+
+from ont_fast5_api.multi_fast5 import MultiFast5File
+from ont_fast5_api.fast5_info import _clean
+
 
 __author__ = 'Huanle.Liu@crg.eu'
-__version__ = '0.1'
+__version__ = '0.2'
 __email__ = 'same as author'
 
 usage = '''
@@ -14,16 +17,32 @@ usage = '''
             1: multi-reads fast5
 '''
 
-if len (sys.argv) < 2:
-    print (usage)
-    exit(0)
+if len (sys.argv) !=2:
+	print (usage, file=sys.stderr)
+	sys.exit()
 
-f5file = sys.argv[1]
-hdf5 = h5py.File(f5file,'r')
-f5 = get_fast5_file (f5file,mode='r')
-reads_in_f5 = f5.get_read_ids()
-number_of_reads =  len( reads_in_f5)
-if number_of_reads == 1:
-    print (0)
-elif number_of_reads > 1:
-    print (1)
+
+def check_file_type(f5_file):
+	try:
+		return _clean(f5_file.handle.attrs['file_type'])
+	except KeyError:
+		if len(f5_file.handle) == 0 :
+			return 1 
+		if len([read for read in f5_file.handle if read.startswith('read_')]) !=0 :
+			return 1
+		if 'UniqueGlobalKey' in f5_file.handle:
+			return 0
+	raise TypeError('file can not be indetified as single- or multi- read.\n' 'File path: {}'.format(f5_file.filename))
+
+
+filepath = sys.argv[1]
+f5_file = MultiFast5File (filepath, mode='r') 
+filetype = check_file_type (f5_file)
+filetype = 1 if filetype.startswith ('multi') else 0
+print (filetype)
+
+
+
+    
+    
+
