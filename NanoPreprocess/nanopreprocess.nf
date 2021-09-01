@@ -373,7 +373,7 @@ if(demultiplexer == "deeplexicon") {
 	
 	process extracting_demultiplexed_fast5 {
 
-		label 'basecall_cpus'
+		//label 'basecall_cpus'
    	    tag { demultiplexer }  
 		publishDir outputFast5,  mode: 'copy'
 	
