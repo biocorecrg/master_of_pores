@@ -22,9 +22,9 @@ Nextflow pipeline for analysis of Nanopore data from direct RNA sequencing. This
 The current version is the 1.1. The original 1.0 published in the paper is [here](https://github.com/biocorecrg/master_of_pores/releases/tag/v1.0)
 
 -------------------------------------
-## New DSL2 version of Master Of Pores is out as beta!!
-We translated nanopreprocess and nanotail using DSL2. Soon we will port nanomod and introduce novel pipelines!
-[https://github.com/biocorecrg/MOP2](https://github.com/biocorecrg/MOP2)
+## New DSL2 version of Master Of Pores is out!!
+We translated the pipelines using DSL2 and added a new pipeline!! A lot of improvements and bug fixes!
+[https://github.com/biocorecrg/MoP2](https://github.com/biocorecrg/MOP2)
 
 ---------------------------------
 
