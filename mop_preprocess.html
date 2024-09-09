@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOP_PREPROCESS &mdash; MoP3  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+    <link rel="canonical" href="https://biocorecrg.github.io/master_of_pores/mop_preprocess.html" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MOP_MOD" href="mop_mod.html" />
+    <link rel="prev" title="Get Started" href="install.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MoP3
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About Master of Pores 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Get Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MOP_PREPROCESS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#input-parameters">Input Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-run-the-pipeline">How to run the pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tool-opts">tool_opts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-libraries-for-specific-tools">Model libraries for specific tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#barcodes">Barcodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basecalling-with-the-m6a-aware-model">Basecalling with the m6A-aware model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#results">Results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mop_mod.html">MOP_MOD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mop_consensus.html">MOP_CONSENSUS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mop_tail.html">MOP_TAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reporting.html">Resource reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ci.html">Continuous integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MoP3</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">MOP_PREPROCESS</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mop_preprocess.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mop-preprocess">
+<span id="home-page-moprepr"></span><h1>MOP_PREPROCESS<a class="headerlink" href="#mop-preprocess" title="Link to this heading"></a></h1>
+<p>This pipeline takes as input the raw fast5 reads - single or multi - and it produces several outputs (basecalled fast5, sequences in fastq format, aligned reads in BAM format etc). The pre-processing pipeline can perform base-calling, demultiplexing (optional), filtering, quality control, mapping to a reference (either a genome or a transcriptome), feature counting, discovery of novel transcripts, and it generates a final report with the performance and results of each of the steps performed.</p>
+<p>It automatically detects the kind of input fast5 file (single or multi-sequence). It can also support the new pod5 format but it won’t output basecalled fastq useful for the other pipelines. The basecalling can be performed with guppy or dorado and the demultiplexing with either guppy, or deeplexicon. Basecalled fastq and Fast5 files can be demultiplexed as well. You can restrict the number of barcodes by indicating a file with barcode list using the <strong>barcodes</strong> parameter.</p>
+<a class="reference internal image-reference" href="_images/flow_preproc.png"><img alt="mop_preprocess graph" src="_images/flow_preproc.png" style="width: 600px;" /></a>
+<section id="input-parameters">
+<h2>Input Parameters<a class="headerlink" href="#input-parameters" title="Link to this heading"></a></h2>
+<p>The input parameters are stored in yaml files like the one represented here:</p>
+<p>You can change them by editing this file or using the command line as explained in the next section.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In the case of pod5 as input files, you can use them as they were fast5 with dorado or guppy &gt;= 6.5.x. The only limitation is that you cannot obtain basecalled fast5 so you cannot use the other pipelines that need fast5 as input files.</p>
+</div>
+</section>
+<section id="how-to-run-the-pipeline">
+<h2>How to run the pipeline<a class="headerlink" href="#how-to-run-the-pipeline" title="Link to this heading"></a></h2>
+<p>Before launching the pipeline, the user can decide which containers to use: either docker or singularity <strong>[-with-docker / -with-singularity]</strong>.</p>
+<p>Then, to launch the pipeline, please use the following command by specifying the path of the yaml parameter file:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -with-singularity -params-file params.yaml &gt; log.txt</span>
+</pre></div>
+</div>
+<p>You can run the pipeline in the background by adding the nextflow parameter <strong>-bg</strong>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -params-file params.yaml -with-singularity -bg &gt; log.txt</span>
+</pre></div>
+</div>
+<p>You can change the parameters either by changing the yaml config file or by feeding the parameters via command line:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -with-singularity -params-file params.yaml -bg --output test2 &gt; log.txt</span>
+</pre></div>
+</div>
+<p>You can specify a different working directory with temporary files:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -with-singularity -params-file params.yaml -bg -w /path/working_directory &gt; log.txt</span>
+</pre></div>
+</div>
+<p>You can use different profiles for running the pipeline in different environments. We have one set up for HPC using the SGE scheduler:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -with-singularity -bg -params-file params.yaml -w /path/working_directory -profile cluster &gt; log.txt</span>
+</pre></div>
+</div>
+<p>One for HPC using the slurm scheduler</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -with-singularity -bg -params-file params.yaml -w /path/working_directory -profile slurm &gt; log.txt</span>
+</pre></div>
+</div>
+<p>One for emulating the new M1 processor for Apple:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -with-singularity -bg -params-file params.yaml -w /path/working_directory -profile m1mac &gt; log.txt</span>
+</pre></div>
+</div>
+<p>or you can run the pipeline locally:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -with-singularity -bg -params-file params.yaml -w /path/working_directory -profile local &gt; log.txt</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>In case of errors you can troubleshoot by seeing the log file (log.txt) for more details. Furthermore, if more information is needed, you can also go to the intermediate directory indicated in the log and check both the <cite>.command.log</cite> and <cite>.command.err</cite> files.</p></li>
+</ul>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Once the error has been solved or if you change a specific parameter, you can resume the execution with the <strong>Netxtlow</strong> parameter <strong>- resume</strong> (only one dash!). If there is an error, the pipeline will resume from the process that had the error and proceed with the rest.  If you change a parameter, only the processes affected by this parameter will be re-run.</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">...</span>
+
+<span class="go">[warm up] executor &gt; crg</span>
+<span class="go">[9d/82eeaa] Cached process &gt; checkRef (Checking yeast_rRNA_ref.fa.gz)</span>
+<span class="go">[33/b8d053] Submitted process &gt; BASECALL:GUPPY_VERSION:getVersion</span>
+<span class="go">[e5/e5c990] Submitted process &gt; BASECALL:GUPPY65_BASECALL:baseCallNew (mod---2)</span>
+<span class="go">[b5/0997da] Submitted process &gt; BASECALL:GUPPY65_BASECALL:baseCallNew (wt---1)</span>
+<span class="go">[fb/6353d6] Submitted process &gt; SEQFILTER:NANOQ_FILTER:filter (mod---2)</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To resume the execution, temporary files generated previously by the pipeline must be kept. Otherwise, the pipeline will re-start from the beginning.</p>
+</div>
+</section>
+<section id="tool-opts">
+<h2>tool_opts<a class="headerlink" href="#tool-opts" title="Link to this heading"></a></h2>
+<p>The command line options for each tool used in the pipeline are stored within specialized tsv files stored within the  <em>tool_opts</em> folder. Here is an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#step	tool	extrapars</span>
+<span class="n">basecalling</span>	<span class="n">dorado</span>	<span class="s2">&quot;rna002_70bps_hac@v3&quot;</span>
+<span class="n">basecalling</span>	<span class="n">guppy</span>	<span class="s2">&quot;-c rna_r9.4.1_70bps_m6A_hac.cfg&quot;</span>
+<span class="n">demultiplexing</span>	<span class="n">deeplexicon</span>	<span class="s2">&quot;&quot;</span>
+<span class="n">demultiplexing</span>	<span class="n">guppy</span>	<span class="s2">&quot;&quot;</span>
+<span class="n">filtering</span>	<span class="n">nanofilt</span>	<span class="s2">&quot;&quot;</span>
+<span class="n">filtering</span>	<span class="n">nanoq</span>	<span class="s2">&quot;&quot;</span>
+<span class="n">mapping</span>	<span class="n">graphmap</span>	<span class="s2">&quot;&quot;</span>
+<span class="n">mapping</span>	<span class="n">graphmap2</span>	<span class="s2">&quot;-x rnaseq&quot;</span>
+<span class="n">mapping</span>	<span class="n">minimap2</span>	<span class="s2">&quot;-uf -ax splice -k14&quot;</span>
+<span class="n">mapping</span>	<span class="n">bwa</span>	<span class="s2">&quot;&quot;</span>
+<span class="n">counting</span>	<span class="n">htseq</span>	<span class="s2">&quot;-a 0&quot;</span>
+<span class="n">counting</span>	<span class="n">nanocount</span>	<span class="s2">&quot;&quot;</span>
+<span class="n">discovery</span>	<span class="n">bambu</span>	<span class="s2">&quot;&quot;</span>
+</pre></div>
+</div>
+<p>The first column indicates the processing step as <strong>basecalling</strong> or <strong>demultiplexing</strong> etc. Some tools such as Guppy can be used for more processing steps. Several pre-compiled tool_opts files are stored within the folder <strong>tool_opts</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Readucks is run after guppy demultiplexing. It refines the demultiplexing generating different fastqs</p>
+</div>
+</section>
+<section id="model-libraries-for-specific-tools">
+<h2>Model libraries for specific tools<a class="headerlink" href="#model-libraries-for-specific-tools" title="Link to this heading"></a></h2>
+<p>The following folders are available for the respective tools. Some models are already pre-installed-</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>deeplexicon_models</dt><dd><ul>
+<li><p>resnet20-final.h5</p></li>
+<li><p>pAmps-final-actrun_newdata_nanopore_UResNet20v2_model.030.h5</p></li>
+<li><p>pAmps-rep2-4-train1_newdata_nanopore_UResNet20v2_model.039.h5</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>dorado_models</dt><dd><ul>
+<li><p><a class="reference external" href="mailto:rna002_70bps_hac&#37;&#52;&#48;v3">rna002_70bps_hac<span>&#64;</span>v3</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You need to download the models you want to use in case they are not already available. For instance, if you need another model for dorado you need to do:</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">dorado download --model MODELNAME</span>
+</pre></div>
+</div>
+<p>You also need to add the dedicated parameter within the tool_opts file for the specific tool as:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">basecalling dorado   &quot;rna002_70bps_hac@v3&quot;</span>
+<span class="go">demultiplexing       deeplexicon   &quot;-f multi -m resnet20-final.h5&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You need to copy the model in the corresponding folder and indicate just the model name. You don’t need the absolute path.</p>
+</div>
+</section>
+<section id="barcodes">
+<h2>Barcodes<a class="headerlink" href="#barcodes" title="Link to this heading"></a></h2>
+<p>You can select the barcodes you are interested in by writing them down in a text file as in this example. The format is <em>samplename—barcodeID</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">anna</span><span class="o">---</span><span class="n">bc_104</span>
+<span class="n">anna</span><span class="o">---</span><span class="n">bc_102</span>
+</pre></div>
+</div>
+<p>The sample id is given by either the folder containing the fast5 files or the basename of the fastq files. So, if your files are in a folder named <strong>myfiles</strong>, it will be:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">myfiles---bc_1</span>
+<span class="go">myfiles---bc_2</span>
+<span class="go">myfiles---bc_3</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The naming convention of the different barcodes is decided by each tool, so guppy will produce <strong>barcode01</strong>, <strong>barcode02</strong>, etc.</p>
+</div>
+</section>
+<section id="basecalling-with-the-m6a-aware-model">
+<h2>Basecalling with the m6A-aware model<a class="headerlink" href="#basecalling-with-the-m6a-aware-model" title="Link to this heading"></a></h2>
+<p>For m6A basecalling in your <code class="docutils literal notranslate"><span class="pre">params.f5.yaml</span></code> file you should specify <code class="docutils literal notranslate"><span class="pre">basecalling:</span> <span class="pre">&quot;guppy&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">pars_tools:</span> <span class="pre">&quot;tool_opts/drna_tool_m6A_splice_opt.tsv&quot;</span> <span class="pre">``</span> <span class="pre">so</span> <span class="pre">that</span> <span class="pre">guppy</span> <span class="pre">will</span> <span class="pre">use</span> <span class="pre">the</span> <span class="pre">m6A</span> <span class="pre">model.</span> <span class="pre">In</span> <span class="pre">your</span> <span class="pre">output</span> <span class="pre">folder</span> <span class="pre">you</span> <span class="pre">will</span> <span class="pre">have</span> <span class="pre">the</span> <span class="pre">``fast5_files</span></code> folder containing the m6A basecalled fast5 files for downstream analysis. Then run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd mop_preprocess</span>
+<span class="go">nextflow run mop_preprocess.nf -params-file params.f5.yaml -with-singularity -bg &gt; yourlog.txt</span>
+</pre></div>
+</div>
+</section>
+<section id="results">
+<h2>Results<a class="headerlink" href="#results" title="Link to this heading"></a></h2>
+<p>Several folders are created by the pipeline within the output directory specified by the <strong>output</strong> parameter:</p>
+<ul class="simple">
+<li><p><strong>fast5_files</strong>: Contains the basecalled multifast5 files. Each batch contains 4000 sequences.</p></li>
+<li><p><strong>fastq_files</strong>: Contains one or, in case of demultiplexing, more fastq files.</p></li>
+<li><p><strong>QC_files</strong>: Contains each single QC produced by the pipeline.</p></li>
+<li><p><strong>alignment</strong>: Contains the bam file(s).</p></li>
+<li><p><strong>cram_files</strong>: Contains the cram file(s).</p></li>
+<li><p><strong>counts</strong>: Contains read counts per gene / transcript if counting was performed.</p></li>
+<li><p><strong>assigned</strong>: Contains assignment of each read to a given gene / transcript if counting was performed.</p></li>
+<li><p><strong>report</strong>: Contains the final multiqc report.</p></li>
+<li><p><strong>assembly</strong>: It contains assembled transcripts.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>MOP3 will automatically detect the version of guppy and modify the parameters accordingly. You don’t need to add any extra parameter as in MOP2.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="install.html" class="btn btn-neutral float-left" title="Get Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mop_mod.html" class="btn btn-neutral float-right" title="MOP_MOD" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
