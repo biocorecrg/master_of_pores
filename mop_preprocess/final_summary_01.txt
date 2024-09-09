@@ -1,0 +1,17 @@
+instrument=MN27184
+position=
+flow_cell_id=FAP80183
+sample_id=RNA397931
+protocol_group_id=RNA397931
+protocol=sequencing/sequencing_MIN106_RNA:FLO-MIN106:SQK-RNA002
+protocol_run_id=097c961b-3b04-45c7-84d8-5874bca6acea
+acquisition_run_id=7255def509a9dadd1fa502acb25ec99984216195
+started=2021-04-01T18:45:46.978060+02:00
+acquisition_stopped=2021-04-04T18:45:50.452261+02:00
+processing_stopped=2021-04-04T18:45:53.381792+02:00
+basecalling_enabled=0
+sequencing_summary_file=sequencing_summary_FAP80183_7255def5.txt
+fast5_files_in_final_dest=621
+fast5_files_in_fallback=0
+fastq_files_in_final_dest=0
+fastq_files_in_fallback=0

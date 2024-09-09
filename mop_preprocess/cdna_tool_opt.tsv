@@ -1,0 +1,12 @@
+#step	tool	extrapars
+basecalling	guppy	"--kit"
+demultiplexing	guppy	"--barcode_kits EXP-NBD104"
+filtering	nanofilt	""
+filtering	nanoq	""
+mapping	graphmap	""
+mapping	graphmap2	"-x rnaseq"
+mapping	minimap2	"-ax splice -L --secondary=no"
+mapping	bwa	""
+counting	htseq	"-a 0 --secondary-alignments ignore"
+counting	nanocount	""
+discovery	bambu	""

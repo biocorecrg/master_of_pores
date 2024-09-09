@@ -1,0 +1,7 @@
+#flows	tool	extrapars
+epinano	epinano	""
+nanocompore	nanopolish	""
+nanocompore	nanocompore	"--sequence_context 2 --downsample_high_coverage 10000"
+tombo_resquiggling	tombo	""
+tombo_msc	tombo	""
+tombo_lsc	tombo	""

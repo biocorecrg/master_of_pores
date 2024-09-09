@@ -1,0 +1,13 @@
+#step	tool	extrapars
+demultiplexing	deeplexicon	"-f multi -m resnet20-final.h5"
+demultiplexing	guppy	""
+filtering	nanofilt	""
+basecalling	guppy	""
+filtering	nanoq	""
+mapping	graphmap	""
+mapping	graphmap2	""
+mapping	minimap2	"-ax map-ont -k14"
+mapping	bwa	""
+counting	htseq	"-a 0"
+counting	nanocount	""
+discovery	bambu	""

@@ -1,3 +1,4 @@
+#This will do biocorecrg/moppreprocess:0.7
 FROM biocorecrg/centos-perlbrew-pyenv23-java:centos7
 
 # File Author / Maintainer
@@ -18,9 +19,10 @@ ARG MINIMAP_VERSION=2.17
 ARG NANOPLOT_VERSION=1.26.3
 ARG FASTQC_VERSION=0.11.8
 ARG ONTFAST5API_VERSION=1.4.4
-ARG NANOCOUNT_VERSION=0.2.0
+ARG NANOCOUNT_VERSION=0.2.3
 ARG HTSEQ_VERSION=0.11.2
 ARG MEDAKA_VERSION=v0.12.1
+
 # Environment variables
 ENV POREQUAL_PATH=$PWD/POREquality/
 ENV MINIONQC=/usr/local/bin/MinIONQC.R

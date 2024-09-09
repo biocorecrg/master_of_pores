@@ -1,0 +1,34 @@
+# Install biocorecrg/htseq:30e9e9c
+FROM ubuntu:focal-20211006
+
+# File Author / Maintainer
+MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com> 
+
+ARG HTSEQ_VERSION=30e9e9c
+
+#upgrade pip
+RUN apt-get update
+RUN apt-get install -y software-properties-common
+RUN apt-add-repository universe
+RUN apt install -y python3-pip
+RUN pip install --upgrade pip
+
+# Installing modules for EPINANO
+RUN pip install numpy pysam wheel 
+RUN pip install matplotlib 
+RUN pip install scipy 
+RUN pip install anndata loompy cython
+RUN apt install -y git
+RUN git clone "https://github.com/htseq/htseq.git"; cd htseq; git checkout ${HTSEQ_VERSION}; python3 setup.py build; python3 setup.py install
+
+
+
+# Clean cache
+#RUN yum clean all 
+
+#cleaning
+RUN rm -fr htseq 
+
+ENV LC_ALL=en_US.utf8
+ENV LANG=en_US.utf8
+

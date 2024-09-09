@@ -1,0 +1,22 @@
+params {
+    input_path         = "$baseDir/../mop_preprocess/output/"
+    comparison         = "$baseDir/comparison.tsv"
+
+    reference           = "$baseDir/../anno/yeast_rRNA_ref.fa.gz"
+    
+    output             = "$baseDir/output_mod"
+
+    pars_tools         = "$baseDir/tools_opt.tsv"
+    
+    // flows 
+    epinano       = "YES"
+    nanocompore   = "NO"
+    tombo_lsc     = "YES"
+    tombo_msc     = "YES"
+
+    // epinano plots
+    epinano_plots = "YES"
+
+    email              = ""
+}
+

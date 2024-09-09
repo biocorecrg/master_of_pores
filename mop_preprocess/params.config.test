@@ -1,0 +1,32 @@
+params {
+    conffile            = "final_summary_01.txt"
+    fast5               = "$baseDir/../data/**/*.fast5"
+    fastq               = ""
+
+    reference           = "$baseDir/../anno/yeast_rRNA_ref.fa.gz"
+    annotation          = ""
+    ref_type            = "transcriptome"
+
+    pars_tools          = "drna_tool_splice_opt.tsv" 
+    output              = "$baseDir/output"
+    qualityqc           = 5
+    granularity         = 1
+
+    basecalling         = "guppy"
+    GPU                 = "OFF"
+    demultiplexing      = "NO"
+    demulti_fast5       = "NO" 
+
+    filtering           = "nanoq"
+
+    mapping             = "graphmap"
+    counting            = "nanocount"
+    discovery           = "NO"
+
+    cram_conv           = "YES"
+    subsampling_cram    = 50
+
+    saveSpace           = "NO"
+
+    email               = ""
+}
