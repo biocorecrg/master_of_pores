@@ -24,7 +24,7 @@ About Master of Pores 3
      - |nver|
      - |sing|
 
-`Master of Pores 3`<https://github.com/biocorecrg/master_of_pores>_ is a collection of pipelines written in Nextflow DSL2 for the analysis of Nanopore data. It can handle reads from direct RNAseq, cDNAseq, DNAseq etc.
+`Master of Pores 3 <https://github.com/biocorecrg/master_of_pores>`_ is a collection of pipelines written in Nextflow DSL2 for the analysis of Nanopore data. It can handle reads from direct RNAseq, cDNAseq, DNAseq etc.
 
 The software is composed by four pipelines:
 
