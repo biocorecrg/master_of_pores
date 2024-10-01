@@ -14,7 +14,7 @@ RUN tar -zxf Python-${PYTHON_VERSION}.tgz; rm Python-${PYTHON_VERSION}.tgz ; cd 
 RUN ln -s /usr/local/bin/python3 /usr/local/bin/python; ln -s /usr/local/bin/pip3 /usr/local/bin/pip
 
 RUN pip install --upgrade pip
-RUN pip install wheel biopython 
+RUN pip install wheel biopython
 RUN pip install parasail
 RUN apt-get install -y git
 RUN git clone https://github.com/rambaut/readucks.git
@@ -26,5 +26,5 @@ RUN pip install --upgrade pip setuptools
 RUN pip install pyts numba==0.45.0 keras==2.2.4 scikit-learn pandas TensorFlow==1.13.1
 
 # Cleanup
-RUN apt-get clean && apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* 
+RUN apt-get clean && apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8

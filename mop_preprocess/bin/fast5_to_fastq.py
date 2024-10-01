@@ -1,13 +1,9 @@
 #!/usr/bin/env python
-import gzip
-import os
-import re
-import sys
-import warnings
-
-import h5py
+import sys, warnings,os
 import numpy as np
-import ont_fast5_api
+import re
+import gzip
+import h5py, ont_fast5_api
 from ont_fast5_api.fast5_interface import get_fast5_file
 
 usage = '''

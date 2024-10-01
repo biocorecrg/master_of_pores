@@ -1,7 +1,7 @@
 FROM biocorecrg/centos-perlbrew-pyenv3-java:centos7
 
 # File Author / Maintainer
-MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com> 
+MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com>
 
 ARG NANOCOMPORE_VERSION=v1.0.0rc3-1
 ARG MEDAKA_VERSION=v0.11.5
@@ -16,11 +16,11 @@ RUN pip install nanocompore==${NANOCOMPORE_VERSION}
 # Intaalling Medaka
 RUN pip install medaka==${MEDAKA_VERSION}
 
-# Installing 
+# Installing
 RUN pip install NanopolishComp==${NANOPOLISHCOMP_VERSION}
 
 # Clean cache
-RUN yum clean all 
+RUN yum clean all
 
 #cleaning
 RUN rm -fr *.tar.gz; rm -fr *.bz2; rm -fr ./tmp

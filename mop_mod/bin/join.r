@@ -30,12 +30,12 @@ venn.diagram(
     filename = 'venn_diagram.png',
     imagetype = "png",
     output=TRUE,
-    height = 1024, 
-    width = 1024 , 
+    height = 1024,
+    width = 1024 ,
     resolution = 300,
     compression = "lzw",
     main.pos = c(0.5,0.7),
-    
+
 	# Circles
 	lwd = 2,
 	lty = 'blank',
@@ -43,12 +43,12 @@ venn.diagram(
 	margin = 0.6,
     main = prefix,
     main.fontfamily = "sans",
-     
+
 	# Numbers
 	cex = .6,
 	fontface = "bold",
 	fontfamily = "sans",
-    
+
     # Set names
     cat.cex = 0.6,
     cat.fontface = "bold",
@@ -56,5 +56,3 @@ venn.diagram(
     cat.pos = c(-135, 135),
     cat.fontfamily = "sans"
 )
-
-

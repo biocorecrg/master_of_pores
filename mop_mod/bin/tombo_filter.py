@@ -1,10 +1,8 @@
 #!/usr/bin/env python
-import argparse
-import re
+import argparse, re
+import numpy as np
 from collections import Counter as cnt
 from collections import defaultdict
-
-import numpy as np
 
 parser = argparse.ArgumentParser()
 parser.add_argument ('-t','--tomboouputs', required=True, dest='tbs', action='append', help='knockout sample tombo prediciton results')

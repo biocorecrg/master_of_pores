@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 # -- coding: utf-8 -
 
-import argparse
-import gzip
-import re
+import argparse, re
+import numpy as np
 from collections import Counter as cnt
 from collections import defaultdict
-
-import numpy as np
+import gzip
 
 parser = argparse.ArgumentParser()
 parser.add_argument ('-k','--knockout', required=True, dest='kos', action='append', help='knockout sample  epinano prediciton results')

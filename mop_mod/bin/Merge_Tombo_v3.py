@@ -4,12 +4,11 @@
 
 #Import libraries:
 import sys
-
 import pyBigWig
 
 #Import input files:
 statistic = pyBigWig.open(sys.argv[1])
-cov_ivt = pyBigWig.open(sys.argv[2]) 
+cov_ivt = pyBigWig.open(sys.argv[2])
 cov_sample = pyBigWig.open(sys.argv[3])
 output_name = sys.argv[4]
 
@@ -26,7 +25,7 @@ for transcript in statistic.chroms().keys():
             stat = statistic.values(transcript, position-1, position)[0]
             ivt = cov_ivt.values(transcript, position-1, position)[0]
             samples = cov_sample.values(transcript, position-1, position)[0]
-        
+
             #Calculate the kmer score:
             try:
                 kmer_score = sum(statistic.values(transcript, position-3, position+2))

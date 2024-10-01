@@ -4,36 +4,34 @@ desc= "Concatenate file(s) containing median current intensity values per positi
 # Import required libraries:
 import argparse
 import statistics
-
 import pandas as pd
 import pyarrow as pa
+import pyarrow.parquet as pq
 import pyarrow.compute as pc
 import pyarrow.dataset as ds
-import pyarrow.parquet as pq
 from pyarrow import fs
-
 
 def generate_output(output_file, data, initial):
     #Create output file:
     out_file = output_file+'.tsv.gz'
 
-    if initial: 
+    if initial:
         data.to_csv(out_file, sep = '\t', index = False, compression = "gzip")
-                
+
     else:
         data.to_csv(out_file, sep = '\t',  mode='a', index = False, header = False, compression = "gzip")
 
 def process_dicts(files, output_file):
     list_tables = list()
-    
+
     #Concatenate parquete files:
     for file in files:
         #Open and read input file:
             new_table = pq.read_table(file, columns=['contig','position', 'reference_kmer', 'median', 'coverage'])
             list_tables.append(new_table)
 
-    concat_table = pa.concat_tables(list_tables) 
-    
+    concat_table = pa.concat_tables(list_tables)
+
     #Create partitioned data:
     pq.write_to_dataset(concat_table, root_path='./dataset_name', partition_cols=['contig'])
 
@@ -56,10 +54,10 @@ def process_dicts(files, output_file):
         #print(table)
         #table = dataset.to_table(filter=ds.field("contig") == single_transcript).to_pandas().groupby(['contig', 'position','reference_kmer'], observed=True).agg({'median':'median', 'coverage':'sum'})
         #mask = pc.equal(concat_table['contig'], single_transcript)
-        #table = concat_table.filter(mask).to_pandas().groupby(['contig', 'position','reference_kmer'], observed=True).agg({'median':'median', 'coverage':'sum'}) 
+        #table = concat_table.filter(mask).to_pandas().groupby(['contig', 'position','reference_kmer'], observed=True).agg({'median':'median', 'coverage':'sum'})
         table.columns = ['median', 'coverage']
         table = table.reset_index()
- 
+
         #Generate output:
         generate_output(output_file, table, initial)
         initial = False
@@ -71,10 +69,10 @@ def main():
     parser.add_argument('-o', '--output', help='Output filename')
 
     a = parser.parse_args()
-    
+
     #Read, parse and merge data from individual eventalign files:
     process_dicts(a.input, a.output)
     os.system("rm -fr dataset_name")
- 
-if __name__=='__main__': 
+
+if __name__=='__main__':
     main()

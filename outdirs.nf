@@ -17,12 +17,9 @@ outputAssigned = "${params.output}/assigned"
 outputEpinanoFlow    = "${params.output}/epinano_flow"
 outputNanoPolComFlow = "${params.output}/nanopolish-compore_flow"
 outputTomboFlow      = "${params.output}/tombo_flow"
+outputModPhredFlow   = "${params.output}/modphred_flow"
 
 // MOP_TAIL
 outputTailFindr     = "${params.output}/tailfindr_flow"
 outputNanopolish    = "${params.output}/nanopolish_flow"
 outputFinalPolyA    = "${params.output}/polya_common"
-
-
-
-

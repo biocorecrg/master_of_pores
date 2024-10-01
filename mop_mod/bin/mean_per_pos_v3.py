@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-speeding up the 
+speeding up the
 /usr/bin/time ./mean_per_pos_v3.py -i mod_batch_0.fast5_event_align.tsv.gz -o mod_batch_0.fast5_event_align.polars --mean
 Analysing data - position level - mean
 Saving results to: mod_batch_0.fast5_event_align.polars_processed_perpos_mean.parquet
@@ -17,40 +17,43 @@ desc= "Calculate mean current analysis per position from nanopolish event align 
 
 import argparse
 
+
 import pandas as pd
-import polars as pl
 import pyarrow as pa
 import pyarrow.parquet as pq
 
 
+
+import polars as pl
+
 def parse_input(input_fn):
-    
-    raw_data = pl.read_csv(input_fn, sep="\t", 
-    columns = ["contig", "position", "reference_kmer", "read_name", "event_level_mean"], 
-    dtype={"contig": pl.Utf8, 
-    "position": pl.Int32, 
-    "reference_kmer": pl.Utf8, 
-    "read_name": pl.Utf8, 
+
+    raw_data = pl.read_csv(input_fn, sep="\t",
+    columns = ["contig", "position", "reference_kmer", "read_name", "event_level_mean"],
+    dtype={"contig": pl.Utf8,
+    "position": pl.Int32,
+    "reference_kmer": pl.Utf8,
+    "read_name": pl.Utf8,
     "event_level_mean": pl.Float32   })
-   
+
     return raw_data
 
 
 def mean_perpos (raw_data_polars, output_prefix):
-    
+
     output_fn =  f"{output_prefix}_processed_perpos_mean.parquet"
-    
+
     #Calculate mean per positions:
     print('Analysing data - position level - mean')
     q = (raw_data_polars.lazy()
      .groupby( ["contig", "position", "reference_kmer"])
      .agg([
-         (pl.col("event_level_mean").mean().alias("mean")), 
+         (pl.col("event_level_mean").mean().alias("mean")),
          (pl.col("read_name").n_unique().alias("coverage") )
          ])
      .sort(["contig", "position","reference_kmer" ])
      )
-    
+
     result_df = q.collect()
     result_df["read_name"] = pd.Series([1 for x in range(result_df.height)])
     result_df = result_df["contig", "position", "reference_kmer","read_name","mean", "coverage"]
@@ -59,9 +62,9 @@ def mean_perpos (raw_data_polars, output_prefix):
     #Output parquet file:
     print(f"Saving results to: {output_fn}")
 
-    
+
 def median_perpos (raw_data_polars, output_prefix):
-    
+
     output_fn =  f"{output_prefix}_processed_perpos_median.parquet"
 
     #Calculate mean per positions:
@@ -70,20 +73,20 @@ def median_perpos (raw_data_polars, output_prefix):
     q = (raw_data_polars.lazy()
      .groupby( ["contig", "position", "reference_kmer"])
      .agg([
-         (pl.col("event_level_mean").median().alias("median")), 
+         (pl.col("event_level_mean").median().alias("median")),
          (pl.col("read_name").n_unique().alias("coverage") )])
      .sort(["contig", "position","reference_kmer" ])
     )
-    
+
     result_df = q.collect()
     result_df["read_name"] = pd.Series([1 for x in range(result_df.height)])
     result_df = result_df["contig", "position", "reference_kmer","read_name","median", "coverage"]
     result_df.to_parquet(output_fn)
     #q.collect().to_parquet(output_fn, compression='zstd')
-    
+
     #Output .csv files:
     print(f"Saving median_perpos results to: {output_fn}")
-    
+
 
 def mean_perpos_perread (raw_data, output):
 
@@ -115,7 +118,7 @@ def main():
 
     parser.add_argument('-i', '--input', help='Input file to process.')
     parser.add_argument('-o', '--output', help='Output filename')
-    
+
     #parser.add_argument("-s", "--chunk_size", default=100000, type=int, help='Size for input subsetting [%(default)s]')
     parser.add_argument("--read_level", action='store_true', help='Analysis at per read level')
     parser.add_argument("--mean", action='store_true', help='Analysis using the mean instead of the median.')
@@ -138,8 +141,8 @@ def main():
         if a.mean:
             mean_perpos(raw_import, a.output)
         else:
-            median_perpos(raw_import, a.output)    
+            median_perpos(raw_import, a.output)
 
 
-if __name__=='__main__': 
+if __name__=='__main__':
     main()

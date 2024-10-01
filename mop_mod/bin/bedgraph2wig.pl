@@ -2,7 +2,7 @@
 
 # Description: This script converts bedGraph to fixedStep wig format with defined step size. Input file may be compressed as .gz.
 # Coordinates in bedGraph input are assumed to be 0-based (http://genome.ucsc.edu/goldenPath/help/bedgraph.html).
-# Coordinates in wig output are 1-based (http://genome.ucsc.edu/goldenPath/help/wiggle.html). 
+# Coordinates in wig output are 1-based (http://genome.ucsc.edu/goldenPath/help/wiggle.html).
 
 # Usage: bedgraph_to_wig.pl --bedgraph input.bedgraph --wig output.wig --step step_size [--compact]
 # --bedgraph : specify input file in bedGraph format.
@@ -69,10 +69,10 @@ while (<IN>) {
   next if (/^track/);
   next if (/^#/);
 
-  # Parse relevant information in current line 
+  # Parse relevant information in current line
   # e.g: chr1 3000400 3000500 2
   my ($chr, $start, $end, $val) = split(/\t/);
-  
+
   # Print header for new chromosome and initialize variables.
   if ($chr ne $cur_chr) {
     $cur_chr = $chr;
@@ -84,12 +84,12 @@ while (<IN>) {
       # +1 was added to convert from 0-based to 1-based coordinates.
     }
   }
-  
+
   # Print values when gap in bedGraph file is greater than step.
   while ($start >= $next_pos) {
     print_wig_line($cur_chr, \$cur_pos, \$next_pos, \$exp_pos, \$cur_val, $chr, $start, $end, $val, $step);
   }
-  
+
   # Print values when step overlaps with bedGraph interval and bedGraph interval is longer than step.
   while ($end >= $next_pos) {
     $cur_val += $val * ($next_pos - max($cur_pos, $start));

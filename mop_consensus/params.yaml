@@ -1,0 +1,9 @@
+input_path: "${projectDir}/../mop_mod/output_mod"
+reference:  "/path/to/reference.fa"
+
+comparison: "comparison.tsv"
+padsize:    50
+output:     "${projectDir}/output"
+
+extraparams: ""
+email: ""

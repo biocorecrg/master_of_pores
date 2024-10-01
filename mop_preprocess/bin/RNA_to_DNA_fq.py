@@ -1,14 +1,13 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 __author__ = 'luca.cozzuto@crg.eu'
 # -*- coding utf-8 -*-
 
-import gzip
-import optparse
-import os
-import re
 #MODULES
 import sys
-
+import re
+import optparse
+import gzip
+import os
 
 #BODY FUNTIONS
 def options_arg():
@@ -30,7 +29,7 @@ def parsefile(file, ofile):
 	fwrite = open(ofile, 'a+')
 	if (file.endswith('.gz')):
 		infile = gzip.open(file, 'rt')
-	
+
 	for line in infile:
 		count = count + 1
 		if (count%4==2):

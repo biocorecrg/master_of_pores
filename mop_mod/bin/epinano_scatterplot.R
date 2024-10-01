@@ -1,9 +1,9 @@
-#Scatter plots 
+#Scatter plots
 #Rscript epinano_scatterplot.R input1 label1 input2 label2 feature
 #Libraries needed
 library(plyr)
 library(ggplot2)
-library(ggrepel) 
+library(ggrepel)
 library(MASS)
 library(reshape2)
 
@@ -23,7 +23,7 @@ label2 <- gsub("-", "_", paste0("X", as.character(args[4]))) #2nd label
 feature <- as.character(args[5]) #Feature
 
 
-#Cleanup 
+#Cleanup
 cleanup <- function(input, label) {
 	#Filter low coverage reads
         input$cov <- as.numeric(input$cov)
@@ -39,10 +39,10 @@ cleanup <- function(input, label) {
         input$del <- as.numeric(input$del)
 
 	#Add summed errors column
-        input$sum <- input$mis + input$del + input$ins 
-	#Add a column with position 
+        input$sum <- input$mis + input$del + input$ins
+	#Add a column with position
 	input$position<- paste(input$X.Ref,input$pos)
-	#Change column names 
+	#Change column names
 	input <- input[, c("X.Ref","pos","position", "base", feature)]
 	colnames(input)<- c("Chr","Position","chr_pos","base",feature )
 	data_melted<- melt(data = input, id.vars = c("Chr", "Position", "chr_pos", "base"))
@@ -60,14 +60,14 @@ merged$Chr <- NULL
 merged$Position <- NULL
 merged$base <- NULL
 merged$variable <- NULL
-			
+
 
 plot<- function(data)
 for (chr in unique(data$Chr)) {
 	subs <- subset(data,  Chr==chr)
         if(nrow(subs)>0){
-		res<- rlm(subs[,c(paste(label1, "value", sep="_"))] ~ subs[,c(paste(label2, "value", sep="_"))]) #linear model  
-		res_vec <- res$residuals#this contains residuals 
+		res<- rlm(subs[,c(paste(label1, "value", sep="_"))] ~ subs[,c(paste(label2, "value", sep="_"))]) #linear model
+		res_vec <- res$residuals#this contains residuals
 		threshold <-  5 * sd(res_vec) #The threshold
 		subs$score<- abs(subs[,c(paste(label1, "value", sep="_"))] - subs[,c(paste(label2, "value", sep="_"))])
 		pdf(file=paste(chr,feature, plotlab1, plotlab2, "scatter.pdf", sep="_"),height=5,width=5,onefile=FALSE)

@@ -1,23 +1,20 @@
 #!/usr/bin/env python3
-# Report stats (mapped reads and identity to reference) from samtools stats 
+# Report stats (mapped reads and identity to reference) from samtools stats
 # for bam file(s) ignoring secondary, suplementary and qc failed alignments
 #
 # USAGE: bam2stats.py bam1 bam2 ... bamN
 
-import os
-import subprocess
-import sys
-
+import os, subprocess, sys
 
 def bam2stats(fn, flag=3840):
     """Get stats from samtools stats"""
     args = ["samtools", "stats", "-F%s"%flag, fn]
     proc = subprocess.Popen(args, stdout=subprocess.PIPE)
     k2v = {}
-    for l in proc.stdout: 
+    for l in proc.stdout:
         l = l.decode("utf-8")
-        if l.startswith('SN'): 
-            ldata = l[:-1].split()#; print(ldata) 
+        if l.startswith('SN'):
+            ldata = l[:-1].split()#; print(ldata)
             kv = [[]]
             for e in ldata[1:]:
                 kv[-1].append(e)
@@ -37,12 +34,12 @@ def bam2stats(fn, flag=3840):
     text.append("{:,}\t{:,}".format(k2v['average length'], k2v['maximum length']))
     text.append("{:.2f}%".format(100-100*k2v['mismatches']/k2v['bases mapped (cigar)'], )) #"identity: %.2f%"%(100-k2v['mismatches']/k2v['bases mapped (cigar)'], ))
     return "\t".join(text)
-    
+
 for fn in sys.argv[1:]:
     if os.path.isfile(fn):
         sys.stdout.write("#File name\tMapped reads\tMap %\tBases\tBases %\tAvg read length\tMax read length\tidentity\n")
         sys.stdout.write("%s\t%s\n"%(fn, bam2stats(fn)))
-    
+
 '''
 CHK     4691e107        9942d94c        cd9ffd51
 # Summary Numbers. Use `grep ^SN | cut -f 2-` to extract this part.
@@ -79,4 +76,3 @@ SN      pairs with other orientation:   0
 SN      pairs on different chromosomes: 0
 
 '''
-

@@ -1,4 +1,5 @@
-FROM nvidia/cuda:10.1-base-ubuntu18.04 
+#This will do biocorecrg/mopbasecall:0.2
+FROM nvidia/cuda:10.1-base-ubuntu18.04
 
 MAINTAINER Leszek Pryszcz <l.p.pryszcz+docker@gmail.com>
 MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com>
@@ -22,11 +23,11 @@ RUN pip install ont-fast5-api
 RUN apt update && apt install -y p7zip-full libidn11 libgssapi-krb5-2
 
 # Cleanup
-RUN apt-get clean && apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* 
+RUN apt-get clean && apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
 
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/cuda-10.1/compat/
-ENV PYTHONPATH $PATH 
+ENV PYTHONPATH $PATH
 WORKDIR /
 
 ENV LC_ALL=en_US.utf8

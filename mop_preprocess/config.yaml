@@ -1,15 +1,15 @@
-title: "MoP2 - pipeline"
+title: "MoP3 - pipeline"
 subtitle: ""
 intro_text: False
 
 report_header_info:
-    - Please cite: "Cozzuto L, Delgado-Tejedor A, Hermoso Pulido T, Novoa EM, Ponomarenko J. Nanopore Direct RNA Sequencing Data Processing and Analysis Using MasterOfPores. Methods Mol Biol. 2023;2624:185-205. doi: 10.1007/978-1-0716-2962-8_13."
+    - Please cite: "Cozzuto L, Liu H, Pryszcz LP, Pulido TH, Delgado-Tejedor A, Ponomarenko J, Novoa EM. MasterOfPores: A Workflow for the Analysis of Oxford Nanopore Direct RNA Sequencing Datasets. Front Genet. 2020 Mar 17;11:211. doi: 10.3389/fgene.2020.00211"
 
 custom_logo: 'logo_small.png'
-custom_logo_url: 'https://github.com/biocorecrg/MoP2'
-custom_logo_title: 'Master of Pores 2'
+custom_logo_url: 'https://github.com/biocorecrg/master_of_pores'
+custom_logo_title: 'Master of Pores 3'
 
-extra_fn_clean_trim: 
+extra_fn_clean_trim:
    - '_QC'
    - '.count'
 
@@ -20,7 +20,7 @@ read_count_desc: 'thousands'
 table_columns_visible:
     FastQC:
         percent_duplicates: True
-   
+
 top_modules:
  - fastqc:
         name: 'FastQC'
@@ -30,4 +30,4 @@ top_modules:
         info: 'This section of the report shows alnQC results on aligned reads'
  - minionqc
  - RNA201120181_REP2_bc_1_stats:
-        info: 'Nanoplot stats' 
+        info: 'Nanoplot stats'

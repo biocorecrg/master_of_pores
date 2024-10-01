@@ -2,7 +2,7 @@
 FROM biocorecrg/centos-perlbrew-pyenv23-java:centos7
 
 # File Author / Maintainer
-MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com> 
+MAINTAINER Luca Cozzuto <lucacozzuto@gmail.com>
 
 ARG MULTIQC_VERSION=1.8
 ARG SAMTOOLS_VERSION=1.10
@@ -39,14 +39,14 @@ RUN yum install -y xz-devel.x86_64
 RUN bash -c 'curl -k -L https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 > samtools.tar.bz2'
 #RUN bash -c 'curl -k -L https://downloads.sourceforge.net/project/samtools/samtools/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 > samtools.tar.bz2'
 RUN tar -jvxf samtools.tar.bz2
-RUN cd samtools-${SAMTOOLS_VERSION}; ./configure; make; make install; make install install-htslib; cd ../ 
+RUN cd samtools-${SAMTOOLS_VERSION}; ./configure; make; make install; make install install-htslib; cd ../
 RUN rm samtools.tar.bz2
 
 # Installing bcftools
 RUN yum install -y xz-devel.x86_64
 RUN bash -c 'curl -k -L https://github.com/samtools/bcftools/releases/download/${BCFTOOLS_VERSION}/bcftools-${BCFTOOLS_VERSION}.tar.bz2 > bcftools.tar.bz2'
 RUN tar -jvxf bcftools.tar.bz2
-RUN cd bcftools-${BCFTOOLS_VERSION}; ./configure; make; make install; cd ../ 
+RUN cd bcftools-${BCFTOOLS_VERSION}; ./configure; make; make install; cd ../
 RUN rm bcftools.tar.bz2
 
 # install sam2tsv // version is github tag
@@ -85,7 +85,7 @@ RUN Rscript -e "install.packages(c('BiocManager', 'snow'), repos='http://cran.us
 
 # Installing POREquality // version is github tag
 RUN yum install -y pandoc
-RUN git clone https://github.com/carsweshau/POREquality; cd POREquality/; git checkout ${POREQUALITY_VERSION}; cd ../ 
+RUN git clone https://github.com/carsweshau/POREquality; cd POREquality/; git checkout ${POREQUALITY_VERSION}; cd ../
 
 # Installing MinIONQC
 RUN bash -c 'curl -k -L https://github.com/roblanf/minion_qc/releases/download/v${MINIONQC_VERSION}/MinIONQC.R > /usr/local/bin/MinIONQC.R'
@@ -95,10 +95,10 @@ RUN chmod +x /usr/local/bin/MinIONQC.R
 RUN pip install ont-fast5-api==${ONTFAST5API_VERSION}
 
 #install Nanoplot
-RUN pip install pandas 
+RUN pip install pandas
 RUN pip install NanoPlot==${NANOPLOT_VERSION}
 
-# Installing MULTIQC_VERSION 
+# Installing MULTIQC_VERSION
 RUN pip install multiqc==${MULTIQC_VERSION}
 
 # Installing GraphicsMagick
@@ -117,14 +117,14 @@ RUN pip install HTSeq==${HTSEQ_VERSION}
 RUN pip install medaka==${MEDAKA_VERSION}
 
 # Clean cache
-RUN yum clean all 
+RUN yum clean all
 
 #cleaning
 RUN rm -fr *.tar.gz; rm -fr *.bz2; rm -fr ./tmp
 RUN rm -rf /var/cache/yum
-RUN rm -fr fastqc.zip  samtools-*   
+RUN rm -fr fastqc.zip  samtools-*
 
-#ENV PATH "/project/ont-guppy_3.1.5_linux64/ont-guppy/bin/:${PATH}" 
+#ENV PATH "/project/ont-guppy_3.1.5_linux64/ont-guppy/bin/:${PATH}"
 ENV SAM2TSV "java -jar /project/jvarkit/dist/sam2tsv.jar"
 ENV PICARD "java -jar /usr/local/bin/picard.jar"
 ENV LC_ALL=en_US.utf8

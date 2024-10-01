@@ -3,20 +3,18 @@ desc= "Calculate mean current analysis per position from nanopolish event align 
 
 # Import required libraries:
 import argparse
-
 import pandas as pd
 
-
 def parse_input(file, size_chunks):
-    
+
     df_chunk = pd.read_csv(file, sep='\t', chunksize=size_chunks, compression='gzip', error_bad_lines=False)
     #df_chunk = pd.read_csv(file, sep='\t', chunksize=size_chunks, error_bad_lines=False)
     chunk_list = list()
 
     # Process each portion of input file:
-    for chunk in df_chunk:  
-        
-        # Perform data filtering: 
+    for chunk in df_chunk:
+
+        # Perform data filtering:
         chunk_filter = chunk.iloc[:,[0,1,2,3,6]]
         #chunk_filter = chunk
         chunk_filter.columns = ['contig', 'position','reference_kmer', 'read_name','event_level_mean']
@@ -25,7 +23,7 @@ def parse_input(file, size_chunks):
         chunk_filter = chunk_filter.groupby(['contig', 'position','reference_kmer', 'read_name']).agg({'event_level_mean':'mean'})
         chunk_filter.columns = ['event_level_mean']
         chunk_filter = chunk_filter.reset_index()
-        
+
         # Once the data filtering is done, append to list
         chunk_list.append(chunk_filter)
         print('Partition {}: Processed'.format(len(chunk_list)))
@@ -41,7 +39,7 @@ def parse_input(file, size_chunks):
 
 
 def mean_perpos (sliced_data, output):
-    
+
     #Calculate mean per positions:
     print('Analysing data - position level - mean')
     sliced_data['read_name'] = 1
@@ -54,7 +52,7 @@ def mean_perpos (sliced_data, output):
     mean_perpos.to_csv('{}_processed_perpos_mean.tsv'.format(output), sep='\t', index = False)
 
 def median_perpos (sliced_data, output):
-    
+
     #Calculate mean per positions:
     print('Analysing data - position level - median')
     #sliced_data['read_name'] = 1
@@ -120,8 +118,8 @@ def main():
         if a.mean:
             mean_perpos(raw_import, a.output)
         else:
-            median_perpos(raw_import, a.output)    
+            median_perpos(raw_import, a.output)
 
 
-if __name__=='__main__': 
+if __name__=='__main__':
     main()
