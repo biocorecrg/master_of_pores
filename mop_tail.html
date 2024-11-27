@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -6,19 +8,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MOP_TAIL &mdash; MoP3  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
     <link rel="canonical" href="https://biocorecrg.github.io/master_of_pores/mop_tail.html" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -92,7 +90,8 @@
   <section id="mop-tail">
 <span id="home-page-moptail"></span><h1>MOP_TAIL<a class="headerlink" href="#mop-tail" title="Link to this heading"></a></h1>
 <p>This pipeline takes as input the output from MOP_PREPROCESS: basecalled fast5 reads, together with their respective fastq files, alignment and assignment read ID to gene/transcript. It outputs the estimation of poly(A) tail length at read level provided by <strong>Tailfindr</strong>, <strong>Nanopolish</strong> or both. Tailfinr can be run using three modes: standard, for Nano3P-seq protocol with R9 chemistry and Nano3P-seq protocol with R10 chemistry.</p>
-<a class="reference internal image-reference" href="_images/flow_tail.png"><img alt="mop_tail graph" src="_images/flow_tail.png" style="width: 600px;" /></a>
+<a class="reference internal image-reference" href="_images/flow_tail.png"><img alt="mop_tail graph" src="_images/flow_tail.png" style="width: 600px;" />
+</a>
 <section id="input-parameters">
 <h2>Input Parameters<a class="headerlink" href="#input-parameters" title="Link to this heading"></a></h2>
 <p>The input parameters are stored in yaml files like the one represented here:</p>
@@ -154,7 +153,8 @@
 </pre></div>
 </div>
 <p>If both programs are run, an additional plot that shows the correlation of their results is generated.</p>
-<a class="reference internal image-reference" href="_images/mod_corr.png"><img alt="_images/mod_corr.png" src="_images/mod_corr.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="_images/mod_corr.png"><img alt="_images/mod_corr.png" src="_images/mod_corr.png" style="width: 400px;" />
+</a>
 </section>
 </section>
 
