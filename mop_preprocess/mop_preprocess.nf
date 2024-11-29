@@ -32,8 +32,8 @@ reference                 : ${params.reference}
 annotation                : ${params.annotation}
 
 granularity               : ${params.granularity}
-
 ref_type                  : ${params.ref_type}
+
 pars_tools                : ${params.pars_tools}
 barcodes                  : ${params.barcodes}
 
@@ -99,6 +99,9 @@ switch(params.demultiplexing) {
     case "deeplexicon":
         demux_models = "${projectDir}/deeplexicon_models/"
     break;
+    case "seqtagger":
+        demux_models = "${projectDir}/seqtagger_models/"
+    break;
 }
 
 dorado_models = "${projectDir}/dorado_models/"
@@ -126,6 +129,7 @@ include { checkInput; filterPerBarcodes; get_barcode_list; RNA2DNA; parseFinalSu
 def demulti_fast5_opt = homogenizeVals(params.demulti_fast5)
 def basecall_label = (params.GPU != 'OFF' ? 'basecall_gpus' : 'big_cpus')
 def deeplexi_basecall_label = (params.GPU != 'OFF' ? 'demulti_gpus' : '')
+
 
 def output_bc = (demulti_fast5_opt == 'ON' ? '' : outputFast5)
 //def outputMinionQC = (demulti_fast5_opt == 'ON' ? '': outputQual)
@@ -160,7 +164,7 @@ barcodes_to_include = get_barcode_list(params.barcodes)
 def guppy_basecall_pars = guppypars + " " + progPars["basecalling--guppy"]
 
 def basecaller_pars = ["guppy" : guppy_basecall_pars, "dorado" : progPars["basecalling--dorado"] ]
-def demux_pars = ["guppy" : progPars["demultiplexing--guppy"] + " " + guppy_basecall_pars, "deeplexicon": progPars["demultiplexing--deeplexicon"] ]
+def demux_pars = ["guppy" : progPars["demultiplexing--guppy"] + " " + guppy_basecall_pars, "seqtagger":  progPars["demultiplexing--seqtagger"], "deeplexicon": progPars["demultiplexing--deeplexicon"] ]
 
 
 // INCLUDE WORKFLOWS
@@ -186,7 +190,7 @@ include { GET_VERSION as FASTQC_VER} from "${subworkflowsDir}/qc/fastqc"
 include { SORT as SAMTOOLS_SORT } from "${subworkflowsDir}/misc/samtools" addParams(LABEL: 'big_cpus', OUTPUT:outputMapping)
 include { INDEX as SAMTOOLS_INDEX } from "${subworkflowsDir}/misc/samtools" addParams(OUTPUT:outputMapping)
 include { GET_VERSION as SAMTOOLS_VERSION; CAT as SAMTOOLS_CAT } from "${subworkflowsDir}/misc/samtools"
-include { MOP_QC as NANOPLOT_QC } from "${subworkflowsDir}/qc/nanoplot" addParams(LABEL: 'big_cpus_ignore')
+include { MOP_QC as NANOPLOT_QC } from "${subworkflowsDir}/qc/nanoplot" addParams(LABEL: 'big_cpus_retry')
 include { GET_VERSION as NANOPLOT_VER } from "${subworkflowsDir}/qc/nanoplot"
 include { GET_VERSION as NANOCOUNT_VER } from "${subworkflowsDir}/read_count/nanocount"
 include { COUNT as NANOCOUNT } from "${subworkflowsDir}/read_count/nanocount" addParams(LABEL: 'big_mem', EXTRAPARS: progPars["counting--nanocount"], OUTPUT:outputCounts)
@@ -407,6 +411,7 @@ workflow {
         else { // BASECALL AND DEMULTIPLEX
             switch(params.demultiplexing) {
                 case "deeplexicon":
+                case "seqtagger":
                 outbc = BASECALL(fast5_4_analysis)
                 demux = DEMULTIPLEX(fast5_4_analysis, outbc.basecalled_fastq)
                 demufq = demux.demultiplexed_fastq
@@ -507,7 +512,7 @@ workflow {
 
     // Perform fastqc QC on fastq
     fastqc_files = FASTQC(fastq_files)
-    multiqc_data = multiqc_data.mix(stats_aln).mix(fastqc_files.map{it[1]})
+    multiqc_data = multiqc_data.mix(fastqc_files.map{it[1]})
 
 
     stats_counts = COUNTING(sorted_alns, aln_indexes).stats_counts    

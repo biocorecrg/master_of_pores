@@ -1,6 +1,7 @@
 #step tool  extrapars
 basecalling guppy ""
 demultiplexing  guppy "--barcode_kits EXP-NBD114"
+demultiplexing	seqtagger	""
 filtering nanofilt  ""
 filtering	nanoq	""
 mapping graphmap  ""

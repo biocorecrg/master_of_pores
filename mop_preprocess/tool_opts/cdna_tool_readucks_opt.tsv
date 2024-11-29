@@ -2,6 +2,7 @@
 basecalling	guppy	""
 demultiplexing	guppy	"--flowcell FLO-MIN106 --kit SQK-DCS109 --barcode_kits EXP-NBD104"
 demultiplexing	readucks	"--limit_barcodes_to 1 2 3 4 --native_barcodes --threshold 50"
+demultiplexing	seqtagger	""
 filtering	nanofilt	""
 filtering	nanoq	""
 mapping	graphmap	""

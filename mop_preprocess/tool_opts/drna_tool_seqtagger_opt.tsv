@@ -1,5 +1,7 @@
 #step	tool	extrapars
-basecalling	guppy	"-c dna_r9.4.1_450bps_hac.cfg --barcode_kits EXP-NBD104 "
+basecalling	dorado	"rna002_70bps_hac@v3"
+basecalling	guppy	""
+demultiplexing	seqtagger	"-k b100"
 demultiplexing	deeplexicon	""
 demultiplexing	guppy	""
 filtering	nanofilt	""
