@@ -6,12 +6,12 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Get Started &mdash; MoP3  documentation</title>
+  <title>Get Started &mdash; MOP4  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-    <link rel="canonical" href="https://biocorecrg.github.io/master_of_pores/install.html" />
+    <link rel="canonical" href="https://biocorecrg.github.io/MOP4/install.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
@@ -22,7 +22,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="MOP_PREPROCESS" href="mop_preprocess.html" />
-    <link rel="prev" title="About Master of Pores 3" href="about.html" /> 
+    <link rel="prev" title="About Master of Pores 4" href="about.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -34,7 +34,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            MoP3
+            MOP4
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,11 +45,13 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="about.html">About Master of Pores 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About Master of Pores 4</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Get Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#installing-guppy">Installing Guppy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#profiles">Profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#experimental-cleanup">Experimental cleanup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specify-the-place-for-singularity-image-download">Specify the place for singularity image download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-on-slurm-hpc-by-submitting-the-nextflow-job">Running on slurm HPC by submitting the nextflow job</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mop_preprocess.html">MOP_PREPROCESS</a></li>
@@ -69,7 +71,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">MoP3</a>
+          <a href="index.html">MOP4</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -95,26 +97,9 @@
 </pre></div>
 </div>
 <p>To install the pipeline you need to download the repo:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone --depth 1 --recurse-submodules https://github.com/biocorecrg/master_of_pores.git</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone --depth 1 --recurse-submodules https://github.com/biocorecrg/MOP4.git</span>
 </pre></div>
 </div>
-<section id="installing-guppy">
-<h2>Installing Guppy<a class="headerlink" href="#installing-guppy" title="Link to this heading"></a></h2>
-<p>You can use <strong>INSTALL.sh</strong> and the version of Guppy you want to download.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Please consider that the support of VBZ compression of fast5 started with version 3.4.X.</p>
-</div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd master_of_pores; bash INSTALL.sh 6.0.1</span>
-</pre></div>
-</div>
-<p>or for installing the default 3.4.5</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd master_of_pores; bash INSTALL.sh</span>
-</pre></div>
-</div>
-<p>Guppy custom models for RNA basecalling will be downloaded from our repository <a class="reference external" href="https://biocore.crg.eu/public/mop3_pub/models.tar">https://biocore.crg.eu/public/mop3_pub/models.tar</a> and placed automatically within the right path inside the pipeline.</p>
-<p>You can install different versions of Guppy but only one will be run during the pipeline execution. For switching among them you need to run INSTALL.sh with the version you prefer.</p>
-</section>
 <section id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h2>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd mop_preprocess</span>
@@ -138,7 +123,28 @@
 <li><p>cluster or crg:  for being used in the custom HPC environment at CRG</p></li>
 <li><p>slurm:           for being used in an HPC with SLURM</p></li>
 <li><p>awsbatch:        for being used in Amazon AWS cloud infrastructure</p></li>
+<li><p>clean:           for removing intermediate files (resume won’t work)</p></li>
 </ul>
+</section>
+<section id="experimental-cleanup">
+<h2>Experimental cleanup<a class="headerlink" href="#experimental-cleanup" title="Link to this heading"></a></h2>
+<p>The nextflow pipelines can occupy a lot of space in the work folders. If you are not interested in caching and resuming you might want to use the clean profile in addition to the one you choose for the infrastructure.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd mop_preprocess</span>
+
+<span class="go">nextflow run mop_preprocess.nf -params-file params.f5.yaml -with-singularity -bg -profile local,clean &gt; log</span>
+</pre></div>
+</div>
+</section>
+<section id="specify-the-place-for-singularity-image-download">
+<h2>Specify the place for singularity image download<a class="headerlink" href="#specify-the-place-for-singularity-image-download" title="Link to this heading"></a></h2>
+<p>Setting the following variables in your .bashrc or .bash_profile will specify the place for downloading the images:</p>
+</section>
+<section id="running-on-slurm-hpc-by-submitting-the-nextflow-job">
+<h2>Running on slurm HPC by submitting the nextflow job<a class="headerlink" href="#running-on-slurm-hpc-by-submitting-the-nextflow-job" title="Link to this heading"></a></h2>
+<p>You can use the script <a href="#id1"><span class="problematic" id="id2">`</span></a>launch_nf.sh`for submitting the nextflow jobs as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sbatch launch_nf.sh nextflow run run mop_preprocess.nf -params-file params.f5.yaml -ansi-log false -with-singularity -profile newcrg</span>
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -146,7 +152,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="about.html" class="btn btn-neutral float-left" title="About Master of Pores 3" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="about.html" class="btn btn-neutral float-left" title="About Master of Pores 4" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="mop_preprocess.html" class="btn btn-neutral float-right" title="MOP_PREPROCESS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

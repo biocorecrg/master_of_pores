@@ -6,12 +6,12 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MOP_MOD &mdash; MoP3  documentation</title>
+  <title>MOP_MOD &mdash; MOP4  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-    <link rel="canonical" href="https://biocorecrg.github.io/master_of_pores/mop_mod.html" />
+    <link rel="canonical" href="https://biocorecrg.github.io/MOP4/mop_mod.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
@@ -34,7 +34,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            MoP3
+            MOP4
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,14 +45,14 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="about.html">About Master of Pores 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About Master of Pores 4</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Get Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mop_preprocess.html">MOP_PREPROCESS</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">MOP_MOD</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#input-parameters">Input Parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-to-run-the-pipeline">How to run the pipeline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#results">Results</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#encoding-of-modification-information-from-m6a-aware-basecalled-data-using-modphred">Encoding of modification information from m6A-aware basecalled data using modPhred</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extracting-modification-encoded-within-bam-files-basecalling-with-modification">Extracting modification encoded within BAM files (basecalling with modification)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mop_consensus.html">MOP_CONSENSUS</a></li>
@@ -70,7 +70,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">MoP3</a>
+          <a href="index.html">MOP4</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -96,25 +96,6 @@
 <section id="input-parameters">
 <h2>Input Parameters<a class="headerlink" href="#input-parameters" title="Link to this heading"></a></h2>
 <p>The input parameters are stored in yaml files like the one represented here:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">input_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${projectDir}/../mop_preprocess/outfolder/&quot;</span>
-<span class="nt">comparison</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${projectDir}/comparison.tsv&quot;</span>
-
-<span class="nt">reference</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${projectDir}/../anno/yeast_rRNA_ref.fa.gz&quot;</span>
-<span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${projectDir}/output_mod&quot;</span>
-<span class="nt">pars_tools</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${projectDir}/tools_opt.tsv&quot;</span>
-
-<span class="c1"># flows</span>
-<span class="nt">epinano</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;YES&quot;</span>
-<span class="nt">nanocompore</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NO&quot;</span>
-<span class="nt">tombo_lsc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;YES&quot;</span>
-<span class="nt">tombo_msc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;YES&quot;</span>
-<span class="nt">modphred</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NO&quot;</span>
-
-<span class="c1"># epinano plots</span>
-<span class="nt">epinano_plots</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;YES&quot;</span>
-<span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-</pre></div>
-</div>
 </section>
 <section id="how-to-run-the-pipeline">
 <h2>How to run the pipeline<a class="headerlink" href="#how-to-run-the-pipeline" title="Link to this heading"></a></h2>
@@ -162,42 +143,20 @@
 <p>Here an example of a plot from Epinano:</p>
 <a class="reference internal image-reference" href="_images/epinano.png"><img alt="_images/epinano.png" src="_images/epinano.png" style="width: 350px;" />
 </a>
-<ol class="arabic simple" start="2">
-<li><p><strong>Tombo</strong> results are stored in <strong>tombo_flow</strong> directory. It contains one file per comparison. It reports the p-value per position, the sum of p-values per 5-mer and coverage in both WT and KO. See example below:</p></li>
-</ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&quot;Ref_Position&quot;       &quot;Chr&quot;   &quot;Position&quot;      &quot;Tombo_SiteScore&quot;       &quot;Coverage_Sample&quot;       &quot;Coverage_IVT&quot;  &quot;Tombo_KmerScore&quot;</span>
-<span class="go">&quot;gene_A_3&quot;   &quot;gene_A&quot;        &quot;3&quot;     &quot;0.0000&quot;        &quot;92&quot;    &quot;87&quot;    NA</span>
-<span class="go">&quot;gene_A_4&quot;   &quot;gene_A&quot;        &quot;4&quot;     &quot;0.0000&quot;        &quot;92&quot;    &quot;87&quot;    NA</span>
-<span class="go">&quot;gene_A_5&quot;   &quot;gene_A&quot;        &quot;5&quot;     &quot;0.0000&quot;        &quot;92&quot;    &quot;87&quot;    0</span>
-<span class="go">&quot;gene_A_6&quot;   &quot;gene_A&quot;        &quot;6&quot;     &quot;0.0000&quot;        &quot;93&quot;    &quot;88&quot;    0.0014</span>
-<span class="go">&quot;gene_A_7&quot;   &quot;gene_A&quot;        &quot;7&quot;     &quot;0.0000&quot;        &quot;95&quot;    &quot;89&quot;    0.0027</span>
-<span class="go">&quot;gene_A_8&quot;   &quot;gene_A&quot;        &quot;8&quot;     &quot;0.0014&quot;        &quot;95&quot;    &quot;89&quot;    0.004</span>
-</pre></div>
-</div>
-<ol class="arabic simple" start="3">
-<li><p><strong>Nanopolish</strong> results are stored in <strong>nanopolish-compore_flow</strong> directory. It contains two files per sample: raw eventalign output (gzipped) and another with the median raw current per position and transcript (<strong>sample_processed_perpos_median.tsv.gz</strong>). See example below:</p></li>
-</ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">contig       position        reference_kmer  read_name       median  coverage</span>
-<span class="go">gene_A       0       AAATT   1       113.35  433</span>
-<span class="go">gene_A       1       AATTG   1       97.24   506</span>
-<span class="go">gene_A       2       ATTGA   1       70.35   2034</span>
-<span class="go">gene_A       3       TTGAA   1       102.03  416</span>
-<span class="go">gene_A       4       TGAAG   1       115.315 422</span>
-<span class="go">gene_A       5       GAAGA   1       104.25  471</span>
-</pre></div>
-</div>
-<ol class="arabic simple" start="4">
-<li><p><strong>Nanocompore</strong> results are stored in <strong>nanopolish-compore_flow</strong> directory. It contains one file per comparison (<strong>wt_1_vs_ko_1_nanocompore_results.tsv</strong>). Default output from Nanocompore (see Nanocompore’s repository for a more detailed explanation).</p></li>
-</ol>
 </section>
-<section id="encoding-of-modification-information-from-m6a-aware-basecalled-data-using-modphred">
-<h2>Encoding of modification information from m6A-aware basecalled data using modPhred<a class="headerlink" href="#encoding-of-modification-information-from-m6a-aware-basecalled-data-using-modphred" title="Link to this heading"></a></h2>
-<p>Once the data has been basecalled with our m6A modification-aware basecalling model, modification information data should be encoded for its later downstream analysis. This step is performed by <strong>modPhred</strong>, another software included in the <strong>mop_mod</strong> module.</p>
-<p>To run this software, in the <code class="docutils literal notranslate"><span class="pre">params.yaml</span></code> file you should specify <code class="docutils literal notranslate"><span class="pre">modphred:</span> <span class="pre">&quot;YES&quot;</span></code> and run the code below:</p>
+<section id="extracting-modification-encoded-within-bam-files-basecalling-with-modification">
+<h2>Extracting modification encoded within BAM files (basecalling with modification)<a class="headerlink" href="#extracting-modification-encoded-within-bam-files-basecalling-with-modification" title="Link to this heading"></a></h2>
+<p>Once the data has been basecalled with a modification-aware basecalling model, modification can be evaluated using modkit.</p>
+<p>To run this software, in the <code class="docutils literal notranslate"><span class="pre">params.yaml</span></code> file you should specify <code class="docutils literal notranslate"><span class="pre">modkit:</span> <span class="pre">&quot;YES&quot;</span></code> and run the code below:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd mop_mod</span>
 <span class="go">nextflow run mop_mod.nf -params-file params.yaml -with-singularity -bg &gt; yourlog.txt</span>
 </pre></div>
 </div>
+<p>Modkit will generate a pileup file that can be filtered by keeping only the positions with a coverage higher than a value indicated in <strong>tools_opt.tsv</strong>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">modkit</span>&#160; <span class="pre">filtering</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;&gt;=</span> <span class="pre">25&quot;</span>
+<span class="pre">`</span></code></p>
+<p>The resulting bedgraphs are then merged in a single table called union.bed</p>
 </section>
 </section>
 

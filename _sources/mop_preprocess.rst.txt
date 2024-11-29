@@ -7,12 +7,12 @@ MOP_PREPROCESS
 .. autosummary::
    :toctree: generated
 
-This pipeline takes as input the raw fast5 reads - single or multi - and it produces several outputs (basecalled fast5, sequences in fastq format, aligned reads in BAM format etc). The pre-processing pipeline can perform base-calling, demultiplexing (optional), filtering, quality control, mapping to a reference (either a genome or a transcriptome), feature counting, discovery of novel transcripts, and it generates a final report with the performance and results of each of the steps performed. 
+This pipeline takes as input the raw reads - single or multi - and it produces several outputs (basecalled pod5, sequences in fastq format, aligned reads in BAM format etc). The pre-processing pipeline can perform base-calling, demultiplexing (optional), filtering, quality control, mapping to a reference (either a genome or a transcriptome), feature counting, discovery of novel transcripts, and it generates a final report with the performance and results of each of the steps performed.
 
-It automatically detects the kind of input fast5 file (single or multi-sequence). It can also support the new pod5 format but it won't output basecalled fastq useful for the other pipelines. The basecalling can be performed with guppy or dorado and the demultiplexing with either guppy, seqtagger, or deeplexicon. Basecalled fastq and Fast5 files can be demultiplexed as well. You can restrict the number of barcodes by indicating a file with barcode list using the **barcodes** parameter.
+It support the new pod5 format. The basecalling can be performed with dorado or dorado-duplex and the demultiplexing with either dorado or seqtagger. Basecalled fastq and pod5 files can be demultiplexed as well. You can restrict the number of barcodes by indicating a file with barcode list using the **barcodes** parameter.
 
 
-.. image:: ../img/flow_preproc.png
+.. image:: ../img/flow_preproc2.png
   :width: 600
   :alt: mop_preprocess graph
 
@@ -23,15 +23,10 @@ Input Parameters
 
 The input parameters are stored in yaml files like the one represented here:
 
-.. literalinclude:: ../mop_preprocess/params.f5.demrna.yaml
+.. literalinclude:: ../mop_preprocess/params.yaml
    :language: yaml
 
 You can change them by editing this file or using the command line as explained in the next section.
-
-   
-.. tip::
-
-   In the case of pod5 as input files, you can use them as they were fast5 with dorado or guppy >= 6.5.x. The only limitation is that you cannot obtain basecalled fast5 so you cannot use the other pipelines that need fast5 as input files.
 
 
 
@@ -108,30 +103,40 @@ or you can run the pipeline locally:
 
 .. code-block:: console
 
-   ...
 
-   [warm up] executor > crg
-   [9d/82eeaa] Cached process > checkRef (Checking yeast_rRNA_ref.fa.gz)
-   [33/b8d053] Submitted process > BASECALL:GUPPY_VERSION:getVersion
-   [e5/e5c990] Submitted process > BASECALL:GUPPY65_BASECALL:baseCallNew (mod---2)
-   [b5/0997da] Submitted process > BASECALL:GUPPY65_BASECALL:baseCallNew (wt---1)
-   [fb/6353d6] Submitted process > SEQFILTER:NANOQ_FILTER:filter (mod---2)
-   ...
+      ----------------------CHECK TOOLS -----------------------------
+   basecalling : dorado
+   > demultiplexing will be skipped
+   mapping : minimap2
+   filtering : nanoq
+   counting : nanocount
+   > discovery will be skipped
+   --------------------------------------------------------------
+   Skipping the email
+
+   [15/cc7992] Cached process > checkRef (Checking curlcake_constructs.fasta.gz)
+   [e7/fe0c2b] Submitted process > BASECALL:DORADO_BASECALL:downloadModel (A---1)
+   [a8/fc6e07] Submitted process > BASECALL:DORADO_BASECALL:baseCallMod (A---1)
+   [95/044f06] Submitted process > BASECALL:DORADO_BASECALL:baseCallMod (m6A---2)
+   [a1/867fa2] Submitted process > BASECALL:DORADO_BASECALL:bam2ModFastq (A---1)
+
 
 .. note::
    To resume the execution, temporary files generated previously by the pipeline must be kept. Otherwise, the pipeline will re-start from the beginning.
 
-tool_opts
+Command line options
 ====================
 
-The command line options for each tool used in the pipeline are stored within specialized tsv files stored within the  *tool_opts* folder. Here is an example:
+The command line options for each tool used in the pipeline are stored within in the same yaml file with other parameters. The section is called **progPars**. Here is an example:
 
-.. literalinclude:: ../mop_preprocess/tool_opts/drna_tool_m6A_splice_opt.tsv
+.. literalinclude:: ../mop_preprocess/params.yaml
+   :language: yaml
+   :emphasize-lines: 44-65
 
-The first column indicates the processing step as **basecalling** or **demultiplexing** etc. Some tools such as Guppy can be used for more processing steps. Several pre-compiled tool_opts files are stored within the folder **tool_opts**.
+The second level indicates the processing step as **basecalling** or **demultiplexing** etc, while the third indicates the tool. Finally you have the command specific command line between quotation marks.
 
 .. note::
-   Readucks is run after guppy demultiplexing. It refines the demultiplexing generating different fastqs
+   You can indicate the models to be used for basecalling with dorado or dorardo-duplex as "sup,m6A_DRACH". The pipeline will try to download before and then to perform the basecalling. In case you want a specific model version you need to indicate the base simplex model as "rna002_70bps_hac@v3,pseU". You can see `here <https://github.com/nanoporetech/dorado?tab=readme-ov-file#dna-models>`_ the list of models and modifications.
 
 .. tip::
    You don't need to specify the whole path for the models of seqtagger, just the name of the model will be enough
@@ -141,31 +146,23 @@ Model libraries for specific tools
 ====================
 The following folders are available for the respective tools. Some models are already pre-installed-
 
-* deeplexicon_models
-   * resnet20-final.h5
-   * pAmps-final-actrun_newdata_nanopore_UResNet20v2_model.030.h5
-   * pAmps-rep2-4-train1_newdata_nanopore_UResNet20v2_model.039.h5
-* dorado_models
-   * rna002_70bps_hac@v3
 * seqtagger_models
    * b04_RNA002
    * b04_RNA004
 
-.. note::
-   You need to download the models you want to use in case they are not already available. For instance, if you need another model for dorado you need to do:
-
-.. code-block:: console
-
-   dorado download --model MODELNAME
-
-
 You also need to add the dedicated parameter within the tool_opts file for the specific tool as:
 
-.. code-block:: console
+.. code-block:: yaml
+   ...
+   basecalling:
+      dorado: "sup,m6A_DRACH"
+      dorado-duplex: "sup"
+   demultiplexing:
+      seqtagger: "-k b100"
+       dorado: ""
+   ...
 
-   basecalling dorado   "rna002_70bps_hac@v3"
-   demultiplexing       seqtagger   "-k b100"
-   demultiplexing	deeplexicon   "-f multi -m resnet20-final.h5"
+
 
 .. note::
    You need to copy the model in the corresponding folder and indicate just the model name. You don't need the absolute path.
@@ -189,19 +186,7 @@ The sample id is given by either the folder containing the fast5 files or the ba
 
 .. note::
 
-   The naming convention of the different barcodes is decided by each tool, so guppy will produce **barcode01**, **barcode02**, while seqtagger will produce bc_1, bc_2, etc.
-
-
-Basecalling with the m6A-aware model
-=========================================
-
-For m6A basecalling in your ``params.f5.yaml`` file you should specify ``basecalling: "guppy"`` and ``pars_tools: "tool_opts/drna_tool_m6A_splice_opt.tsv" `` so that guppy will use the m6A model. In your output folder you will have the ``fast5_files`` folder containing the m6A basecalled fast5 files for downstream analysis. Then run: 
-
-.. code-block:: console
-
-   cd mop_preprocess
-   nextflow run mop_preprocess.nf -params-file params.f5.yaml -with-singularity -bg > yourlog.txt
- 
+   The naming convention of the different barcodes is decided by each tool, so **seqtagger** will produce **bc_1**, **bc_2**, etc. while guppy will produce **barcode01**, **barcode02**, etc.
 
 
 Results
@@ -210,7 +195,7 @@ Results
 Several folders are created by the pipeline within the output directory specified by the **output** parameter:
 
 
-* **fast5_files**: Contains the basecalled multifast5 files. Each batch contains 4000 sequences.
+* **pod5_files**: Contains the basecalled multifast5 files. Each batch can contain a variable number of sequences.
 * **fastq_files**: Contains one or, in case of demultiplexing, more fastq files.
 * **QC_files**: Contains each single QC produced by the pipeline.
 * **alignment**: Contains the bam file(s).
@@ -219,7 +204,3 @@ Several folders are created by the pipeline within the output directory specifie
 * **assigned**: Contains assignment of each read to a given gene / transcript if counting was performed.
 * **report**: Contains the final multiqc report.
 * **assembly**: It contains assembled transcripts.
-
-.. note::
-   MOP3 will automatically detect the version of guppy and modify the parameters accordingly. You don't need to add any extra parameter as in MOP2.
-

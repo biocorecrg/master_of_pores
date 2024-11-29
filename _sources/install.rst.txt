@@ -19,31 +19,8 @@ To install the pipeline you need to download the repo:
 
 .. code-block:: console
 
-   git clone --depth 1 --recurse-submodules https://github.com/biocorecrg/master_of_pores.git
+   git clone --depth 1 --recurse-submodules https://github.com/biocorecrg/MOP4.git
 
-Installing Guppy
-============
-
-You can use **INSTALL.sh** and the version of Guppy you want to download.
-
-.. note::
-
-  Please consider that the support of VBZ compression of fast5 started with version 3.4.X.
-
-
-.. code-block:: console
-
-  cd master_of_pores; bash INSTALL.sh 6.0.1
-
-or for installing the default 3.4.5
-
-.. code-block:: console
-
-  cd master_of_pores; bash INSTALL.sh
-
-Guppy custom models for RNA basecalling will be downloaded from our repository https://biocore.crg.eu/public/mop3_pub/models.tar and placed automatically within the right path inside the pipeline.
-
-You can install different versions of Guppy but only one will be run during the pipeline execution. For switching among them you need to run INSTALL.sh with the version you prefer.
 
 Testing
 ============
@@ -69,4 +46,36 @@ Some nextflow configuration files are stored within the folder **conf** and can 
 - cluster or crg:  for being used in the custom HPC environment at CRG
 - slurm:           for being used in an HPC with SLURM
 - awsbatch:        for being used in Amazon AWS cloud infrastructure
+- clean:           for removing intermediate files (resume won't work)
+
+Experimental cleanup
+======================
+The nextflow pipelines can occupy a lot of space in the work folders. If you are not interested in caching and resuming you might want to use the clean profile in addition to the one you choose for the infrastructure.
+
+.. code-block:: console
+
+  cd mop_preprocess
+
+  nextflow run mop_preprocess.nf -params-file params.f5.yaml -with-singularity -bg -profile local,clean > log
+
+Specify the place for singularity image download
+===============
+Setting the following variables in your .bashrc or .bash_profile will specify the place for downloading the images:
+
+.. code-block:: console
+  export APPTAINERENV_TMPDIR="MYPATH"
+  export APPTAINERENV_NXF_TASK_WORKDIR="MYPATH"
+  export NXF_APPTAINERENV_LIBRARYDIR="MYPATH"
+  export NXF_SINGULARITY_CACHEDIR="MYPATH"
+
+Running on slurm HPC by submitting the nextflow job 
+===============
+You can use the script `launch_nf.sh`for submitting the nextflow jobs as follows:
+
+
+.. code-block:: console
+
+   sbatch launch_nf.sh nextflow run run mop_preprocess.nf -params-file params.f5.yaml -ansi-log false -with-singularity -profile newcrg 
+
+
 
