@@ -58,7 +58,7 @@ git pull --recurse-submodules
 The documentation is available at [https://biocorecrg.github.io/MOP4/](https://biocorecrg.github.io/MOP4/)
 
 ## Contact
-Please open an [issue](https://github.com/biocorecrg/MOP2/issues) if you encounter any issues/troubles.
+Please open an issue if you encounter any issues / troubles.
 However, please go over the previous issues (including closed issues) before opening a new issue, as your same exact question might have been already answered previously. Thank you!
 
 
