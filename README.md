@@ -1,6 +1,6 @@
-# MoP3 - Master of Pores 3
+# MoP4 - Master of Pores 4
 [![Docker Build Status](https://img.shields.io/docker/automated/biocorecrg/nanopore.svg)](https://cloud.docker.com/u/biocorecrg/repository/docker/biocorecrg/nanopore/builds)
-[![mop3-CI](https://github.com/biocorecrg/master_of_pores/actions/workflows/build.yml/badge.svg)](https://github.com/biocorecrg/master_of_pores/actions/workflows/build.yml)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![mop2-CI](https://github.com/biocorecrg/MOP4/actions/workflows/build.yml/badge.svg)](https://github.com/biocorecrg/MOP4/actions/workflows/build.yml)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Nextflow version](https://img.shields.io/badge/Nextflow-21.04.1-brightgreen)](https://www.nextflow.io/)
 [![Nextflow DSL2](https://img.shields.io/badge/Nextflow-DSL2-brightgreen)](https://www.nextflow.io/)
 [![Singularity version](https://img.shields.io/badge/Singularity-v3.2.1-green.svg)](https://www.sylabs.io/)
@@ -9,11 +9,10 @@
 <br/>
 
 
-
 <img align="right" href="https://biocore.crg.eu/" src="https://raw.githubusercontent.com/CRG-CNAG/BioCoreMiscOpen/master/logo/biocore-logo_small.png" />
 
 
-Master of Pores is a pipeline written in Nextflow DSL2 for the analysis of Nanopore data.
+Master of Pores is a pipeline written in Nextflow DSL2 to analyze Nanopore data.
 <br/>
 
 It can handle reads from direct RNAseq, cDNAseq, DNAseq etc.
@@ -21,9 +20,9 @@ It can handle reads from direct RNAseq, cDNAseq, DNAseq etc.
 <br/>
 
 
-![MOP3](https://github.com/biocorecrg/master_of_pores/blob/v3.0/img/goku3.png?raw=true)
+![MOP4](https://github.com/biocorecrg/MoP4/blob/master/img/ssj4.png?raw=true)
 
-The name is inspired by the Metallica's [Master Of Puppets](https://www.youtube.com/watch?v=S7blkui3nQc)
+The name is inspired by the Metallica's [Master Of Puppets](https://www.youtube.com/watch?v=S7blkui3nQc), the logo and the images are an homage to [Akira Toriyama](https://en.wikipedia.org/wiki/Akira_Toriyama)
 
 ## Install
 Please install nextflow and singularity or docker before.
@@ -31,13 +30,13 @@ Please install nextflow and singularity or docker before.
 Then download the repo:
 
 ```
-git clone --depth 1 --recurse-submodules https://github.com/biocorecrg/master_of_pores.git
+git clone --depth 1 --recurse-submodules https://github.com/biocorecrg/MOP4.git
 ```
 
 You can use INSTALL.sh to download the version 3.4.5 of guppy or you can replace it with the version you prefer. Please consider that the support of VBZ compression of fast5 started with version 3.4.X.
 
 ```
-cd master_of_pores; sh INSTALL.sh
+cd MOP4; sh INSTALL.sh
 ```
 
 ## Testing
@@ -56,10 +55,10 @@ git pull --recurse-submodules
 ```
 
 ## Documentation
-The documentation is available at [https://biocorecrg.github.io/master_of_pores/](https://biocorecrg.github.io/master_of_pores/)
+The documentation is available at [https://biocorecrg.github.io/MOP4/](https://biocorecrg.github.io/MOP4/)
 
 ## Contact
-Please open an [issue](https://github.com/biocorecrg/master_of_pores/issues) if you encounter any issues/troubles.
+Please open an [issue](https://github.com/biocorecrg/MOP2/issues) if you encounter any issues/troubles.
 However, please go over the previous issues (including closed issues) before opening a new issue, as your same exact question might have been already answered previously. Thank you!
 
 

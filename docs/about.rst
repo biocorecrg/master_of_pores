@@ -1,7 +1,7 @@
 .. _home-page-about:
 
 *******************
-About Master of Pores 3
+About Master of Pores 4
 *******************
 
 .. autosummary::
@@ -9,7 +9,7 @@ About Master of Pores 3
 
 
 .. |docker| image:: https://img.shields.io/badge/Docker-v20.10.8-blue
-.. |status| image:: https://github.com/biocorecrg/master_of_pores/actions/workflows/build.yml/badge.svg
+.. |status| image:: https://github.com/biocorecrg/MOP4/actions/workflows/build.yml/badge.svg
 .. |license| image:: https://img.shields.io/badge/License-MIT-yellow.svg
 .. |nver| image:: https://img.shields.io/badge/Nextflow-21.04.1-brightgreen
 .. |sing| image:: https://img.shields.io/badge/Singularity-v3.2.1-green.svg
@@ -24,7 +24,7 @@ About Master of Pores 3
      - |nver|
      - |sing|
 
-`Master of Pores 3 <https://github.com/biocorecrg/master_of_pores>`_ is a collection of pipelines written in Nextflow DSL2 for the analysis of Nanopore data. It can handle reads from direct RNAseq, cDNAseq, DNAseq etc.
+Master of Pores 4 is a collection of pipelines written in Nextflow DSL2 for the analysis of Nanopore data. It can handle reads from direct RNAseq, cDNAseq, DNAseq etc.
 
 The software is composed by four pipelines:
 
@@ -35,7 +35,7 @@ The software is composed by four pipelines:
 
 The name is inspired by Metallica's `Master Of Puppets <https://www.youtube.com/watch?v=S7blkui3nQc>`_
 
-.. image:: ../img/goku3.png
+.. image:: ../img/ssj4.png
   :width: 600
 
 This is a joint project between `CRG bioinformatics core <https://biocore.crg.eu/>`_ and `Epitranscriptomics and RNA Dynamics research group <https://public-docs.crg.es/enovoa/public/website/index.html>`_.

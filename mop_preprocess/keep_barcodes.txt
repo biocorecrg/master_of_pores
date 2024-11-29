@@ -1,2 +1,4 @@
-anna---bc_104
-anna---bc_102
+lserrano---barcode01
+lserrano---barcode02
+lserrano---barcode03
+lserrano---unclassified

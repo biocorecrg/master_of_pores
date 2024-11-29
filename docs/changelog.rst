@@ -7,6 +7,16 @@ CHANGELOG
 .. autosummary::
    :toctree: generated
 
+Version 4.0
+================
+* mop_preprocess
+   * Deprecated tools: Guppy, Deeplexicon, and MINIONQC.
+   * Fast5 is deprecated as input, pod5 is the only one supported now
+   * Added the demultiplexing with Dorado.
+   * Added the demultiplexing of pod5 input files.
+   * The modified bases obtained by the Dorado basecalling are copied in the header of the fastq files
+   * Dorado duplex is supported
+
 Version 3.0
 ================
 * mop_preprocess
@@ -15,6 +25,7 @@ Version 3.0
    * Added readucks for improving demultiplexing with guppy (optional).
    * New parameter "barcodes" where you can specify a file with barcodes to be kept. Example in **keep_barcodes.txt**
    * Adding a `new model for direct RNA basecalling <https://www.biorxiv.org/content/10.1101/2023.11.28.568965v1>`__.
+   * Added seqTagger (add reference)
    * Added support to dorado basecalling. Not yet supported the demultiplexing
    * Also guppy version >= 6.5.x are supported. No need for indicating different command lines for different guppy versions inside tool_opts. The pipeline will get the version and act accordingly
    * pod5 are supported for dorado and guppy >= 6.5.x. No fast5 and stats files will be output. This will limit other pipelines.
@@ -22,7 +33,6 @@ Version 3.0
 * mop_tail
    * we upgraded tailfindR to version 1.3
    * Tailfinder can be used either in standard mode or nano3p mode (chemistry R10 and R9) by specifying the *tailfindr_mode* to: standard, n3ps_r9 or n3ps_r10.
-
 
 
 Version 2.0

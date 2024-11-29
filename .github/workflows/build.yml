@@ -1,6 +1,6 @@
-name: mop3-CI
+name: mop4-CI
 # When this workflow is triggered
-on: 
+on:
   push:
     paths-ignore:
       - 'docs/**'
@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: mop3 ci
+    name: mop4 ci
     # This job runs on Linux
     runs-on: ubuntu-20.04
     timeout-minutes: 90
@@ -24,7 +24,7 @@ jobs:
         uses: jlumbroso/free-disk-space@main
         with:
          tool-cache: true
-        
+
       - name: Environment
         run: env | sort
 
@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v3
         with:
          token: ${{ github.token }}
-         repository: biocorecrg/master_of_pores
+         repository: biocorecrg/MOP4
          fetch-depth: 1
          submodules: true
 
@@ -42,17 +42,16 @@ jobs:
          java-version: ${{ matrix.java_version }}
          distribution: 'adopt'
          architecture: x64
-        
-      - name: MOP3
+
+      - name: MOP4
         run: |
           curl -fsSL get.nextflow.io | bash
-          bash INSTALL.sh
           cd mop_preprocess
-          ../nextflow run mop_preprocess.nf -params-file params.f5.yaml -with-docker -profile ci
-          cd ../mop_mod
-          ../nextflow run mop_mod.nf -params-file params.yaml -with-docker -profile ci
-          cd ../mop_tail
-           ../nextflow run mop_tail.nf -with-docker  -params-file params.yaml -profile ci
+          ../nextflow run mop_preprocess.nf -params-file params.yaml -with-docker -profile ci
+         # cd ../mop_mod
+         # ../nextflow run mop_mod.nf -params-file params.yaml -with-docker -profile ci
+         # cd ../mop_tail
+         #  ../nextflow run mop_tail.nf -with-docker  -params-file params.yaml -profile ci
 
         env:
           NXF_ANSI_LOG: false

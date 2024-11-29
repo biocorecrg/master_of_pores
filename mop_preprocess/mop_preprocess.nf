@@ -2,59 +2,89 @@
 
 nextflow.enable.dsl=2
 
+
+
 /*
  * Define the pipeline parameters
  *
  */
 
 // Pipeline version
-version = '3.0'
+version = '4.0'
 
 params.help            = false
 params.resume          = false
 
+def local_modules = file("${projectDir}/../local_modules.nf")
+
+include { colorCodes } from local_modules
+
+def colors = colorCodes()
+
 log.info """
 
+${colors.yellow}${colors.bold}====================================================
 ╔╦╗╔═╗╔═╗  ╔═╗┬─┐┌─┐┌─┐┬─┐┌─┐┌─┐┌─┐┌─┐┌─┐
 ║║║║ ║╠═╝  ╠═╝├┬┘├┤ ├─┘├┬┘│ ││  ├┤ └─┐└─┐
 ╩ ╩╚═╝╩    ╩  ┴└─└─┘┴  ┴└─└─┘└─┘└─┘└─┘└─┘
-
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣶⣦⡄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⣀⣀⣀⡀⢀⠀⢹⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠙⠻⣿⣿⣷⣄⠨⣿⣿⣿⡌⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣷⣿⣿⣿⣿⣿⣶⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⣠⣴⣾⣿⣮⣝⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠈⠉⠙⠻⢿⣿⣿⣿⣿⣿⣿⠟⣹⣿⡿⢿⣿⣿⣬⣶⣶⡶⠦⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⣀⣢⣙⣻⢿⣿⣿⣿⠎⢸⣿⠕⢹⣿⣿⡿⣛⣥⣀⣀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠈⠉⠛⠿⡏⣿⡏⠿⢄⣜⣡⠞⠛⡽⣸⡿⣟⡋⠉⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⠾⠿⣿⠁⠀⡄⠀⠀⠰⠾⠿⠛⠓⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠠⢐⢉⢷⣀⠛⠠⠐⠐⠠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⣀⣠⣴⣶⣿⣧⣾⠡⠼⠎⢎⣋⡄⠆⠀⠱⡄⢉⠃⣦⡤⡀⠀⠀⠀⠀
+⠀⠀⠐⠙⠻⢿⣿⣿⣿⣿⣿⣿⣄⡀⠀⢩⠀⢀⠠⠂⢀⡌⠀⣿⡇⠟⠀⠀⢄⠀
+⠀⣴⣇⠀⡇⠀⠸⣿⣿⣿⣿⣽⣟⣲⡤⠀⣀⣠⣴⡾⠟⠀⠀⠟⠀⠀⠀⠀⡰⡀
+⣼⣿⠋⢀⣇⢸⡄⢻⣟⠻⣿⣿⣿⣿⣿⣿⠿⡿⠟⢁⠀⠀⠀⠀⠀⢰⠀⣠⠀⠰
+⢸⣿⡣⣜⣿⣼⣿⣄⠻⡄⡀⠉⠛⠿⠿⠛⣉⡤⠖⣡⣶⠁⠀⠀⠀⣾⣶⣿⠐⡀
+⣾⡇⠈⠛⠛⠿⣿⣿⣦⠁⠘⢷⣶⣶⡶⠟⢋⣠⣾⡿⠃⠀⠀⠀⠰⠛⠉⠉⠀⠀
 ====================================================
-BIOCORE@CRG Master of Pores 3. Preprocessing - N F  ~  version ${version}
+BIOCORE@CRG Master of Pores 4. Preprocessing - N F  ~  version ${version}
 ====================================================
+${colors.reset}
 
-conffile                  : ${params.conffile}
+${colors.bold}Input${colors.reset}
+----------------------------------------------------${colors.reset}
+${colors.green}pod5${colors.reset}                      : ${params.pod5}
+${colors.green}fastq${colors.reset}                     : ${params.fastq}
 
-fast5                     : ${params.fast5}
-fastq                     : ${params.fastq}
+${colors.bold}Reference${colors.reset}
+----------------------------------------------------${colors.reset}
+${colors.green}reference${colors.reset}                  : ${params.reference}
+${colors.green}annotation${colors.reset}                 : ${params.annotation}
+${colors.green}ref_type${colors.reset}                   : ${params.ref_type}
 
-reference                 : ${params.reference}
-annotation                : ${params.annotation}
+${colors.bold}Output${colors.reset}
+----------------------------------------------------${colors.reset}
+${colors.green}output${colors.reset}                    : ${params.output}
+${colors.green}email${colors.reset}                     : ${params.email}
+${colors.green}slackhook${colors.reset}                 : ${params.slackhook}
 
-granularity               : ${params.granularity}
-ref_type                  : ${params.ref_type}
+${colors.bold}Actions
+----------------------------------------------------${colors.reset}
+${colors.green}basecalling${colors.reset}               : ${params.basecalling}
+${colors.green}demultiplexing${colors.reset}            : ${params.demultiplexing}
+${colors.green}demulti_pod5${colors.reset}              : ${params.demulti_pod5}
+${colors.green}filtering${colors.reset}                 : ${params.filtering}
+${colors.green}mapping${colors.reset}                   : ${params.mapping}
+${colors.green}counting${colors.reset}                  : ${params.counting}
+${colors.green}discovery${colors.reset}                 : ${params.discovery}
+${colors.green}cram_conv${colors.reset}                 : ${params.cram_conv}
+${colors.green}subsampling_cram${colors.reset}          : ${params.subsampling_cram}
 
-pars_tools                : ${params.pars_tools}
-barcodes                  : ${params.barcodes}
+${colors.bold}Advanced${colors.reset}
+----------------------------------------------------${colors.reset}
+${colors.green}granularity${colors.reset}               : ${params.granularity}
+${colors.green}barcodes${colors.reset}                  : ${params.barcodes}
+${colors.green}GPU${colors.reset}                       : ${params.GPU}
 
-output                    : ${params.output}
+${colors.bold}====================================================${colors.reset}
 
-GPU                       : ${params.GPU}
-
-basecalling               : ${params.basecalling}
-demultiplexing            : ${params.demultiplexing}
-demulti_fast5             : ${params.demulti_fast5}
-
-filtering                 : ${params.filtering}
-mapping                   : ${params.mapping}
-
-counting                  : ${params.counting}
-discovery                 : ${params.discovery}
-
-cram_conv                 : ${params.cram_conv}
-subsampling_cram          : ${params.subsampling_cram}
-
-email                     : ${params.email}
 """
 
 // Help and avoiding typos
@@ -64,18 +94,9 @@ if (params.resume) exit 1, "Are you making the classical --resume typo? Be caref
 // include functions, outdirs from other files
 evaluate(new File("../outdirs.nf"))
 //def local_modulesDir = "${projectDir}/../local"
-def local_modules = file("${projectDir}/../local_modules.nf")
 def subworkflowsDir = "${projectDir}/../BioNextflow/subworkflows"
 def workflowsDir = "${projectDir}/../BioNextflow/workflows"
 joinScript = file("${projectDir}/bin/join.r")
-
-// get and check input files
-if (params.mapping != "NO") {
-    reference = file(params.reference)
-    if( !reference.exists() ) exit 1, "Missing reference file: ${reference}!"
-} else {
-    reference = ""
-}
 
 // INIZIALIZE MULTIQC REPORT
 config_report = file("${projectDir}/config.yaml")
@@ -91,15 +112,36 @@ if( outputReport.exists() ) {
   outputReport.moveTo("${outputMultiQC}/multiqc_report.html.old")
 }
 
-// Get models
 
+
+// Sanitize parameters
+if (params.mapping != "NO") {
+    reference = file(params.reference)
+    if( !reference.exists() ) exit 1, "Missing reference file: ${reference}!"
+	cram_conv = params.cram_conv
+	counting = params.counting
+	discovery = params.discovery
+} else {
+    cram_conv = "NO"
+    reference = ""
+    counting = "NO"
+    discovery = "NO"
+}
+
+if (params.demultiplexing == "NO" ) {
+	demulti_pod5_opt = "NO"
+} else {
+	demulti_pod5_opt = params.demultiplexing
+}
+
+// Get models
 demux_models = ""
 
 switch(params.demultiplexing) {
-    case "deeplexicon":
-        demux_models = "${projectDir}/deeplexicon_models/"
-    break;
     case "seqtagger":
+        demux_models = "${projectDir}/seqtagger_models/"
+    break;
+    case "dorado":
         demux_models = "${projectDir}/seqtagger_models/"
     break;
 }
@@ -109,7 +151,6 @@ dorado_models = "${projectDir}/dorado_models/"
 // check GPU usage.
 if (params.GPU != "cuda11" && params.GPU != "cuda10" && params.GPU != "OFF" && params.GPU != "ON") exit 1, "Please specify cuda11, cuda10, ON or OFF if GPU processors are available. ON is legacy for cuda10"
 def gpu = (params.GPU != 'OFF' ? 'ON' : 'OFF')
-def cuda_cont = (params.GPU == 'cuda11' ? 'biocorecrg/mopbasecallc11:0.3' : 'biocorecrg/mopbasecall:0.3')
 
 
 // CHECK INCOMPATIBILITIES AMONG PARAMETERS
@@ -121,24 +162,23 @@ if (params.ref_type == "genome") {
     }
 }
 
-outmode = "copy"
+include {final_message; notify_slack } from "${subworkflowsDir}/global_functions.nf"
 
-include { final_message; notify_slack } from "${subworkflowsDir}/global_functions.nf"
 include { checkInput; filterPerBarcodes; get_barcode_list; RNA2DNA; parseFinalSummary; checkTools; reshapeSamples; reshapeDemuxSamples; checkRef; getParameters; homogenizeVals } from "${local_modules}"
 
-def demulti_fast5_opt = homogenizeVals(params.demulti_fast5)
+def demulti_pod5_opt = homogenizeVals(demulti_pod5_opt)
 def basecall_label = (params.GPU != 'OFF' ? 'basecall_gpus' : 'big_cpus')
-def deeplexi_basecall_label = (params.GPU != 'OFF' ? 'demulti_gpus' : '')
+
+//def output_bc = (demulti_pod5_opt == 'ON' ? '' : outputFast5)
+def output_bc = ''
+//def outputMinionQC = (demulti_pod5_opt == 'ON' ? '': outputQual)
+
+def basecalling = params.basecalling
 
 
-def output_bc = (demulti_fast5_opt == 'ON' ? '' : outputFast5)
-//def outputMinionQC = (demulti_fast5_opt == 'ON' ? '': outputQual)
-
-
-def guppypars = ""
 // GET PROGRAM PARS AND VERIFY
 def tools = [:]
-tools["basecalling"] = homogenizeVals(params.basecalling)
+tools["basecalling"] = homogenizeVals(basecalling)
 tools["demultiplexing"] = homogenizeVals(params.demultiplexing)
 tools["mapping"] = homogenizeVals(params.mapping)
 tools["filtering"] = homogenizeVals(params.filtering)
@@ -146,62 +186,57 @@ tools["counting"] = homogenizeVals(params.counting)
 tools["discovery"] = homogenizeVals(params.discovery)
 
 // Remove basecalling and demultiplexing in case of fastq input
-if(params.fast5 == "" && params.fastq != "") {
+if(params.pod5 == "" && params.fastq != "") {
+    basecalling = "NO"
     tools["basecalling"] = "NO"
     tools["demultiplexing"] = "NO"
-} else {
-    guppypars = parseFinalSummary(params.conffile)
-    // Create a channel for tool options
-    if (workflow.profile == "awsbatch") guppypars = guppypars + " --data_path /nextflow-bin/ont-guppy/data"
 }
 
-progPars = getParameters(params.pars_tools)
-checkTools(tools, progPars)
+progPars = params.progPars
+checkTools(tools, params.progPars)
+
 
 // Create a channel for excluded ids
-barcodes_to_include = get_barcode_list(params.barcodes)
+//barcodes_to_include = get_barcode_list(params.barcodes)
 
-def guppy_basecall_pars = guppypars + " " + progPars["basecalling--guppy"]
+progPars["basecalling"]["dorado-mod"] = progPars["basecalling"]["dorado-mod"] + " --emit-moves"
 
-def basecaller_pars = ["guppy" : guppy_basecall_pars, "dorado" : progPars["basecalling--dorado"] ]
-def demux_pars = ["guppy" : progPars["demultiplexing--guppy"] + " " + guppy_basecall_pars, "seqtagger":  progPars["demultiplexing--seqtagger"], "deeplexicon": progPars["demultiplexing--deeplexicon"] ]
-
+def basecaller_pars = ["dorado" : progPars["basecalling"]["dorado"],  "dorado-duplex" : progPars["basecalling"]["dorado"], "dorado-mod" : progPars["basecalling"]["dorado-mod"] ]
+def demux_pars = [ "dorado" : progPars["demultiplexing"]["dorado"] + " " + progPars["basecalling"]["dorado"], "seqtagger":  progPars["demultiplexing"]["seqtagger"] ]
+def mapping_pars = ["bwa": progPars["mapping"]["bwa"], "winnowmap": progPars["mapping"]["winnowmap"] + " -y",
+				"graphmap2": progPars["mapping"]["graphmap2"], "minimap2": progPars["mapping"]["minimap2"] + " -y --MD",
+				"graphmap": progPars["mapping"]["graphmap"]
+				]
 
 // INCLUDE WORKFLOWS
-include { BASECALL } from "${workflowsDir}/basecaller" addParams(gpu: gpu, output: output_bc, label: basecall_label, type:params.basecalling ,  extrapars: basecaller_pars[params.basecalling], models: dorado_models )
+include { BASECALL } from "${workflowsDir}/basecaller" addParams(gpu: gpu, output: output_bc, label: basecall_label, label2:'big_cpus', type:basecalling ,  extrapars: basecaller_pars[basecalling], models: dorado_models )
 include { DEMULTIPLEX } from "${workflowsDir}/demultiplexer.nf" addParams(gpu: gpu, output: output_bc, label: basecall_label, type:params.demultiplexing , extrapars: demux_pars[params.demultiplexing], models: demux_models )
-include { BASECALL_DEMULTIPLEX } from "${workflowsDir}/basecaller_demultiplexer.nf" addParams(gpu: gpu, output: output_bc, label: basecall_label, type:params.demultiplexing , extrapars: demux_pars[params.demultiplexing] )
-include { DEMULTI_FAST5; DEMULTI_FAST5_FILTER } from "${subworkflowsDir}/misc/demulti_fast5" addParams(OUTPUT: outputFast5, OUTPUTST: outputQual, LABEL: 'big_cpus', TYPE: params.demultiplexing)
+include { BASECALL_DEMULTIPLEX } from "${workflowsDir}/basecaller_demultiplexer.nf" addParams(gpu: gpu, output: output_bc, label: basecall_label, label2:'big_cpus', type:params.demultiplexing , extrapars: demux_pars[params.demultiplexing], models: dorado_models  )
+
+include { DEMULTI_POD5; DEMULTI_POD5_FILTER } from "${subworkflowsDir}/misc/demulti_pod5" addParams(OUTPUT: outputFast5, OUTPUTST: outputQual, LABEL: 'big_cpus', TYPE: params.demultiplexing)
+include { ALIGN } from "${workflowsDir}/aligner.nf" addParams(output: output_bc, label: 'big_mem_cpus', type: params.mapping , extrapars: mapping_pars[params.mapping] )
 
 
 // INCLUDE MODULES
-include { GET_VERSION as NANOFILT_VER; FILTER as NANOFILT_FILTER} from "${subworkflowsDir}/trimming/nanofilt" addParams(EXTRAPARS: progPars["filtering--nanofilt"])
-include { GET_VERSION as NANOQ_VER; FILTER as NANOQ_FILTER} from "${subworkflowsDir}/trimming/nanoq" addParams(EXTRAPARS: progPars["filtering--nanoq"])
-include { MAP as GRAPHMAP} from "${subworkflowsDir}/alignment/graphmap" addParams(EXTRAPARS: progPars["mapping--graphmap"], LABEL:'big_mem_cpus')
-include { MAP as GRAPHMAP2} from "${subworkflowsDir}/alignment/graphmap2" addParams(EXTRAPARS: progPars["mapping--graphmap2"], LABEL:'big_mem_cpus')
-include { MAP as MINIMAP2} from "${subworkflowsDir}/alignment/minimap2" addParams(EXTRAPARS: progPars["mapping--minimap2"], LABEL:'big_mem_cpus')
-include { ALL as BWA} from "${subworkflowsDir}/alignment/bwa" addParams(EXTRAPARS: progPars["mapping--bwa"], LABEL:'big_mem_cpus')
-include { GET_VERSION as BWA_VER} from "${subworkflowsDir}/alignment/bwa"
-include { GET_VERSION as GRAPHMAP_VER} from "${subworkflowsDir}/alignment/graphmap"
-include { GET_VERSION as GRAPHMAP2_VER} from "${subworkflowsDir}/alignment/graphmap2"
-include { GET_VERSION as MINIMAP2_VER} from "${subworkflowsDir}/alignment/minimap2"
-include { FASTQCP as FASTQC} from "${subworkflowsDir}/qc/fastqc" addParams(LABEL: 'big_cpus')
-include { GET_VERSION as FASTQC_VER} from "${subworkflowsDir}/qc/fastqc"
-include { SORT as SAMTOOLS_SORT } from "${subworkflowsDir}/misc/samtools" addParams(LABEL: 'big_cpus', OUTPUT:outputMapping)
+include { GET_VERSION as NANOFILT_VER; FILTER as NANOFILT_FILTER} from "${subworkflowsDir}/trimming/nanofilt" addParams(EXTRAPARS: progPars["filtering"]["nanofilt"])
+include { GET_VERSION as NANOQ_VER; FILTER as NANOQ_FILTER} from "${subworkflowsDir}/trimming/nanoq" addParams(EXTRAPARS: progPars["filtering"]["nanoq"])
+include { REPORT as NANOQ_REPORT} from "${subworkflowsDir}/trimming/nanoq" addParams(EXTRAPARS: "-t 5 -vvv")
+
+include { SORT as SAMTOOLS_SORT } from "${subworkflowsDir}/misc/samtools" addParams(LABEL: 'big_cpus_retry', OUTPUT:outputMapping)
 include { INDEX as SAMTOOLS_INDEX } from "${subworkflowsDir}/misc/samtools" addParams(OUTPUT:outputMapping)
 include { GET_VERSION as SAMTOOLS_VERSION; CAT as SAMTOOLS_CAT } from "${subworkflowsDir}/misc/samtools"
-include { MOP_QC as NANOPLOT_QC } from "${subworkflowsDir}/qc/nanoplot" addParams(LABEL: 'big_cpus_retry')
+include { MOP_QC as NANOPLOT_QC } from "${subworkflowsDir}/qc/nanoplot" addParams(LABEL: 'big_cpus_ignore')
 include { GET_VERSION as NANOPLOT_VER } from "${subworkflowsDir}/qc/nanoplot"
 include { GET_VERSION as NANOCOUNT_VER } from "${subworkflowsDir}/read_count/nanocount"
-include { COUNT as NANOCOUNT } from "${subworkflowsDir}/read_count/nanocount" addParams(LABEL: 'big_mem', EXTRAPARS: progPars["counting--nanocount"], OUTPUT:outputCounts)
-include { COUNT_AND_ANNO as HTSEQ_COUNT } from "${subworkflowsDir}/read_count/htseq" addParams(CONTAINER:"biocorecrg/htseq:30e9e9c", EXTRAPARS: progPars["counting--htseq"], OUTPUT:outputCounts, LABEL:'big_cpus')
+include { COUNT as NANOCOUNT } from "${subworkflowsDir}/read_count/nanocount" addParams(LABEL: 'big_mem', EXTRAPARS: progPars["counting"]["nanocount"], OUTPUT:outputCounts)
+include { COUNT_AND_ANNO as HTSEQ_COUNT } from "${subworkflowsDir}/read_count/htseq" addParams(CONTAINER:"biocorecrg/htseq:30e9e9c", EXTRAPARS: progPars["counting"]["htseq"], OUTPUT:outputCounts, LABEL:'big_cpus')
 include { GET_VERSION as HTSEQ_VER } from "${subworkflowsDir}/read_count/htseq" addParams(CONTAINER:"biocorecrg/htseq:30e9e9c")
 
 include { GET_VERSION as BAMBU_VER } from "${subworkflowsDir}/assembly/bambu"
-include { ASSEMBLE as BAMBU_ASSEMBLE } from "${subworkflowsDir}/assembly/bambu" addParams(EXTRAPARS: progPars["discovery--bambu"], OUTPUT:outputAssembly, LABEL:'big_mem_cpus')
+include { ASSEMBLE as BAMBU_ASSEMBLE } from "${subworkflowsDir}/assembly/bambu" addParams(EXTRAPARS: progPars["discovery"]["bambu"], OUTPUT:outputAssembly, LABEL:'big_mem_cpus')
 
 include { GET_VERSION as ISOQUANT_VER } from "${subworkflowsDir}/assembly/isoquant"
-include { ASSEMBLE as ISOQUANT_ASSEMBLE } from "${subworkflowsDir}/assembly/isoquant" addParams(EXTRAPARS: progPars["discovery--isoquant"], OUTPUT:outputAssembly, LABEL:'big_mem_cpus', CONTAINER:'quay.io/biocontainers/isoquant:3.2.0--hdfd78af_0')
+include { ASSEMBLE as ISOQUANT_ASSEMBLE } from "${subworkflowsDir}/assembly/isoquant" addParams(EXTRAPARS: progPars["discovery"]["isoquant"], OUTPUT:outputAssembly, LABEL:'big_mem_cpus', CONTAINER:'quay.io/biocontainers/isoquant:3.2.0--hdfd78af_0')
 
 include { REPORT as MULTIQC; GET_VERSION as MULTIQC_VER } from "${subworkflowsDir}/reporting/multiqc" addParams(EXTRAPARS: "-c ${config_report.getName()}", OUTPUT:outputMultiQC)
 include { concatenateFastQFiles} from "${local_modules}" addParams(OUTPUT:outputFastq)
@@ -242,47 +277,31 @@ workflow SEQFILTER {
 /*
 * Wrapper for MAPPING
 */
-workflow MAPPING {
+
+workflow MAPPING_MOP {
 
     take:
         bc_fastq
+        reference
 
     main:
 
     // Perform mapping on fastq files
     if (params.mapping == "NO") {
-        stats_aln = Channel.empty()
-        stats_counts = Channel.empty()
-        sorted_alns = Channel.empty()
-        nanoplot_qcs = Channel.empty()
-        aln_indexes = Channel.empty()
-        aln_reads = Channel.empty()
+        aln_reads = Channel.value()
     }
     else {
-        switch(params.mapping) {
-            case "graphmap":
+        if(params.mapping == "graphmap") {
             //GRAPHMAP cannot align RNA, WE NEED TO CONVERT
-             dna_bc_fastq = RNA2DNA(bc_fastq)
-             aln_reads = GRAPHMAP(dna_bc_fastq, reference)
-            break
-            case "graphmap2":
-             aln_reads = GRAPHMAP2(bc_fastq, reference)
-            break
-            case "minimap2":
-             aln_reads = MINIMAP2(bc_fastq, reference)
-            break
-            case "bwa":
-             aln_reads = BWA(reference, bc_fastq)
-            break
-            default:
-            break
-
-        }
+             bc_fastq = RNA2DNA(bc_fastq)
+         }
+	aln_reads = ALIGN(bc_fastq, reference).out
     }
 
     emit:
         out = aln_reads
 }
+
 
 /*
 * Wrapper for COUNTING
@@ -377,7 +396,7 @@ workflow BASECALL_MOP {
         input_fast5
 
     main:
-	if (params.basecalling != "NO" ) {
+	if (basecalling != "NO" ) {
 		outbc = BASECALL(input_fast5)
 		basecalled_fastq = outbc.basecalled_fastq
 	} else {
@@ -389,156 +408,171 @@ workflow BASECALL_MOP {
     emit:
 	basecalled_fastq
 	basecalling_stats
-	basecalled_fast5 
-	
+	basecalled_fast5
+
 }
 
 
 workflow {
 
-    analysis_type = checkInput(params.fast5, params.fastq)
+    /* DEFAULT EMPTY VALS
+    stats_counts = Channel.value()
+    sorted_alns = Channel.value()
+    nanoplot_qcs = Channel.value()
+    aln_indexes = Channel.value()
+    alns = Channel.value()
+    aln_stats = Channel.value()
+    */
+
+    analysis_type = checkInput(params.pod5, params.fastq)
 
     switch(analysis_type) {
         // INPUT IS RAW NANOPORE DATA
         case "fast5":
-        fast5_4_analysis = getFast5(params.fast5)
+        pod5_4_analysis = getFast5(params.pod5)
         // BASECALL ONLY
         if (params.demultiplexing == "NO" ) {
-            outbc = BASECALL(fast5_4_analysis)
+            outbc = BASECALL(pod5_4_analysis)
             basecalled_fastq = outbc.basecalled_fastq
             bc_stats = reshapeSamples(outbc.basecalling_stats)
         }
         else { // BASECALL AND DEMULTIPLEX
+
             switch(params.demultiplexing) {
-                case "deeplexicon":
                 case "seqtagger":
-                outbc = BASECALL(fast5_4_analysis)
-                demux = DEMULTIPLEX(fast5_4_analysis, outbc.basecalled_fastq)
-                demufq = demux.demultiplexed_fastq
-                bc_stats = reshapeSamples(outbc.basecalling_stats)
-                bc_demux_stats = reshapeSamples(demux.demultiplexed_tsv).groupTuple()
-                break;
-        
-                case "guppy":
-                case "readucks":
-                outbc = BASECALL_DEMULTIPLEX(fast5_4_analysis)
-                demufq = outbc.demultiplexed_fastqs
-                bc_stats = reshapeSamples(outbc.basecalling_stats)
-                bc_demux_stats = reshapeSamples(outbc.basecalling_stats).groupTuple()
-                outbc.basecalled_fast5.view()
-                break;
-        
+                	outbc = BASECALL(pod5_4_analysis)
+                	demux = DEMULTIPLEX(pod5_4_analysis, outbc.basecalled_fastq)
+                	demufq = demux.demultiplexed_fastq
+                	bc_stats = reshapeSamples(outbc.basecalling_stats)
+                	bc_demux_stats = reshapeSamples(demux.demultiplexed_tsv).groupTuple()
+                	break;
                 case "dorado":
-                break;
+                	outbc = BASECALL_DEMULTIPLEX(pod5_4_analysis)
+                	demufq = outbc.demultiplexed_fastqs
+                	bc_demux_stats = reshapeSamples(outbc.basecalling_stats).groupTuple()
+                	break;
+                default:
+			        println "ERROR ################################################################"
+        			println "${params.demultiplexing} is not supported!!!"
+        			println "ERROR ################################################################"
+        			println "Exiting ..."
+        			System.exit(0)
+                	break;
             }
-        
-        bc_stats = reshapeSamples(outbc.basecalling_stats)
+		bc_stats = reshapeSamples(outbc.basecalling_stats)
+		reshapedPrefiltDemufq = demufq.transpose().map{
+			[it[1].name.replace(".fastq.gz", "").replace(".fq.gz", ""), it[1] ]
+		}
 
-        reshapedPrefiltDemufq = demufq.transpose().map{
-            [it[1].name.replace(".fastq.gz", "").replace(".fq.gz", ""), it[1] ]
-        }
+		// FILTER BARCODES FOR FASTQ
+		if (params.barcodes != "") {
+                	barcodes_to_include = get_barcode_list(params.barcodes)
+				log.info "*********************************************************************"
+				log.info "*************** Selecting only the requested barcodes ***************"
+				log.info "*********************************************************************"
+				basecalled_fastq = filterPerBarcodes(barcodes_to_include, reshapedPrefiltDemufq)
+			} else {
+			   basecalled_fastq = reshapedPrefiltDemufq
+			}
 
-        // FILTER BARCODES FOR FASTQ
-        if (params.barcodes != "") {
-            log.info "*********************************************************************"
-            log.info "*************** Selecting only the requested barcodes ***************"
-            log.info "*********************************************************************"
-            basecalled_fastq = filterPerBarcodes(barcodes_to_include, reshapedPrefiltDemufq)
-        } else {
-           basecalled_fastq = reshapedPrefiltDemufq
-        }
+			basecalled_fastq.ifEmpty{exit 1, "NO COMBINATION SAMPLE---BARCODEID WAS FOUND\nPLEASE CHECK YOUR BARCODE LIST\nENDING NOW, BYE!!!"}
 
-        basecalled_fastq.ifEmpty{exit 1, "NO COMBINATION SAMPLE---BARCODEID WAS FOUND\nPLEASE CHECK YOUR BARCODE LIST\nENDING NOW, BYE!!!"}
-        
-        // DEMULTI FAST5
-        if (demulti_fast5_opt == "ON") {
-            outbc.basecalled_fast5.view()
-            basecalled_fast5 = reshapeSamples(outbc.basecalled_fast5).transpose().groupTuple()
-            if (params.barcodes == "") {
-                DEMULTI_FAST5(bc_demux_stats, basecalled_fast5)
-            } else {
-                // FILTER BARCODES FOR FAST5
-                DEMULTI_FAST5_FILTER(bc_demux_stats, basecalled_fast5, barcodes_to_include)
-            }
-        } 
-    }  
-  
-    // Perform MinIONQC on basecalling stats
-    basecall_qc = MinIONQC(bc_stats.groupTuple())
-    multiqc_data = multiqc_data.mix(basecall_qc.QC_folder.map{it[1]})
+			// DEMULTI POD5. POD5 are not basecalled so they just need to be split
+			if (demulti_pod5_opt == "ON") {
+				grouped_pod5 = reshapeSamples(pod5_4_analysis)
+				if (params.barcodes == "") {
+					DEMULTI_POD5(bc_demux_stats, grouped_pod5)
+				} else {
+					// FILTER BARCODES FOR FAST5
+     				barcodes_file = channel.fromPath(params.barcodes, checkIfExists:true)
+					DEMULTI_POD5_FILTER(bc_demux_stats, grouped_pod5, barcodes_file)
+				}
+			}
+		}
 
-    // SEQUENCE FILTERING
-    bc_fastq = SEQFILTER(basecalled_fastq).out
+		// SEQUENCE FILTERING
+		bc_fastq = SEQFILTER(basecalled_fastq).out
+		alns = MAPPING_MOP(bc_fastq, reference).out
 
-    // SEQUENCE ALIGNMENT
-    alns = MAPPING(bc_fastq).out
+		// Concatenate fastq and BAM files differently depending on if demultiplexed or not
+		if (params.demultiplexing == "NO" ) {
+			reshaped_bc_fastq = reshapeSamples(bc_fastq)
+	    	if (params.mapping != "NO") {
+				reshaped_aln_reads = reshapeSamples(alns)
+			}
+		} else {
+			reshaped_bc_fastq = reshapeDemuxSamples(bc_fastq)
+	    	if (params.mapping != "NO") {
+				reshaped_aln_reads = reshapeDemuxSamples(alns)
+			}
+		}
 
-    // Concatenate fastq and BAM files differently depending on if demultiplexed or not
-    if (params.demultiplexing == "NO" ) {
-        reshaped_bc_fastq = reshapeSamples(bc_fastq)
-        reshaped_aln_reads = reshapeSamples(alns)
-    } else {
-        reshaped_bc_fastq = reshapeDemuxSamples(bc_fastq)
-        reshaped_aln_reads = reshapeDemuxSamples(alns)
-    }
-        
-    jaln_reads = SAMTOOLS_CAT(reshaped_aln_reads.groupTuple())
-    fastq_files = concatenateFastQFiles(reshaped_bc_fastq.groupTuple())
-    break
-    
-    // INPUT IS BASECALLED SEQUENCES
-    case "fastq":
-        fastq_files = Channel.fromFilePairs( params.fastq , size: 1, checkIfExists: true)
-        jaln_reads = MAPPING(fastq_files).out
-        break
-    }
+    	if (params.mapping != "NO") {
+    		jaln_reads = SAMTOOLS_CAT(reshaped_aln_reads.groupTuple())
+  	  		//aln_indexes = SAMTOOLS_INDEX(jaln_reads)
+    	}
+		fastq_files = concatenateFastQFiles(reshaped_bc_fastq.groupTuple())
+		break;
+
+		// INPUT IS BASECALLED SEQUENCES
+		case "fastq":
+			fastq_files = Channel.fromFilePairs( params.fastq , size: 1, checkIfExists: true)
+			jaln_reads = MAPPING_MOP(fastq_files, reference).out
+			break;
+		}
 
     // Perform SORTING and INDEXING on bam files
-    sorted_alns = SAMTOOLS_SORT(jaln_reads)
-    aln_indexes = SAMTOOLS_INDEX(sorted_alns)
+    if (params.mapping != "NO") {
+  	  sorted_alns = SAMTOOLS_SORT(jaln_reads)
+  	  aln_indexes = SAMTOOLS_INDEX(sorted_alns)
+    // Perform bam2stats on sorted bams
+      aln_stats = bam2stats(sorted_alns)
+      stats_aln = joinAlnStats(aln_stats.map{ it[1]}.collect())
+      multiqc_data = multiqc_data.mix(stats_aln)
+    // Perform NanoPlot on sorted bams
+       nanoplot_qcs = NANOPLOT_QC(sorted_alns)
+    }
 
     // Converting BAM to CRAM and
-    if (params.cram_conv == "YES") {
+    if (cram_conv == "YES") {
         good_ref = checkRef(reference)
         bam2Cram(good_ref, params.subsampling_cram, sorted_alns.join(aln_indexes))
     }
 
-    // Perform bam2stats on sorted bams
-    aln_stats = bam2stats(sorted_alns)
-    stats_aln = joinAlnStats(aln_stats.map{ it[1]}.collect())
-
-    // Perform NanoPlot on sorted bams
-    nanoplot_qcs = NANOPLOT_QC(sorted_alns)
-
     // Perform fastqc QC on fastq
-    fastqc_files = FASTQC(fastq_files)
-    multiqc_data = multiqc_data.mix(fastqc_files.map{it[1]})
+    nqreport_files = NANOQ_REPORT(fastq_files)
+    multiqc_data = multiqc_data.mix(nqreport_files.map{it[1]})
 
-
-    stats_counts = COUNTING(sorted_alns, aln_indexes).stats_counts    
-    multiqc_data = multiqc_data.mix(stats_counts)
+	if (counting != "NO") {
+        stats_counts = COUNTING(sorted_alns, aln_indexes).stats_counts
+        multiqc_data = multiqc_data.mix(stats_counts)
+    }
 
     // REVISE THIS
-    //ASSEMBLY(sorted_alns, reference, params.annotation)
+    if (discovery != "NO") {
+	    ASSEMBLY(sorted_alns, reference, params.annotation)
+	}
 
     // Perform MULTIQC report
     MULTIQC(multiqc_data.collect())
 
     //all_ver = BAMBU_VER().mix(DEMULTIPLEX_VER()).mix(NANOQ_VER()).mix(NANOFILT_VER())
     //.mix(GRAPHMAP_VER()).mix(GRAPHMAP2_VER())
-    //.mix(MINIMAP2_VER()).mix(BWA_VER()).mix(FASTQC_VER())
+    //.mix(MINIMAP2_VER()).mix(BWA_VER()).mix(FALCOQC_VER())
     //.mix(SAMTOOLS_VERSION()).mix(NANOPLOT_VER()).mix(NANOCOUNT_VER()).mix(HTSEQ_VER()).mix(MULTIQC_VER())
     //.collectFile(name: 'tool_version.txt', newLine: false, storeDir:outputMultiQC)
 
  }
 
 
+
+
 workflow.onComplete {
 
-    def text = final_message("MoP3")
+    def text = final_message("MOP4")
     println text
-    if (params.hook != "") {
-       notify_slack(text, params.hook)
+    if (params.slackhook != "") {
+       notify_slack(text, params.slackhook)
     }
 }
 
@@ -553,7 +587,7 @@ else {
     log.info "Sending the email to ${params.email}\n"
 
     workflow.onComplete {
-     def msg = final_message("MoP3")
-        sendMail(to: params.email, subject: "MoP3 - preprocess execution", body: msg, attach: "${outputMultiQC}/multiqc_report.html")
+     def msg = final_message("MOP4")
+        sendMail(to: params.email, subject: "MOP4 - preprocess execution", body: msg, attach: "${outputMultiQC}/MoP3-pipeline_multiqc_report.html")
     }
 }

@@ -3,6 +3,7 @@
 params.LABEL = ""
 params.OUTPUT = ""
 params.saveSpace = "NO"
+params.EXTRAPARS = ""
 
 // MODULES
 // MOP_PREPROCESS
@@ -102,12 +103,12 @@ process MinIONQC {
     script:
     """
       if [ -f "summaries_" ]; then
-	  cp summaries_ ${folder_name}_final_summary.stats
+	  zcat summaries_ > ${folder_name}_final_summary.stats
 	  else
-		  head -n 1 summaries_1 > ${folder_name}_final_summary.stats
-	      for i in summaries_*; do grep -v "filename" \$i >> ${folder_name}_final_summary.stats; done
+		  zcat summaries_1| awk 'FNR <= 1' > ${folder_name}_final_summary.stats
+	      for i in summaries_*; do zcat \$i| grep -v "filename" >> ${folder_name}_final_summary.stats; done
 	  fi
-      MinIONQC.R -i ${folder_name}_final_summary.stats -o ${folder_name}_QC -q ${params.qualityqc} -p ${task.cpus}
+      MinIONQC.R -i ${folder_name}_final_summary.stats -o ${folder_name}_QC -q 5 -p ${task.cpus}
     """
 }
 
@@ -298,9 +299,29 @@ process splitReference {
     """
 }
 
-process splitBams {
+process filter_modkit {
     label (params.LABEL)
     container 'biocorecrg/mopmod:0.6.2'
+    tag "${id}"
+
+    input:
+    tuple val(id), path(bedgz)
+
+    output:
+    tuple val(id), path("${id}.bedgraph.gz")
+
+    script:
+    """
+		zcat ${bedgz} | awk   '\$10 ${params.EXTRAPARS} && \$4== "a" { print \$1"\t"\$2"\t"\$3"\t"\$11 }' | gzip -c > ${id}.bedgraph.gz
+    """
+}
+
+
+
+
+process splitBams {
+    label (params.LABEL)
+    container 'biocorecrg/samtools:1.17'
     tag "Splitting of ${ bams } on ${ref_piece}"
 
     input:
@@ -896,25 +917,59 @@ def  getFast5 (fast5_string_path) {
     return(fast5_4_analysis)
 }
 
+def getPOD5 (pod5_string_folder) {
+
+     pod5_files = Channel.fromPath( pod5_string_folder, checkIfExists: true)
+
+     pod5_folder = pod5_files.map {
+         def filepath = file(it)
+         def file_parts = "${filepath}".tokenize("/")
+         def folder_name  = filepath[-2]
+         [folder_name, it]
+     }.groupTuple()
+
+	return(pod5_folder)
+
+}
+
+def colorCodes() {
+	def colorcodes = [:]
+    // font
+    colorcodes['bold']     = "\033[1m"
+    colorcodes['reset']    = "\033[0m"
+    colorcodes['line']     = "\033[0m"
 
 
-def checkTools(tool_names, tool_lists) {
-	println "----------------------CHECK TOOLS -----------------------------"
-	tool_names.each{ key, value ->
-		if (value == "NO" ) {
-			println "> ${key} will be skipped"
+
+    // colors
+    colorcodes['yellow']     = "\033[0;33m"
+    colorcodes['black']      = "\033[0;30m"
+    colorcodes['red']        = "\033[0;31m"
+	colorcodes['green']      = "\033[0;32m"
+	colorcodes['green']      = "\033[0;32m"
+	return(colorcodes)
+}
+
+def checkTools(tool_names, tool_pars) {
+
+	def colors = colorCodes()
+	println "${colors.bold}----------------------CHECK TOOLS -----------------------------"
+	tool_names.each{ method, tool ->
+		if (tool == "NO" ) {
+			println "${colors.yellow}> ${method} will be skipped"
 		} else {
-			def combid = "${key}--${value}".toString()
-			if (tool_lists.containsKey(combid)) {
-				println "${key} : ${value}"
-			} else {
-				println "ERROR ################################################################"
-				println "${value} is not a valid program for ${key}"
-				println "ERROR ################################################################"
-				println "Exiting ..."
+            def method_pars = tool_pars[method]
+            if (method_pars.containsKey(tool)) {
+				println "${colors.green}${method} : ${tool}"
+            }
+            else {
+				println "${colors.red}ERROR ################################################################"
+				println "${colors.red}${tool} is not a valid program for ${method}"
+				println "${colors.red}ERROR ################################################################"
+				println "${colors.red}Exiting ..."
 				System.exit(0)
 			}
 		}
 	}
-	println "--------------------------------------------------------------"
+	println "${colors.reset}${colors.bold}--------------------------------------------------------------${colors.reset}"
 }

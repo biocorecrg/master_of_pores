@@ -13,6 +13,6 @@ The following pipelines are continuously checked using GitHub actions:
 * mop_mod
 * mop_tail
 
-.. image:: https://github.com/biocorecrg/master_of_pores/actions/workflows/build.yml/badge.svg
-    :target: https://github.com/biocorecrg/master_of_pores
+.. image:: https://github.com/biocorecrg/MOP4/actions/workflows/build.yml/badge.svg
+    :target: https://github.com/biocorecrg/MOP4
     :alt: pipeline status
