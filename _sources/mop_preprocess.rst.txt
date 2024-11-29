@@ -9,7 +9,7 @@ MOP_PREPROCESS
 
 This pipeline takes as input the raw fast5 reads - single or multi - and it produces several outputs (basecalled fast5, sequences in fastq format, aligned reads in BAM format etc). The pre-processing pipeline can perform base-calling, demultiplexing (optional), filtering, quality control, mapping to a reference (either a genome or a transcriptome), feature counting, discovery of novel transcripts, and it generates a final report with the performance and results of each of the steps performed. 
 
-It automatically detects the kind of input fast5 file (single or multi-sequence). It can also support the new pod5 format but it won't output basecalled fastq useful for the other pipelines. The basecalling can be performed with guppy or dorado and the demultiplexing with either guppy, or deeplexicon. Basecalled fastq and Fast5 files can be demultiplexed as well. You can restrict the number of barcodes by indicating a file with barcode list using the **barcodes** parameter.
+It automatically detects the kind of input fast5 file (single or multi-sequence). It can also support the new pod5 format but it won't output basecalled fastq useful for the other pipelines. The basecalling can be performed with guppy or dorado and the demultiplexing with either guppy, seqtagger, or deeplexicon. Basecalled fastq and Fast5 files can be demultiplexed as well. You can restrict the number of barcodes by indicating a file with barcode list using the **barcodes** parameter.
 
 
 .. image:: ../img/flow_preproc.png
@@ -133,6 +133,9 @@ The first column indicates the processing step as **basecalling** or **demultipl
 .. note::
    Readucks is run after guppy demultiplexing. It refines the demultiplexing generating different fastqs
 
+.. tip::
+   You don't need to specify the whole path for the models of seqtagger, just the name of the model will be enough
+
 
 Model libraries for specific tools
 ====================
@@ -144,6 +147,9 @@ The following folders are available for the respective tools. Some models are al
    * pAmps-rep2-4-train1_newdata_nanopore_UResNet20v2_model.039.h5
 * dorado_models
    * rna002_70bps_hac@v3
+* seqtagger_models
+   * b04_RNA002
+   * b04_RNA004
 
 .. note::
    You need to download the models you want to use in case they are not already available. For instance, if you need another model for dorado you need to do:
@@ -158,6 +164,7 @@ You also need to add the dedicated parameter within the tool_opts file for the s
 .. code-block:: console
 
    basecalling dorado   "rna002_70bps_hac@v3"
+   demultiplexing       seqtagger   "-k b100"
    demultiplexing	deeplexicon   "-f multi -m resnet20-final.h5"
 
 .. note::
@@ -182,7 +189,7 @@ The sample id is given by either the folder containing the fast5 files or the ba
 
 .. note::
 
-   The naming convention of the different barcodes is decided by each tool, so guppy will produce **barcode01**, **barcode02**, etc.
+   The naming convention of the different barcodes is decided by each tool, so guppy will produce **barcode01**, **barcode02**, while seqtagger will produce bc_1, bc_2, etc.
 
 
 Basecalling with the m6A-aware model

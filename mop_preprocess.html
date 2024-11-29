@@ -94,7 +94,7 @@
   <section id="mop-preprocess">
 <span id="home-page-moprepr"></span><h1>MOP_PREPROCESS<a class="headerlink" href="#mop-preprocess" title="Link to this heading"></a></h1>
 <p>This pipeline takes as input the raw fast5 reads - single or multi - and it produces several outputs (basecalled fast5, sequences in fastq format, aligned reads in BAM format etc). The pre-processing pipeline can perform base-calling, demultiplexing (optional), filtering, quality control, mapping to a reference (either a genome or a transcriptome), feature counting, discovery of novel transcripts, and it generates a final report with the performance and results of each of the steps performed.</p>
-<p>It automatically detects the kind of input fast5 file (single or multi-sequence). It can also support the new pod5 format but it won’t output basecalled fastq useful for the other pipelines. The basecalling can be performed with guppy or dorado and the demultiplexing with either guppy, or deeplexicon. Basecalled fastq and Fast5 files can be demultiplexed as well. You can restrict the number of barcodes by indicating a file with barcode list using the <strong>barcodes</strong> parameter.</p>
+<p>It automatically detects the kind of input fast5 file (single or multi-sequence). It can also support the new pod5 format but it won’t output basecalled fastq useful for the other pipelines. The basecalling can be performed with guppy or dorado and the demultiplexing with either guppy, seqtagger, or deeplexicon. Basecalled fastq and Fast5 files can be demultiplexed as well. You can restrict the number of barcodes by indicating a file with barcode list using the <strong>barcodes</strong> parameter.</p>
 <a class="reference internal image-reference" href="_images/flow_preproc.png"><img alt="mop_preprocess graph" src="_images/flow_preproc.png" style="width: 600px;" />
 </a>
 <section id="input-parameters">
@@ -175,6 +175,7 @@
 <span class="n">basecalling</span>	<span class="n">guppy</span>	<span class="s2">&quot;-c rna_r9.4.1_70bps_m6A_hac.cfg&quot;</span>
 <span class="n">demultiplexing</span>	<span class="n">deeplexicon</span>	<span class="s2">&quot;&quot;</span>
 <span class="n">demultiplexing</span>	<span class="n">guppy</span>	<span class="s2">&quot;&quot;</span>
+<span class="n">demultiplexing</span>	<span class="n">seqtagger</span>	<span class="s2">&quot;&quot;</span>
 <span class="n">filtering</span>	<span class="n">nanofilt</span>	<span class="s2">&quot;&quot;</span>
 <span class="n">filtering</span>	<span class="n">nanoq</span>	<span class="s2">&quot;&quot;</span>
 <span class="n">mapping</span>	<span class="n">graphmap</span>	<span class="s2">&quot;&quot;</span>
@@ -190,6 +191,10 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Readucks is run after guppy demultiplexing. It refines the demultiplexing generating different fastqs</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You don’t need to specify the whole path for the models of seqtagger, just the name of the model will be enough</p>
 </div>
 </section>
 <section id="model-libraries-for-specific-tools">
@@ -212,6 +217,14 @@
 </dd>
 </dl>
 </li>
+<li><dl class="simple">
+<dt>seqtagger_models</dt><dd><ul>
+<li><p>b04_RNA002</p></li>
+<li><p>b04_RNA004</p></li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -222,6 +235,7 @@
 </div>
 <p>You also need to add the dedicated parameter within the tool_opts file for the specific tool as:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">basecalling dorado   &quot;rna002_70bps_hac@v3&quot;</span>
+<span class="go">demultiplexing       seqtagger   &quot;-k b100&quot;</span>
 <span class="go">demultiplexing       deeplexicon   &quot;-f multi -m resnet20-final.h5&quot;</span>
 </pre></div>
 </div>
@@ -245,7 +259,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The naming convention of the different barcodes is decided by each tool, so guppy will produce <strong>barcode01</strong>, <strong>barcode02</strong>, etc.</p>
+<p>The naming convention of the different barcodes is decided by each tool, so guppy will produce <strong>barcode01</strong>, <strong>barcode02</strong>, while seqtagger will produce bc_1, bc_2, etc.</p>
 </div>
 </section>
 <section id="basecalling-with-the-m6a-aware-model">
