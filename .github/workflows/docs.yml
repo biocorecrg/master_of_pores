@@ -21,7 +21,7 @@ jobs:
         path: gh-pages
     - name: Copy file
       run: |
-        cp -r ${{ github.ref_name }}/ ./gh-pages/
+        cp -pr ${{ github.ref_name }}/ ./gh-pages/
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       with:
