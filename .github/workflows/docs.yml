@@ -27,10 +27,9 @@ jobs:
       with:
         ref: gh-pages
         path: gh-pages
-    - uses: actions/copy-files@v4
-      with:
-        source-directory: ./assets/docs/index.html
-        destination-directory: ./gh-pages
+    - name: Copy file
+      run: |
+        cp ./assets/docs/index.html ./gh-pages
     - name: Commit and Push Redirect index
       run: |
         git config --local user.name "${{ secrets.GITHUB_ACTOR }}"
