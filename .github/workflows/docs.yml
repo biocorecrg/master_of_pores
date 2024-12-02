@@ -1,7 +1,10 @@
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'docs/**'
+    branches-ignore:
+      - 'MOP4-dev'
   pull_request:
     paths:
       - 'docs/**'
