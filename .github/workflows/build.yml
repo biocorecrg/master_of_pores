@@ -4,9 +4,13 @@ on:
   workflow_dispatch:
   push:
     paths-ignore:
+      - 'assets/**'
+      - '.github/workflows/**'
       - 'docs/**'
   pull_request:
     paths-ignore:
+      - 'assets/**'
+      - '.github/workflows/**'
       - 'docs/**'
 
 jobs:

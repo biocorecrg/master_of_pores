@@ -1,27 +1,37 @@
+name: Docs
 on:
   workflow_dispatch:
   push:
     paths:
       - 'docs/**'
-    branches-ignore:
-      - 'MOP4-dev'
   pull_request:
     paths:
       - 'docs/**'
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
-    - uses: actions/setup-python@v2
-    - uses: actions/checkout@master
+    - id: deployment
+      uses: sphinx-notes/pages@v3
       with:
-        fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
-    - name: Build and Commit
-      uses: sphinx-notes/pages@v2
-      with:
-        requirements_path: "docs/requirements.txt"
-    - name: Push changes
-      uses: ad-m/github-push-action@master
+        publish: false
+    - uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: gh-pages
+        destination_dir: ${{ github.ref_name }}
+        publish_dir: ${{ steps.deployment.outputs.artifact }}
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.repository.default_branch }}
+    - uses: actions/checkout@v4
+      with:
+        ref: gh-pages
+        path: gh-pages
+    - name: Copy file
+      run: |
+        cp ./assets/docs/index.html ./gh-pages/
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./gh-pages
