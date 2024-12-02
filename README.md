@@ -30,29 +30,9 @@ Please install nextflow and singularity or docker before.
 Then download the repo:
 
 ```
-git clone --depth 1 --recurse-submodules https://github.com/biocorecrg/MOP4.git
+git clone --recurse-submodules https://github.com/biocorecrg/master_of_pores.git
 ```
 
-You can use INSTALL.sh to download the version 3.4.5 of guppy or you can replace it with the version you prefer. Please consider that the support of VBZ compression of fast5 started with version 3.4.X.
-
-```
-cd MOP4; sh INSTALL.sh
-```
-
-## Testing
-You can replace ```-with-singularity``` with ```-with-docker``` if you want to use the docker engine.
-
-```
-cd mop_preprocess
-nextflow run mop_preprocess.nf -with-singularity -bg -profile local -params-file params.yaml > log
-```
-
-## Upgrading
-To upgrade the tool you can type:
-
-```
-git pull --recurse-submodules
-```
 
 ## Documentation
 The documentation is available at [https://biocorecrg.github.io/MOP4/](https://biocorecrg.github.io/MOP4/)
