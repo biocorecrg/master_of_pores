@@ -1,4 +1,4 @@
-name: mop3-CI
+name: CI
 # When this workflow is triggered
 on:
   workflow_dispatch:
