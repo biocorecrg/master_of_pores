@@ -1,0 +1,37 @@
+name: Docs
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'docs/**'
+  pull_request:
+    paths:
+      - 'docs/**'
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+    - id: deployment
+      uses: sphinx-notes/pages@v3
+      with:
+        publish: false
+    - uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        destination_dir: ${{ github.ref_name }}
+        publish_dir: ${{ steps.deployment.outputs.artifact }}
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.repository.default_branch }}
+    - uses: actions/checkout@v4
+      with:
+        ref: gh-pages
+        path: gh-pages
+    - name: Copy file
+      run: |
+        cp ./assets/docs/index.html ./gh-pages/
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./gh-pages
