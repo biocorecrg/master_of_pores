@@ -1,0 +1,164 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to install &mdash; MoP2  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://biocorecrg.github.io/MoP2/docs/install.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MOP_PREPROCESS" href="mop_preprocess.html" />
+    <link rel="prev" title="About Master of Pores" href="about.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MoP2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About Master of Pores</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apple-m1-processor">Apple M1 processor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mop_preprocess.html">MOP_PREPROCESS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mop_tail.html">MOP_TAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mop_mod.html">MOP_MOD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mop_consensus.html">MOP_CONSENSUS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reporting.html">Resource reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">CHANGELOG</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MoP2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">How to install</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/install.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="how-to-install">
+<span id="home-page-install"></span><h1>How to install<a class="headerlink" href="#how-to-install" title="Link to this heading"></a></h1>
+<p>Please install nextflow <a class="reference external" href="https://www.nextflow.io/">Nextflow</a> and either <a class="reference external" href="https://sylabs.io/">Singularity</a> or <a class="reference external" href="https://www.docker.com/">Docker</a> before.</p>
+<p>For installing Nextflow you need a POSIX compatible system (Linux, OS X, etc). It requires Bash 3.2 (or later) and Java 8 (or later, up to 17). Windows system is supported through WSL. For the installation of Nextflow just run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">curl -s https://get.nextflow.io | bash</span>
+</pre></div>
+</div>
+<p>For installing the pipeline you need to download the repo:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone --depth 1 --recurse-submodules https://github.com/biocorecrg/MOP2.git</span>
+</pre></div>
+</div>
+<p>You can use <strong>INSTALL.sh</strong> to download the <strong>guppy 3.4.5</strong> or you can download the version you prefer by adding an extra parameter.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please consider that the support of VBZ compression of fast5 started with version 3.4.X.</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd MoP2; bash INSTALL.sh</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd MoP2; bash INSTALL.sh 4.0.15</span>
+</pre></div>
+</div>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd mop_preprocess</span>
+
+<span class="go">nextflow run mop_preprocess.nf -with-singularity -bg -profile local &gt; log</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can replace <code class="docutils literal notranslate"><span class="pre">`-with-singularity`</span></code> with <code class="docutils literal notranslate"><span class="pre">`-with-docker`</span></code> if you want to use the docker engine.</p>
+</div>
+</section>
+<section id="apple-m1-processor">
+<h2>Apple M1 processor<a class="headerlink" href="#apple-m1-processor" title="Link to this heading"></a></h2>
+<p>Use the profile <strong>m1mac</strong> for running on machines with Apple M1 processor.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd mop_preprocess</span>
+
+<span class="go">nextflow run mop_preprocess.nf -with-singularity -bg -profile m1mac &gt; log</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="about.html" class="btn btn-neutral float-left" title="About Master of Pores" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mop_preprocess.html" class="btn btn-neutral float-right" title="MOP_PREPROCESS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

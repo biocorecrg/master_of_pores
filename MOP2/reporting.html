@@ -1,0 +1,160 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resource reporting &mdash; MoP2  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+    <link rel="canonical" href="https://biocorecrg.github.io/MoP2/docs/reporting.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Benchmark" href="benchmark.html" />
+    <link rel="prev" title="MOP_CONSENSUS" href="mop_consensus.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MoP2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About Master of Pores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">How to install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mop_preprocess.html">MOP_PREPROCESS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mop_tail.html">MOP_TAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mop_mod.html">MOP_MOD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mop_consensus.html">MOP_CONSENSUS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Resource reporting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#html-report">Html report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#live-reporting">Live reporting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">CHANGELOG</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MoP2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Resource reporting</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/reporting.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="resource-reporting">
+<span id="home-page-reporting"></span><h1>Resource reporting<a class="headerlink" href="#resource-reporting" title="Link to this heading"></a></h1>
+<p>Since each MOP pipeline is based on <a class="reference external" href="https://www.nextflow.io/">Nextflow</a> we can use its embedded functions for reporting the use of resources as a html file and to have a live reporting.</p>
+<section id="html-report">
+<h2>Html report<a class="headerlink" href="#html-report" title="Link to this heading"></a></h2>
+<p>For enabling the generation of a report just run each pipeline with the parameter <cite>-with-report</cite> as in the following example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -profile local -with-docker -bg -with-report</span>
+</pre></div>
+</div>
+<p>Once the pipeline is finished you will have a comprehensive report with information about CPU, disk and memory usage for each execution and as a distribution for each process. Here an example:</p>
+<a class="reference internal image-reference" href="_images/res_report.png"><img alt="_images/res_report.png" src="_images/res_report.png" style="width: 800px;" />
+</a>
+</section>
+<section id="live-reporting">
+<h2>Live reporting<a class="headerlink" href="#live-reporting" title="Link to this heading"></a></h2>
+<p>For having a live reporting your pipeline should run in an environment that has access to internet. Then you have to log-in to the <a class="reference external" href="https://tower.nf/">Tower.nf</a>  website that is developed and mantained by the good people at <a class="reference external" href="https://seqera.io/">Seqera Labs</a>.</p>
+<a class="reference internal image-reference" href="_images/tower.png"><img alt="_images/tower.png" src="_images/tower.png" style="width: 800px;" />
+</a>
+<p>We suggest you to use either the GitHub or the Google authentication:</p>
+<a class="reference internal image-reference" href="_images/tower_eli1.png"><img alt="_images/tower_eli1.png" src="_images/tower_eli1.png" style="width: 800px;" />
+</a>
+<p>You can generate your token at <a class="reference external" href="https://tower.nf/tokens">https://tower.nf/tokens</a> and</p>
+<a class="reference internal image-reference" href="_images/tower2.png"><img alt="_images/tower2.png" src="_images/tower2.png" style="width: 800px;" />
+</a>
+<p>then you can export as an environmental variable.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export TOWER_ACCESS_TOKEN=*******YOUR***TOKEN*****HERE*******</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>We recommend you to add this line to either your .bashrc or .bash_profile file.</p>
+</div>
+<p>Finally we can then launch the pipeline adding the parameter <cite>-with-tower</cite>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -profile local -with-docker -bg -with-tower</span>
+</pre></div>
+</div>
+<p>Going back to the website you can see now your pipeline running and have a nice looking live reporting.</p>
+<a class="reference internal image-reference" href="_images/tower.gif"><img alt="_images/tower.gif" src="_images/tower.gif" style="width: 800px;" />
+</a>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mop_consensus.html" class="btn btn-neutral float-left" title="MOP_CONSENSUS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="benchmark.html" class="btn btn-neutral float-right" title="Benchmark" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
