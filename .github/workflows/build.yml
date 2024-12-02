@@ -1,6 +1,7 @@
 name: mop3-CI
 # When this workflow is triggered
-on: 
+on:
+  workflow_dispatch:
   push:
     paths-ignore:
       - 'docs/**'
@@ -12,7 +13,7 @@ jobs:
   build:
     name: mop3 ci
     # This job runs on Linux
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 90
     strategy:
       fail-fast: false
@@ -24,14 +25,15 @@ jobs:
         uses: jlumbroso/free-disk-space@main
         with:
          tool-cache: true
-        
+
       - name: Environment
         run: env | sort
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
          token: ${{ github.token }}
+         ref: ${{ github.ref }}
          repository: biocorecrg/master_of_pores
          fetch-depth: 1
          submodules: true
@@ -42,7 +44,7 @@ jobs:
          java-version: ${{ matrix.java_version }}
          distribution: 'adopt'
          architecture: x64
-        
+
       - name: MOP3
         run: |
           curl -fsSL get.nextflow.io | bash
