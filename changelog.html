@@ -6,12 +6,12 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CHANGELOG &mdash; MOP4  documentation</title>
+  <title>CHANGELOG &mdash; MoP3  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-    <link rel="canonical" href="https://biocorecrg.github.io/MOP4/changelog.html" />
+    <link rel="canonical" href="https://biocorecrg.github.io/master_of_pores/changelog.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
@@ -34,7 +34,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            MOP4
+            MoP3
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,7 +45,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="about.html">About Master of Pores 4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About Master of Pores 3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Get Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mop_preprocess.html">MOP_PREPROCESS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mop_mod.html">MOP_MOD</a></li>
@@ -54,7 +54,6 @@
 <li class="toctree-l1"><a class="reference internal" href="reporting.html">Resource reporting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="benchmark.html">Benchmark</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CHANGELOG</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#version-4-0">Version 4.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-3-0">Version 3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-2-0">Version 2.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1-1">Version 1.1</a></li>
@@ -71,7 +70,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">MOP4</a>
+          <a href="index.html">MoP3</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -91,23 +90,6 @@
              
   <section id="changelog">
 <span id="home-page-changelog"></span><h1>CHANGELOG<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
-<section id="version-4-0">
-<h2>Version 4.0<a class="headerlink" href="#version-4-0" title="Link to this heading"></a></h2>
-<ul class="simple">
-<li><dl class="simple">
-<dt>mop_preprocess</dt><dd><ul>
-<li><p>Deprecated tools: Guppy, Deeplexicon, and MINIONQC.</p></li>
-<li><p>Fast5 is deprecated as input, pod5 is the only one supported now</p></li>
-<li><p>Added the demultiplexing with Dorado.</p></li>
-<li><p>Added the demultiplexing of pod5 input files.</p></li>
-<li><p>The modified bases obtained by the Dorado basecalling are copied in the header of the fastq files</p></li>
-<li><p>Dorado duplex is supported</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</section>
 <section id="version-3-0">
 <h2>Version 3.0<a class="headerlink" href="#version-3-0" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -118,7 +100,6 @@
 <li><p>Added readucks for improving demultiplexing with guppy (optional).</p></li>
 <li><p>New parameter “barcodes” where you can specify a file with barcodes to be kept. Example in <strong>keep_barcodes.txt</strong></p></li>
 <li><p>Adding a <a class="reference external" href="https://www.biorxiv.org/content/10.1101/2023.11.28.568965v1">new model for direct RNA basecalling</a>.</p></li>
-<li><p>Added seqTagger (add reference)</p></li>
 <li><p>Added support to dorado basecalling. Not yet supported the demultiplexing</p></li>
 <li><p>Also guppy version &gt;= 6.5.x are supported. No need for indicating different command lines for different guppy versions inside tool_opts. The pipeline will get the version and act accordingly</p></li>
 <li><p>pod5 are supported for dorado and guppy &gt;= 6.5.x. No fast5 and stats files will be output. This will limit other pipelines.</p></li>

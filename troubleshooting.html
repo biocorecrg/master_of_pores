@@ -6,12 +6,12 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Troubleshooting &mdash; MOP4  documentation</title>
+  <title>Troubleshooting &mdash; MoP3  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-    <link rel="canonical" href="https://biocorecrg.github.io/MOP4/troubleshooting.html" />
+    <link rel="canonical" href="https://biocorecrg.github.io/master_of_pores/troubleshooting.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
@@ -33,7 +33,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            MOP4
+            MoP3
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,7 +44,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="about.html">About Master of Pores 4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About Master of Pores 3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Get Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mop_preprocess.html">MOP_PREPROCESS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mop_mod.html">MOP_MOD</a></li>
@@ -55,7 +55,7 @@
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">CHANGELOG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ci.html">Continuous integration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Troubleshooting</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#failure-in-downloading-singularity-images">Failure in downloading singularity images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#demultiplexing-with-guppy">Demultiplexing with Guppy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#memory-failures-in-mop-preprocess-and-mop-mod">Memory failures in mop_preprocess and mop_mod</a></li>
 </ul>
 </li>
@@ -67,7 +67,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">MOP4</a>
+          <a href="index.html">MoP3</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -87,14 +87,25 @@
              
   <section id="troubleshooting">
 <span id="home-page-troubleshooting"></span><h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h1>
-<section id="failure-in-downloading-singularity-images">
-<h2>Failure in downloading singularity images<a class="headerlink" href="#failure-in-downloading-singularity-images" title="Link to this heading"></a></h2>
-<p>Sometimes we have problems in downloading the singularity images. You can pre-download them by using the script <strong>get_singularity.py</strong> in <strong>MOP4/BioNextflow/scripts</strong>. You need to inspect your pipeline and store the results as here:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow inspect -params-file params.yaml -profile slurm mop_preprocess.nf &gt; inspect.json</span>
+<section id="demultiplexing-with-guppy">
+<h2>Demultiplexing with Guppy<a class="headerlink" href="#demultiplexing-with-guppy" title="Link to this heading"></a></h2>
+<p>Error:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Init time: 2515 ms</span>
+
+<span class="go">0%   10   20   30   40   50   60   70   80   90   100%</span>
+<span class="go">|----|----|----|----|----|----|----|----|----|----|</span>
+<span class="go">***************************************************</span>
+<span class="go">Caller time: 32995 ms, Samples called: 159196780, samples/s: 4.82488e+06</span>
+<span class="go">Finishing up any open output files.</span>
+<span class="go">Basecalling completed successfully.</span>
+
+<span class="go">Command error:</span>
+<span class="go">rm: cannot remove &#39;*_out/*/*.fastq&#39;: No such file or directory</span>
 </pre></div>
 </div>
-<p>Then you can feed the json file to <strong>get_singularity.py</strong> and indicate where to store the images:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python get_singularity.py -j inspect.json -c ./singularity_folder</span>
+<p>Solution:
+Check your barcode kit!. You must indicate the <strong>–barcode_kits</strong> in the tool_opts file at the row <strong>demultiplexing     guppy</strong>. Example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">demultiplexing guppy  &quot;--flowcell FLO-MIN114 --kit SQK-LSK114 --barcode_kits SQK-NBD114-24&quot;</span>
 </pre></div>
 </div>
 </section>
