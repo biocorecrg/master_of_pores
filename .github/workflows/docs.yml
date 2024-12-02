@@ -20,5 +20,5 @@ jobs:
     - uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        destination_dir: ${{ github.ref }}
+        destination_dir: ${{ github.ref_name }}
         publish_dir: ${{ steps.deployment.outputs.artifact }}
