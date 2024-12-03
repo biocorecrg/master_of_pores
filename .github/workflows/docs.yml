@@ -19,6 +19,16 @@ jobs:
       with:
         ref: gh-pages
         path: gh-pages
+    - name: Prepare Ruby and Jekyll
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3'
+    - name: Install ruby dependencies
+      run: bundle install
+    - name: Build website
+      run: |
+        cd ${{ github.ref_name }}/docs/ \
+        && bundle exec jekyll build
     - name: Copy file
       run: |
         mkdir -p ./gh-pages/${{ github.ref_name }}/ \
@@ -27,5 +37,4 @@ jobs:
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        enable_jekyll: true
         publish_dir: ./gh-pages
