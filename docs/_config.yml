@@ -1,6 +1,6 @@
 title: Master of Pores
 description: Nextflow pipeline for analysis of Nanopore data from direct RNA sequencing.
-url: "https://biocorecrg.github.io/master_of_pores/MOP1.1/"
+url: "https://biocorecrg.github.io/master_of_pores/MOP1.1"
 
 # Build settings
 markdown: kramdown

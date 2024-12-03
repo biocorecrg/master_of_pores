@@ -30,7 +30,7 @@ jobs:
     - name: Copy file
       run: |
         mkdir -p ./gh-pages/${{ github.ref_name }}/ \
-        && cp -pr ${{ github.ref_name }}/docs/* ./gh-pages/${{ github.ref_name }}/
+        && cp -pr ${{ github.ref_name }}/docs/_site/* ./gh-pages/${{ github.ref_name }}/
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       with:
