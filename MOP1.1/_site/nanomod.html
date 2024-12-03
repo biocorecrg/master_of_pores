@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>NanoMod</title>
+  <meta name="description" content="Nextflow pipeline for analysis of Nanopore data from direct RNA sequencing.">
+
+	<link rel="icon" href="/assets/images/favicon.ico">
+  <link rel="canonical" href="https://biocorecrg.github.io/master_of_pores/MOP1.1//nanomod.html">
+
+	<link rel="stylesheet" href="/assets/css/docs.css">
+
+</head>
+
+	<body>
+		<div class="wrapper">
+			<sidebar class="sidebar" id="sidebar">
+	<div class="sidebar-mobile">
+		<img src="/assets/images/menu.svg" class="menu-icon" id="menu" />
+		<img src="/assets/images/close.svg" class="close-icon" id="close" />
+	</div>
+	<div class="search">
+	<input type="text" class="search-input" id="search-input" placeholder="Type to search" />
+</div>
+
+	<div class="sidebar-main">
+		<ul class="navigation" id="navigation">																						<li>				<a class="" href="/">					Home				</a>			</li>								<li>				<a class="" href="/install.html">					Installation				</a>			</li>								<li>				<a class="" href="/nanopreprocess.html">					NanoPreprocess				</a>			</li>								<li>				<a class="" href="/nanotail.html">					NanoTail				</a>			</li>								<li>				<a class="active" href="/nanomod.html">					NanoMod				</a>			</li>								<li>				<a class="" href="/cloud.html">					Running on the cloud				</a>			</li>			</ul>
+
+		<ul id="search-results" class="navigation"></ul>
+
+	</div>
+</sidebar>
+
+			<main class="content">
+				<div class="inner">
+					<h1 id="nanomod">NanoMod</h1>
+<p>This module allows to predict the loci with RNA modifications starting from data produced by NanoPreprocess.</p>
+
+<h2 id="workflow">Workflow</h2>
+
+<p><img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/dag_mod_2.png" width="600" align="middle" /></p>
+
+<ul>
+  <li><strong>index_reference</strong> index the reference file for Epinano</li>
+  <li><strong>call_variants</strong> uses Samtools for calling the variants for Epinano</li>
+  <li><strong>calc_var_frequencies</strong> it uses TSV_to_Variants_Freq.py3 for calculating the frequencies of each variants for Epinano</li>
+  <li><strong>predict_with_EPInano</strong> It predicts the modifications with Epinano in parallel splitting the input file in 1 million rows</li>
+  <li><strong>combineEpinanoPred</strong> It combine the results from Epinano</li>
+  <li><strong>resquiggling</strong> resquiggle fast5 files for Tombo</li>
+  <li><strong>getModifications</strong> it estimates the modifications using Tombo comparing WT vs KO</li>
+</ul>
+
+<h2 id="input-parameters">Input Parameters</h2>
+<ol>
+  <li><strong>input_path</strong> path to the folders produced by NanoPreprocessing step.</li>
+  <li><strong>comparison</strong> tab separated text file containing the list of comparison. Here an example:</li>
+</ol>
+
+<pre><code class="language-bash">WT1 KO1
+WT2 KO2
+WT3 KO3
+</code></pre>
+
+<ol>
+  <li><strong>reference</strong> reference transcriptome</li>
+  <li><strong>output</strong> folder</li>
+  <li><strong>coverage</strong> read coverage threshold for prediction</li>
+  <li><strong>tombo_opt</strong> options for tombo</li>
+  <li><strong>epinano_opt</strong> options for epinano</li>
+  <li><strong>email</strong></li>
+</ol>
+
+<h2 id="results">Results</h2>
+<p>Three folders are produced by this module:</p>
+
+<ol>
+  <li>Epinano, containing the results obtained with this method. You have a single file with putative modifications:</li>
+</ol>
+
+<pre><code class="language-bash">#Kmer,Window,Ref,Coverage,q1,q2,q3,q4,q5,mis1,mis2,mis3,mis4,mis5,ins1,ins2,ins3,ins4,ins5,del1,del2,del3,del4,del5,prediction,dist,ProbM,Pro
+bU
+AGTGG,394404:394405:394406:394407:394408,chr2,8.0:8.0:7.0:7.0:7.0,21.5,21.25,19.857,23.0,16.285999999999998,0.0,0.0,0.0,0.0,0.0,0.0,0.062,0.0
+71,0.0,0.0,0.0,0.0,0.0,0.0,0.0,unm,19.26143361547619,3.00000089999998e-14,0.9999999999999699
+TTTTT,12150:12151:12152:12153:12154,chr8,3.0:3.0:3.0:3.0:3.0,0.0,16.5,18.5,16.0,16.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.3329999999
+9999996,0.33299999999999996,0.0,0.0,unm,2.5976484688977424,0.06071658133381308,0.9392834186661868
+ACATT,438165:438166:438167:438168:438169,chr13,67.0:67.0:67.0:68.0:68.0,13.635,13.446,9.323,9.6,12.127,0.03,0.045,0.015,0.147,0.0740000000000
+0001,0.0,0.0,0.0,0.0,0.0,0.06,0.03,0.075,0.11800000000000001,0.07400000000000001,unm,0.08435556637195174,0.519879422458087,0.4801205775419129
+5...
+</code></pre>
+
+<p>and three plots in pdf indicating possible events related to insertion, deletion and mismatches, see the example below.</p>
+
+<p><img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/v1.1/docs/nanomod_pl.png" width="600" align="middle" /></p>
+
+<ol>
+  <li>Tombo, containing the results obtained with this method in fasta format. You have one file for each comparison WT vs KO</li>
+</ol>
+
+<pre><code class="language-bash">&gt;chr11:455562:- Est. Frac. Alternate: 0.98
+TGACA
+&gt;chr12:1008723:- Est. Frac. Alternate: 0.98
+TATCT
+&gt;chr15:491587:+ Est. Frac. Alternate: 0.96
+TATAT
+&gt;chr10:425794:- Est. Frac. Alternate: 0.95
+ATGTT
+&gt;chr13:510759:+ Est. Frac. Alternate: 0.95
+...
+</code></pre>
+<p>And for convenience a 6 bed files with the coordinates of the event.</p>
+
+
+				</div>
+			</main>
+		</div>
+		<script src="/assets/js/zepto.min.js"></script>
+<script src="/assets/js/lunar.min.js"></script>
+<script src="/assets/js/prism.min.js"></script>
+<script src="/assets/js/database.js"></script>
+<script src="/assets/js/search.js"></script>
+<script src="/assets/js/mobile-navigation.js"></script>
+
+	</body>
+</html>

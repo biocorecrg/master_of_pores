@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>NanoTail</title>
+  <meta name="description" content="Nextflow pipeline for analysis of Nanopore data from direct RNA sequencing.">
+
+	<link rel="icon" href="/assets/images/favicon.ico">
+  <link rel="canonical" href="https://biocorecrg.github.io/master_of_pores/MOP1.1//nanotail.html">
+
+	<link rel="stylesheet" href="/assets/css/docs.css">
+
+</head>
+
+	<body>
+		<div class="wrapper">
+			<sidebar class="sidebar" id="sidebar">
+	<div class="sidebar-mobile">
+		<img src="/assets/images/menu.svg" class="menu-icon" id="menu" />
+		<img src="/assets/images/close.svg" class="close-icon" id="close" />
+	</div>
+	<div class="search">
+	<input type="text" class="search-input" id="search-input" placeholder="Type to search" />
+</div>
+
+	<div class="sidebar-main">
+		<ul class="navigation" id="navigation">																						<li>				<a class="" href="/">					Home				</a>			</li>								<li>				<a class="" href="/install.html">					Installation				</a>			</li>								<li>				<a class="" href="/nanopreprocess.html">					NanoPreprocess				</a>			</li>								<li>				<a class="active" href="/nanotail.html">					NanoTail				</a>			</li>								<li>				<a class="" href="/nanomod.html">					NanoMod				</a>			</li>								<li>				<a class="" href="/cloud.html">					Running on the cloud				</a>			</li>			</ul>
+
+		<ul id="search-results" class="navigation"></ul>
+
+	</div>
+</sidebar>
+
+			<main class="content">
+				<div class="inner">
+					<h1 id="nanotail">NanoTail</h1>
+<p>This module allows to estimates polyA sizes by using two different methods (nanopolish and talifindr). it reads directly the output produced by NanoPreprocess and in particular it needs the read counts / assignment.</p>
+
+<h1 id="workflow">Workflow</h1>
+
+<p><img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/dag_nanotail.png" width="600" align="middle" /></p>
+
+<ol>
+  <li><strong>check_reference</strong> It verifies whether the reference is zipped and eventually unzip it</li>
+  <li><strong>tailfindr</strong> it runs <em>tailfindr</em> tool in parallel.</li>
+  <li><strong>collect_tailfindr_results</strong> It collects the results of tailfindr.</li>
+  <li><strong>filter_bam</strong> Bam files are filtered with <em>samtools</em> to keep only mapped reads and remove secondary alignments</li>
+  <li><strong>tail_nanopolish</strong> It runs <em>nanopolish</em> in parallel.</li>
+  <li><strong>collect_nanopolish_results</strong> It collects the results of tail_nanopolish.</li>
+  <li><strong>join_results</strong> It merges the results from the two algorithms and make a plot of the correlation.</li>
+</ol>
+
+<h2 id="input-parameters">Input Parameters</h2>
+
+<ol>
+  <li><strong>input_folders</strong> path to the folders produced by NanoPreprocessing step.</li>
+  <li><strong>nanopolish_opt</strong> options for the nanopolish program</li>
+  <li><strong>tailfindr_opt</strong> options for the tailfindr program</li>
+  <li><strong>reference</strong> reference genome / transcriptome</li>
+  <li><strong>output</strong> folder</li>
+  <li><strong>email</strong></li>
+</ol>
+
+<h2 id="results">Results</h2>
+<p>Three folders are created by the pipeline within the output folder:</p>
+<ol>
+  <li>NanoPolish: contains the output of <em>nanopolish</em> tool.</li>
+  <li>Tailfindr: contains the output of <em>tailfindr</em> tool.</li>
+  <li>PolyA_final: contains the txt files with the combined results (i.e. predicted polyA sizes). Here an example of a test:</li>
+</ol>
+
+<pre><code class="language-bash">"Read name"	"Tailfindr"	"Nanopolish"	"Gene Name"
+"013a5dde-9c52-4de1-83eb-db70fb2cd130"	52.16	49.39	"YKR072C"
+"01119f62-ca68-458d-aa1f-cf8c8c04cd3b"	231.64	274.28	"YDR133C"
+"0154ce9c-fe6b-4ebc-bbb1-517fdc524207"	24.05	24.24	"YFL044C"
+"020cde28-970d-4710-90a5-977e4b4bbc46"	41.27	56.79	"YGL238W"
+</code></pre>
+<p>A plot is also produced for showing the correlation between the two methods.</p>
+
+
+				</div>
+			</main>
+		</div>
+		<script src="/assets/js/zepto.min.js"></script>
+<script src="/assets/js/lunar.min.js"></script>
+<script src="/assets/js/prism.min.js"></script>
+<script src="/assets/js/database.js"></script>
+<script src="/assets/js/search.js"></script>
+<script src="/assets/js/mobile-navigation.js"></script>
+
+	</body>
+</html>
