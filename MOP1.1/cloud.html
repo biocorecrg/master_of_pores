@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Running on the cloud</title>
+  <meta name="description" content="Nextflow pipeline for analysis of Nanopore data from direct RNA sequencing.">
+
+	<link rel="icon" href="/assets/images/favicon.ico">
+  <link rel="canonical" href="https://biocorecrg.github.io/master_of_pores/MOP1.1/cloud.html">
+
+	<link rel="stylesheet" href="/assets/css/docs.css">
+
+</head>
+
+	<body>
+		<div class="wrapper">
+			<sidebar class="sidebar" id="sidebar">
+	<div class="sidebar-mobile">
+		<img src="/assets/images/menu.svg" class="menu-icon" id="menu" />
+		<img src="/assets/images/close.svg" class="close-icon" id="close" />
+	</div>
+	<div class="search">
+	<input type="text" class="search-input" id="search-input" placeholder="Type to search" />
+</div>
+
+	<div class="sidebar-main">
+		<ul class="navigation" id="navigation">																			<li>				<a class="" href="/">					Home				</a>			</li>								<li>				<a class="" href="/install.html">					Installation				</a>			</li>								<li>				<a class="" href="/nanopreprocess.html">					NanoPreprocess				</a>			</li>								<li>				<a class="" href="/nanotail.html">					NanoTail				</a>			</li>								<li>				<a class="" href="/nanomod.html">					NanoMod				</a>			</li>								<li>				<a class="active" href="/cloud.html">					Running on the cloud				</a>			</li>			</ul>
+
+		<ul id="search-results" class="navigation"></ul>
+
+	</div>
+</sidebar>
+
+			<main class="content">
+				<div class="inner">
+					<h2 id="amazon-web-service-ec2">Amazon Web Service EC2</h2>
+
+<p>The simplest option is running an EC2 instance interactively where the pipeline can be installed as pointed in the previous documentation pages.</p>
+
+<p>Last available Amazon Machine (AMI) we provide is:</p>
+<ul>
+  <li><strong>ami-0bf3a9a6cb7a5ea9f</strong> (Ubuntu 18.04, CUDA compatible, Docker 19.x, Singularity 3.2.1 and Nextflow 19.10 preinstalled)</li>
+</ul>
+
+<p>When running an instance among the different <a href="https://aws.amazon.com/ec2/instance-types/">available types</a>, minimum CPU and memory requirements must be taken into account. These must fit with Nextflow executor process configuration values. In our sample configuration files we use <code>m4.2xlarge</code> for CPU and <code>p3.2xlarge</code> for GPU as examples.</p>
+
+<p>Keep in mind that not all <a href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/">Amazon infrastructure regions</a> may have the same instance types. As a example, in January 2020 Frankfurt has GPU nodes, but not Paris.</p>
+
+<p>Launch an instane from the AMI image above (Go to EC2 &gt; Images &gt; AMI and copy-paste the ID provided above filtering in public images). Once you find that image, you can launch an instance from it.</p>
+
+<p>You can connect to the launched instance by using this command below:</p>
+
+<pre><code class="language-bash">ssh -i "key-nf.pem" ubuntu@xxx.eu-central-1.compute.amazonaws.com
+</code></pre>
+
+<p>where <code>key-nf.pem</code> is your private key (<a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">reference</a>) and host details can be obtained from <em>Connect popup</em> in EC2 instances dashboard.</p>
+
+<h3 id="terraform">Terraform</h3>
+
+<p>For sake of commodity, you may prefer to automate deployment of EC2 instances and S3 buckets. Terraform is a convenient tool for this.</p>
+
+<p>Place <a href="https://www.terraform.io/downloads.html">terraform</a> binary in your local workstation path and move where your are keeping your tf files. Examples are provided in the terraform directory of this repository.</p>
+
+<p>Adapt terraform configuration files to include your credentials, use your chosen instance types, which key pair they are associated with, or whether allow files in S3 bucket to be kept or not (<code>force_destroy</code> parameter).</p>
+
+<p>Initialize terraform directory:</p>
+
+<pre><code class="language-bash">terraform init
+</code></pre>
+<p>Validate terraform files:</p>
+<pre><code class="language-bash">terraform validate
+</code></pre>
+<p>Inspect what changes are going to be performed in your AWS account:</p>
+
+<pre><code class="language-bash">terraform plan
+</code></pre>
+<p>Proceed:</p>
+<pre><code class="language-bash">terraform apply
+</code></pre>
+<p>Once analyses are finished, infrastructure can be dismantled with:</p>
+<pre><code class="language-bash">terraform destroy
+</code></pre>
+
+<h3 id="share-files-in-amazon-s3">Share files in Amazon S3</h3>
+
+<p>Amazon Simple Storage Service (S3) is a convenient web service storage system for sharing raw input and final output files between your premises and your computing cloud instances.</p>
+
+<p>Below we provide some instructions and advices to set up a S3 bucket.</p>
+
+<p>Some convenient instructions for S3 permisions in your EC2 instance can be found <a href="https://cloudkul.com/blog/mounting-s3-bucket-linux-ec2-instance/">here</a>. From the previous link you can learn how to retrieve the key and password to place in <code>/root/.passwd-s3fs</code></p>
+
+<p>Ensure proper permission as well: <code>chmod 600 /root/.passwd-s3fs</code></p>
+
+<p>You can include in <code>/etc/fstab</code> the following mounting point (adapt according to your case):</p>
+
+<pre><code>frankfurt-nf    /mnt/frankfurt-nf fuse.s3fs _netdev,allow_other,passwd_file=/root/.passwd-s3fs,uid=1000,gid=1000   0 0
+</code></pre>
+
+<p>If not mounted, you can mount it therefore straightforward by running:</p>
+
+<pre><code>sudo mount /mnt/frankfurt-nf
+</code></pre>
+
+<p>Adapt your S3 bucket and mounting point names according to your choice.</p>
+
+<p>Specially for huge amount of data, we suggest to use <a href="https://aws.amazon.com/cli/">AWS CLI</a> to transfer files from your premises to a S3 Bucket (<a href="https://docs.aws.amazon.com/en_us/cli/latest/userguide/cli-services-s3.html">Ref</a>). For instance, the commandline below uploads the data example file in a pre-existing bucket.</p>
+<pre><code class="language-bash">aws s3 cp  multifast5_1.fast5 s3://frankfurt-nf
+</code></pre>
+<p>Modify your Nexflow configuration files in order to point your input files at the mounted S3 bucket. Both input and final output files can be placed in that mounted S3 storage, but we do not recommend that <code>work</code> Nextflow directory (containing pipeline intermediary files) is kept there, since it significatively delays the whole process. Choose a suitable disk size for your instance depending on the amount of data to be processed.</p>
+
+
+				</div>
+			</main>
+		</div>
+		<script src="/assets/js/zepto.min.js"></script>
+<script src="/assets/js/lunar.min.js"></script>
+<script src="/assets/js/prism.min.js"></script>
+<script src="/assets/js/database.js"></script>
+<script src="/assets/js/search.js"></script>
+<script src="/assets/js/mobile-navigation.js"></script>
+
+	</body>
+</html>

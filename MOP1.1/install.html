@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Installation</title>
+  <meta name="description" content="Nextflow pipeline for analysis of Nanopore data from direct RNA sequencing.">
+
+	<link rel="icon" href="/assets/images/favicon.ico">
+  <link rel="canonical" href="https://biocorecrg.github.io/master_of_pores/MOP1.1/install.html">
+
+	<link rel="stylesheet" href="/assets/css/docs.css">
+
+</head>
+
+	<body>
+		<div class="wrapper">
+			<sidebar class="sidebar" id="sidebar">
+	<div class="sidebar-mobile">
+		<img src="/assets/images/menu.svg" class="menu-icon" id="menu" />
+		<img src="/assets/images/close.svg" class="close-icon" id="close" />
+	</div>
+	<div class="search">
+	<input type="text" class="search-input" id="search-input" placeholder="Type to search" />
+</div>
+
+	<div class="sidebar-main">
+		<ul class="navigation" id="navigation">																						<li>				<a class="" href="/">					Home				</a>			</li>								<li>				<a class="active" href="/install.html">					Installation				</a>			</li>								<li>				<a class="" href="/nanopreprocess.html">					NanoPreprocess				</a>			</li>								<li>				<a class="" href="/nanotail.html">					NanoTail				</a>			</li>								<li>				<a class="" href="/nanomod.html">					NanoMod				</a>			</li>								<li>				<a class="" href="/cloud.html">					Running on the cloud				</a>			</li>			</ul>
+
+		<ul id="search-results" class="navigation"></ul>
+
+	</div>
+</sidebar>
+
+			<main class="content">
+				<div class="inner">
+					<h2 id="pre-requisites">Pre-requisites</h2>
+<p>For using the pipeline <a href="https://www.nextflow.io/">Nextflow</a> and a linux container engine (either <a href="https://www.docker.com/">Docker</a> or <a href="https://sylabs.io/guides/3.1/user-guide/cli/singularity_apps.html">Singularity</a>) need to be installed. 
+The pipeline can be run in Mac OSX and Linux operative systems.</p>
+
+<h2 id="installation">Installation</h2>
+
+<h3 id="1-install-nextflow-version-19100">1. Install Nextflow (version 19.10.0)</h3>
+
+<pre><code class="language-bash">curl -s https://get.nextflow.io | bash
+</code></pre>
+
+<h3 id="2-clone-the-masterofpores-repository">2. Clone the MasterOfPores repository</h3>
+<p>The pipeline can be cloned in this way using <strong>git</strong>:</p>
+
+<pre><code class="language-bash">git clone --depth 1 https://github.com/biocorecrg/master_of_pores.git
+</code></pre>
+
+<h3 id="3-install-docker-andor-singularity">3. Install Docker and/or Singularity</h3>
+<ul>
+  <li>Docker: https://docs.docker.com/install/ (version 10.03 or later is required)</li>
+  <li>Singularity: https://sylabs.io/guides/2.6/user-guide/quick_start.html#quick-installation-steps (version 2.6.1 or 3.2.1 is required)</li>
+</ul>
+
+<h3 id="4-download-nanopore-base-calling-algorithms">4. Download Nanopore base-calling algorithms</h3>
+<p>Because of redistribution restriction of the basecallers <strong>Albacore</strong> and <strong>Guppy</strong> we cannot provide them inside the docker image, so you would need to download the binaries from the official website https://nanoporetech.com and place them inside the <strong>master_of_pores/NanoPreprocess/bin</strong> folder.</p>
+
+<h4 id="a-both-albacore-and-guppy">a) Both Albacore and Guppy</h4>
+<pre><code class="language-bash">cd master_of_pores/NanoPreprocess/bin
+tar -zvxf ont-guppy_3.1.5_linux64.tar.gz
+ln -s ont-guppy_3.1.5_linux64/ont-guppy/bin/guppy_* .
+pip3 install --target=./albacore ont_albacore-2.1.7-cp36-cp36m-manylinux1_x86_64.whl
+ln -s albacore/bin/read_fast5_basecaller.py .
+</code></pre>
+
+<h4 id="b-albacore">b) Albacore</h4>
+<p>Download the wheel file.</p>
+
+<pre><code class="language-bash">cd master_of_pores/NanoPreprocess/bin
+pip3 install --target=./albacore ont_albacore-2.1.7-cp36-cp36m-manylinux1_x86_64.whl
+$ ln -s albacore/bin/multi_to_single_fast5 
+$ ln -s albacore/bin/read_fast5_basecaller.py .
+</code></pre>
+<h4 id="c-guppy">c) Guppy</h4>
+<p>Please note Guppy versions older than 3.1 (e.g. 3.0.3) only runs on CPUs.
+Newer versions (e.g. 3.1.5 and above) works on both CPUs and GPUs. The difference of speed between CPUs and GPU is more than 10 times.</p>
+
+<pre><code class="language-bash">cd master_of_pores/NanoPreprocess/bin
+tar -zvxf ont-guppy_3.1.5_linux64.tar.gz
+ln -s ont-guppy_3.1.5_linux64/ont-guppy/bin/guppy_* .
+</code></pre>
+
+<h3 id="5-optional-step-install-cuda-drivers-only-needed-for-gpu-support">5. Optional step: install CUDA drivers (only needed for GPU support):</h3>
+
+<p>In case you want to use the GPU you need to install the <a href="https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html">CUDA drivers</a></p>
+
+<h3 id="6-run-the-pipeline">6. Run the pipeline:</h3>
+<p>Using Singularity:</p>
+<pre><code class="language-bash">cd master_of_pores/NanoPreprocess/
+nextflow run preprocessing.nf -with-singularity
+</code></pre>
+<p>Using Docker:</p>
+<pre><code class="language-bash">cd master_of_pores/NanoPreprocess/
+nextflow run preprocessing.nf -with-docker
+</code></pre>
+
+
+
+				</div>
+			</main>
+		</div>
+		<script src="/assets/js/zepto.min.js"></script>
+<script src="/assets/js/lunar.min.js"></script>
+<script src="/assets/js/prism.min.js"></script>
+<script src="/assets/js/database.js"></script>
+<script src="/assets/js/search.js"></script>
+<script src="/assets/js/mobile-navigation.js"></script>
+
+	</body>
+</html>
