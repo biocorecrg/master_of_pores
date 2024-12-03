@@ -23,12 +23,10 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: '3.3'
-    - name: Install ruby dependencies
-      run: bundle install
-    - name: Build website
+    - name: Build deps and website
       run: |
         cd ${{ github.ref_name }}/docs/ \
-        && bundle exec jekyll build
+        && bundle install && bundle exec jekyll build
     - name: Copy file
       run: |
         mkdir -p ./gh-pages/${{ github.ref_name }}/ \
