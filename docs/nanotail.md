@@ -9,7 +9,7 @@ This module allows to estimates polyA sizes by using two different methods (nano
 
 # Workflow
 
-<img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/dag_nanotail.png" width="600" align="middle">
+<img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/v1.1/docs/dag_nanotail.png" width="600" align="middle">
 
  1. **check_reference** It verifies whether the reference is zipped and eventually unzip it
  1. **tailfindr** it runs *tailfindr* tool in parallel.

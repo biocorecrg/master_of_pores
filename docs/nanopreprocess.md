@@ -11,7 +11,7 @@ This module takes as input the raw fast5 reads - single or multi - and produces 
 
 ## Workflow
 
-<img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/master/docs/dag_graph3.png" width="600" align="middle">
+<img src="https://raw.githubusercontent.com/biocorecrg/master_of_pores/v1.1/docs/dag_graph3.png" width="600" align="middle">
 
 | Process name  | Description |
 | ------------- | ------------- |
