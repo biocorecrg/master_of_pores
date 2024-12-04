@@ -56,7 +56,7 @@ git pull --recurse-submodules
 ```
 
 ## Documentation
-The documentation is available at [https://biocorecrg.github.io/master_of_pores/](https://biocorecrg.github.io/master_of_pores/)
+The documentation is available at https://biocorecrg.github.io/master_of_pores/MOP3/
 
 ## Contact
 Please open an [issue](https://github.com/biocorecrg/master_of_pores/issues) if you encounter any issues/troubles.
