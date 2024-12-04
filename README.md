@@ -24,7 +24,6 @@ The current version is the 1.1. The original 1.0 published in the paper is [here
 -------------------------------------
 ## New DSL2 version of Master Of Pores is out!!
 We translated the pipelines using DSL2 and added a new pipeline!! A lot of improvements and bug fixes!
-[https://github.com/biocorecrg/MoP2](https://github.com/biocorecrg/MOP2)
 
 ---------------------------------
 
