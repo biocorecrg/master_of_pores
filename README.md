@@ -29,7 +29,7 @@ We translated the pipelines using DSL2 and added a new pipeline!! A lot of impro
 
 
 ## Documentation
-Please read the documentation here: https://biocorecrg.github.io/master_of_pores/
+Please read the documentation here: https://biocorecrg.github.io/master_of_pores/MOP1.1/
 
 
 
