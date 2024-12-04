@@ -25,6 +25,14 @@ It can handle reads from direct RNAseq, cDNAseq, DNAseq etc.
 
 The name is inspired by the Metallica's [Master Of Puppets](https://www.youtube.com/watch?v=S7blkui3nQc)
 
+-------------------------------------
+## New development version. 
+
+We are developing a new version for the RNA004 chemistry. You can access it [here](https://github.com/biocorecrg/master_of_pores/tree/MOP4-dev)
+
+
+---------------------------------
+
 ## Install
 Please install nextflow and singularity or docker before.
 
