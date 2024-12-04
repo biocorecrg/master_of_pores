@@ -35,7 +35,7 @@ git clone --recurse-submodules https://github.com/biocorecrg/master_of_pores.git
 
 
 ## Documentation
-The documentation is available at [https://biocorecrg.github.io/MOP4/](https://biocorecrg.github.io/MOP4/)
+The documentation is available at https://biocorecrg.github.io/master_of_pores/MOP4-dev/
 
 ## Contact
 Please open an issue if you encounter any issues / troubles.
