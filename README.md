@@ -55,4 +55,4 @@ Luca Cozzuto, Huanle Liu, Leszek P. Pryszcz, Toni Hermoso Pulido, Anna Delgado-T
 
 
 ## Documentation
-The documentation is available at [https://biocorecrg.github.io/MOP2/docs/](https://biocorecrg.github.io/MOP2/docs/about.html)
+The documentation is available at https://biocorecrg.github.io/master_of_pores/MOP2/
