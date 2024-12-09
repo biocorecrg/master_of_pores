@@ -161,6 +161,8 @@ checkTools(tools, progPars)
 // Create a channel for excluded ids
 barcodes_to_include = get_barcode_list(params.barcodes)
 
+
+
 def guppy_basecall_pars = guppypars + " " + progPars["basecalling--guppy"]
 
 def basecaller_pars = ["guppy" : guppy_basecall_pars, "dorado" : progPars["basecalling--dorado"] ]
@@ -425,7 +427,7 @@ workflow {
                 demufq = outbc.demultiplexed_fastqs
                 bc_stats = reshapeSamples(outbc.basecalling_stats)
                 bc_demux_stats = reshapeSamples(outbc.basecalling_stats).groupTuple()
-                outbc.basecalled_fast5.view()
+                //outbc.basecalled_fast5.view()
                 break;
         
                 case "dorado":
@@ -452,7 +454,7 @@ workflow {
         
         // DEMULTI FAST5
         if (demulti_fast5_opt == "ON") {
-            outbc.basecalled_fast5.view()
+//            outbc.basecalled_fast5.view()
             basecalled_fast5 = reshapeSamples(outbc.basecalled_fast5).transpose().groupTuple()
             if (params.barcodes == "") {
                 DEMULTI_FAST5(bc_demux_stats, basecalled_fast5)
