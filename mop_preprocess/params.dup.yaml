@@ -1,0 +1,40 @@
+# Parameters
+
+# Needed for pod5 input
+pod5: "${projectDir}/../data/duplex/**/*.pod5"
+## Can be OFF / cuda10 / cuda11.
+GPU: "cuda11"
+# Basecalling
+basecalling: "dorado-duplex"
+## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)
+demultiplexing: "NO"
+demulti_pod5: "NO"
+### Number of fast5 basecalled per parallel job
+granularity: 1
+### File with the list of accepted barcodes. It can be empty
+barcodes: ""
+
+# Needed for fastq input
+fastq: ""
+
+# Common
+reference: "${projectDir}/../anno/curlcake_constructs.fasta.gz"
+## Can be transcriptome / genome
+ref_type: "transcriptome"
+annotation: ""
+## command line options
+pars_tools: "${projectDir}/tool_opts/tools_opt.tsv"
+## Can be nanoq / nanofilt
+filtering: "nanoq"
+## Can be graphmap / graphmap2 / minimap2 / winnowmap / bwa / NO
+mapping: "minimap2"
+## Can be nanocount for transcriptome / htseq for genome
+counting: "nanocount"
+## Can be NO / bambu / isoquant
+discovery: "NO"
+## Convert bam to cram
+cram_conv: "YES"
+subsampling_cram: 50
+hook: ""
+email: ""
+output: "out"
