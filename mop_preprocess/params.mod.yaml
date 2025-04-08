@@ -35,7 +35,7 @@ discovery: "NO"
 cram_conv: "YES"
 subsampling_cram: 50
 ## Output and notifications
-slackhook: "https://hooks.slack.com/services/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"
+slackhook: ""
 email: ""
 output: "./outfolder/"
 
