@@ -23,8 +23,6 @@ reference: "${projectDir}/../anno/yeast_rRNA_ref.fa.gz"
 ## Can be transcriptome / genome
 ref_type: "transcriptome"
 annotation: ""
-## command line options
-pars_tools: "${projectDir}/tool_opts/tools_opt.tsv"
 ## Can be nanoq / nanofilt
 filtering: "nanoq"
 ## Can be graphmap / graphmap2 / minimap2 / winnowmap / bwa / NO
@@ -51,14 +49,14 @@ progPars:
     seqtagger: "-k b100"
     dorado: ""
   filtering:
-    nanofilt: ""
+    seqkit: ""
     nanoq: ""
   mapping:
     graphmap: ""
     graphmap2: "-x rnaseq"
     minimap2: "-y -uf -ax splice -k14"
     bwa: ""
-  winnowmap: ""
+    winnowmap: ""
   counting:
     htseq: "-a 0"
     nanocount: ""

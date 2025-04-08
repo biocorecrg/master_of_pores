@@ -14,7 +14,7 @@ extra_fn_clean_trim:
    - '_QC'
    - '.count'
    - '-report'
-
+   - '_nanostat'
 table_columns_visible:
     nanoq:
         number_of_bases: True

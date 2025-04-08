@@ -27,22 +27,38 @@ ${colors.yellow}${colors.bold}==================================================
 ╔╦╗╔═╗╔═╗  ╔═╗┬─┐┌─┐┌─┐┬─┐┌─┐┌─┐┌─┐┌─┐┌─┐
 ║║║║ ║╠═╝  ╠═╝├┬┘├┤ ├─┘├┬┘│ ││  ├┤ └─┐└─┐
 ╩ ╩╚═╝╩    ╩  ┴└─└─┘┴  ┴└─└─┘└─┘└─┘└─┘└─┘
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣶⣦⡄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⢀⣀⣀⣀⡀⢀⠀⢹⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠙⠻⣿⣿⣷⣄⠨⣿⣿⣿⡌⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣷⣿⣿⣿⣿⣿⣶⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⣠⣴⣾⣿⣮⣝⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠈⠉⠙⠻⢿⣿⣿⣿⣿⣿⣿⠟⣹⣿⡿⢿⣿⣿⣬⣶⣶⡶⠦⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⣀⣢⣙⣻⢿⣿⣿⣿⠎⢸⣿⠕⢹⣿⣿⡿⣛⣥⣀⣀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠈⠉⠛⠿⡏⣿⡏⠿⢄⣜⣡⠞⠛⡽⣸⡿⣟⡋⠉⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⠾⠿⣿⠁⠀⡄⠀⠀⠰⠾⠿⠛⠓⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠠⢐⢉⢷⣀⠛⠠⠐⠐⠠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⣀⣠⣴⣶⣿⣧⣾⠡⠼⠎⢎⣋⡄⠆⠀⠱⡄⢉⠃⣦⡤⡀⠀⠀⠀⠀
-⠀⠀⠐⠙⠻⢿⣿⣿⣿⣿⣿⣿⣄⡀⠀⢩⠀⢀⠠⠂⢀⡌⠀⣿⡇⠟⠀⠀⢄⠀
-⠀⣴⣇⠀⡇⠀⠸⣿⣿⣿⣿⣽⣟⣲⡤⠀⣀⣠⣴⡾⠟⠀⠀⠟⠀⠀⠀⠀⡰⡀
-⣼⣿⠋⢀⣇⢸⡄⢻⣟⠻⣿⣿⣿⣿⣿⣿⠿⡿⠟⢁⠀⠀⠀⠀⠀⢰⠀⣠⠀⠰
-⢸⣿⡣⣜⣿⣼⣿⣄⠻⡄⡀⠉⠛⠿⠿⠛⣉⡤⠖⣡⣶⠁⠀⠀⠀⣾⣶⣿⠐⡀
-⣾⡇⠈⠛⠛⠿⣿⣿⣦⠁⠘⢷⣶⣶⡶⠟⢋⣠⣾⡿⠃⠀⠀⠀⠰⠛⠉⠉⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣷⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⣿⣷⡒⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿⣿⣆⠙⡄⠀⠐⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣤⣤⣤⣤⣤⣤⣤⣤⠤⢄⡀⠀⠀⣿⣿⣿⣿⣿⣿⡆⠘⡄⠀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣿⣿⣿⣿⣿⣿⣿⣦⡈⠒⢄⢸⣿⣿⣿⣿⣿⣿⡀⠱⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣦⠀⠱⣿⣿⣿⣿⣿⣿⣇⠀⢃⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣿⣿⣿⣷⡄⣹⣿⣿⣿⣿⣿⣿⣶⣾⣿⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣶⣿⣭⣍⡉⠙⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡷⢂⣓⣶⣶⣶⣶⣤⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⠟⢀⣴⢿⣿⣿⣿⠟⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠤⠤⠙⣻⣿⣿⣿⣿⣿⣿⣾⣿⣿⡏⣠⠟⡉⣾⣿⣿⠋⡠⠊⣿⡟⣹⣿⢿⣿⣿⣿⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣶⣤⣭⣤⣼⣿⢛⣿⣿⣿⣿⣻⣿⣿⠇⠐⢀⣿⣿⡷⠋⠀⢠⣿⣺⣿⣿⢺⣿⣋⣉⣉⣩⣴⣶⣤⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠻⠿⣿⣿⣿⣇⢻⣿⣿⡿⠿⣿⣯⡀⠀⢸⣿⠋⢀⣠⣶⠿⠿⢿⡿⠈⣾⣿⣿⣿⣿⡿⠿⠛⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⢧⡸⣿⣿⣿⠀⠃⠻⠟⢦⢾⢣⠶⠿⠏⠀⠰⠀⣼⡇⣸⣿⣿⠟⠉⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣶⣽⣿⡟⠓⠒⠀⠀⡀⠀⠠⠤⠬⠉⠁⣰⣥⣾⣿⣿⣶⣶⣷⡶⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠹⠟⣿⣿⡄⠀⠀⠠⡇⠀⠀⠀⠀⠀⢠⡟⠛⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠋⠹⣷⣄⠀⠐⣊⣀⠀⠀⢀⡴⠁⠣⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣀⠤⠊⢁⡸⠀⣆⠹⣿⣧⣀⠀⠀⡠⠖⡑⠁⠀⠀⠀⠑⢄⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣦⣶⣿⣿⣟⣁⣤⣾⠟⠁⢀⣿⣆⠹⡆⠻⣿⠉⢀⠜⡰⠀⠀⠈⠑⢦⡀⠈⢾⠑⡾⠲⣄⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠖⠒⠚⠛⠛⠢⠽⢄⣘⣤⡎⠠⠿⠂⠀⠠⠴⠶⢉⡭⠃⢸⠃⠀⣿⣿⣿⠡⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⡤⠶⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣋⠁⠀⠀⠀⠀⠀⢹⡇⠀⠀⠀⠀⠒⠢⣤⠔⠁⠀⢀⡏⠀⠀⢸⣿⣿⠀⢻⡟⠑⠢⢄⡀⠀⠀⠀⠀
+⠀⠀⠀⠀⢸⠀⠀⠀⡀⠉⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⣀⣀⡀⠀⢸⣷⡀⣀⣀⡠⠔⠊⠀⠀⢀⣠⡞⠀⠀⠀⢸⣿⡿⠀⠘⠀⠀⠀⠀⠈⠑⢤⠀⠀
+⠀⠀⢀⣴⣿⡀⠀⠀⡇⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣝⡛⠿⢿⣷⣦⣄⡀⠈⠉⠉⠁⠀⠀⠀⢀⣠⣴⣾⣿⡿⠁⠀⠀⠀⢸⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⡜⠀⠀
+⠀⢀⣾⣿⣿⡇⠀⢰⣷⠀⢀⠀⠀⢹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣦⣭⣍⣉⣉⠀⢀⣀⣤⣶⣾⣿⣿⣿⢿⠿⠁⠀⠀⠀⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⡰⠉⢦⠀
+⢀⣼⣿⣿⡿⢱⠀⢸⣿⡀⢸⣧⡀⠀⢿⣿⣿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡭⠖⠁⠀⡠⠂⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⠀⠀⢠⠃⠀⠈⣀
+⢸⣿⣿⣿⡇⠀⢧⢸⣿⣇⢸⣿⣷⡀⠈⣿⣿⣇⠈⠛⢿⣿⣿⣿⣿⣿⣿⠿⠿⠿⠿⠿⠿⠟⡻⠟⠉⠀⠀⡠⠊⠀⢠⠀⠀⠀⠀⠀⠀⠀⠀⣾⡄⠀⢠⣿⠔⠁⠀⢸
+⠈⣿⣿⣿⣷⡀⠀⢻⣿⣿⡜⣿⣿⣷⡀⠈⢿⣿⡄⠀⠀⠈⠛⠿⣿⣿⣿⣷⣶⣶⣶⡶⠖⠉⠀⣀⣤⡶⠋⠀⣠⣶⡏⠀⠀⠀⠀⠀⠀⠀⢰⣿⣧⣶⣿⣿⠖⡠⠖⠁
+⠀⣿⣿⣷⣌⡛⠶⣼⣿⣿⣷⣿⣿⣿⣿⡄⠈⢻⣷⠀⣄⡀⠀⠀⠀⠈⠉⠛⠛⠛⠁⣀⣤⣶⣾⠟⠋⠀⣠⣾⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⠷⠊⠀⢰⠀
+⢰⣿⣿⠀⠈⢉⡶⢿⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠙⢇⠈⢿⣶⣦⣤⣀⣀⣠⣤⣶⣿⣿⡿⠛⠁⢀⣤⣾⣿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⣸⣿⡿⠿⠋⠙⠒⠄⠀⠉⡄
+⣿⣿⡏⠀⠀⠁⠀⠀⠀⠉⠉⠙⢻⣿⣿⣿⣿⣷⡀⠀⠀⠀⠻⣿⣿⣿⣿⣿⠿⠿⠛⠁⠀⣀⣴⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀⢠⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰
 ====================================================
 BIOCORE@CRG Master of Pores 4. Preprocessing - N F  ~  version ${version}
 ====================================================
@@ -131,7 +147,7 @@ if (params.mapping != "NO") {
 if (params.demultiplexing == "NO" ) {
 	demulti_pod5_opt = "NO"
 } else {
-	demulti_pod5_opt = params.demultiplexing
+	demulti_pod5_opt = params.demulti_pod5
 }
 
 // Get models
@@ -149,14 +165,16 @@ switch(params.demultiplexing) {
 dorado_models = "${projectDir}/dorado_models/"
 
 // check GPU usage.
-if (params.GPU != "cuda11" && params.GPU != "cuda10" && params.GPU != "OFF" && params.GPU != "ON") exit 1, "Please specify cuda11, cuda10, ON or OFF if GPU processors are available. ON is legacy for cuda10"
-def gpu = (params.GPU != 'OFF' ? 'ON' : 'OFF')
+if (params.GPU != "LOCAL" && params.GPU != "cuda11" && params.GPU != "cuda10" && params.GPU != "OFF" && params.GPU != "ON") exit 1, "Please specify cuda11, cuda10, ON or OFF if GPU processors are available. ON is legacy for cuda10"
+
+def gpu = (params.GPU != 'OFF') ? 'ON' : 'OFF'
+gpu_bc = (params.GPU == 'LOCAL') ? 'LOCAL' : gpu
 
 
 // CHECK INCOMPATIBILITIES AMONG PARAMETERS
-
+annotation = ""
 if (params.ref_type == "genome") {
-    if (params.annotation != "") {
+    if (params.annotation) {
         annotation = file(params.annotation)
         if( !annotation.exists() ) exit 1, "Missing annotation file: ${params.annotation}!"
     }
@@ -168,6 +186,12 @@ include { checkInput; filterPerBarcodes; get_barcode_list; RNA2DNA; parseFinalSu
 
 def demulti_pod5_opt = homogenizeVals(demulti_pod5_opt)
 def basecall_label = (params.GPU != 'OFF' ? 'basecall_gpus' : 'big_cpus')
+
+if (demulti_pod5_opt == "ON") {
+	log.info """${colors.green}DEMULTIPLEXING POD5${colors.reset}
+	"""
+}
+
 
 //def output_bc = (demulti_pod5_opt == 'ON' ? '' : outputFast5)
 def output_bc = ''
@@ -186,6 +210,8 @@ tools["counting"] = homogenizeVals(params.counting)
 tools["discovery"] = homogenizeVals(params.discovery)
 
 // Remove basecalling and demultiplexing in case of fastq input
+if (!params.fastq) params.fastq = ""
+
 if(params.pod5 == "" && params.fastq != "") {
     basecalling = "NO"
     tools["basecalling"] = "NO"
@@ -202,31 +228,31 @@ checkTools(tools, params.progPars)
 progPars["basecalling"]["dorado-mod"] = progPars["basecalling"]["dorado-mod"] + " --emit-moves"
 
 def basecaller_pars = ["dorado" : progPars["basecalling"]["dorado"],  "dorado-duplex" : progPars["basecalling"]["dorado"], "dorado-mod" : progPars["basecalling"]["dorado-mod"] ]
-def demux_pars = [ "dorado" : progPars["demultiplexing"]["dorado"] + " " + progPars["basecalling"]["dorado"], "seqtagger":  progPars["demultiplexing"]["seqtagger"] ]
+def demux_pars = [ "dorado" : progPars["basecalling"]["dorado"] + " " + progPars["demultiplexing"]["dorado"], "seqtagger":  progPars["demultiplexing"]["seqtagger"] ]
 def mapping_pars = ["bwa": progPars["mapping"]["bwa"], "winnowmap": progPars["mapping"]["winnowmap"] + " -y",
 				"graphmap2": progPars["mapping"]["graphmap2"], "minimap2": progPars["mapping"]["minimap2"] + " -y --MD",
 				"graphmap": progPars["mapping"]["graphmap"]
 				]
 
 // INCLUDE WORKFLOWS
-include { BASECALL } from "${workflowsDir}/basecaller" addParams(gpu: gpu, output: output_bc, label: basecall_label, label2:'big_cpus', type:basecalling ,  extrapars: basecaller_pars[basecalling], models: dorado_models )
+include { BASECALL } from "${workflowsDir}/basecaller" addParams(gpu: gpu_bc, output: output_bc, label: basecall_label, label2:'big_cpus', type:basecalling ,  extrapars: basecaller_pars[basecalling], models: dorado_models )
 include { DEMULTIPLEX } from "${workflowsDir}/demultiplexer.nf" addParams(gpu: gpu, output: output_bc, label: basecall_label, type:params.demultiplexing , extrapars: demux_pars[params.demultiplexing], models: demux_models )
-include { BASECALL_DEMULTIPLEX } from "${workflowsDir}/basecaller_demultiplexer.nf" addParams(gpu: gpu, output: output_bc, label: basecall_label, label2:'big_cpus', type:params.demultiplexing , extrapars: demux_pars[params.demultiplexing], models: dorado_models  )
+include { BASECALL_DEMULTIPLEX } from "${workflowsDir}/basecaller_demultiplexer.nf" addParams(gpu: gpu_bc, output: output_bc, label: basecall_label, label2:'big_cpus', type:params.demultiplexing , extrapars: demux_pars[params.demultiplexing], models: dorado_models  )
 
-include { DEMULTI_POD5; DEMULTI_POD5_FILTER } from "${subworkflowsDir}/misc/demulti_pod5" addParams(OUTPUT: outputFast5, OUTPUTST: outputQual, LABEL: 'big_cpus', TYPE: params.demultiplexing)
+//big_cpus_retry
+include { DEMULTI_POD5; DEMULTI_POD5_FILTER } from "${subworkflowsDir}/misc/demulti_pod5" addParams(OUTPUT: outputFast5, OUTPUTST: outputQual, LABEL: 'big_cpus_retry', TYPE: params.demultiplexing)
 include { ALIGN } from "${workflowsDir}/aligner.nf" addParams(output: output_bc, label: 'big_mem_cpus', type: params.mapping , extrapars: mapping_pars[params.mapping] )
 
 
 // INCLUDE MODULES
-include { GET_VERSION as NANOFILT_VER; FILTER as NANOFILT_FILTER} from "${subworkflowsDir}/trimming/nanofilt" addParams(EXTRAPARS: progPars["filtering"]["nanofilt"])
+include { GET_VERSION as SEQKIT_VER; FILTER as SEQKIT_FILTER} from "${subworkflowsDir}/trimming/seqkit" addParams(EXTRAPARS: progPars["filtering"]["seqkit"])
 include { GET_VERSION as NANOQ_VER; FILTER as NANOQ_FILTER} from "${subworkflowsDir}/trimming/nanoq" addParams(EXTRAPARS: progPars["filtering"]["nanoq"])
 include { REPORT as NANOQ_REPORT} from "${subworkflowsDir}/trimming/nanoq" addParams(EXTRAPARS: "-t 5 -vvv")
 
 include { SORT as SAMTOOLS_SORT } from "${subworkflowsDir}/misc/samtools" addParams(LABEL: 'big_cpus_retry', OUTPUT:outputMapping)
 include { INDEX as SAMTOOLS_INDEX } from "${subworkflowsDir}/misc/samtools" addParams(OUTPUT:outputMapping)
 include { GET_VERSION as SAMTOOLS_VERSION; CAT as SAMTOOLS_CAT } from "${subworkflowsDir}/misc/samtools"
-include { MOP_QC as NANOPLOT_QC } from "${subworkflowsDir}/qc/nanoplot" addParams(LABEL: 'big_cpus_ignore')
-include { GET_VERSION as NANOPLOT_VER } from "${subworkflowsDir}/qc/nanoplot"
+include { QC as NANOSTAT_QC } from "${subworkflowsDir}/qc/nanostat" addParams(LABEL: 'big_cpus_ignore')
 include { GET_VERSION as NANOCOUNT_VER } from "${subworkflowsDir}/read_count/nanocount"
 include { COUNT as NANOCOUNT } from "${subworkflowsDir}/read_count/nanocount" addParams(LABEL: 'big_mem', EXTRAPARS: progPars["counting"]["nanocount"], OUTPUT:outputCounts)
 include { COUNT_AND_ANNO as HTSEQ_COUNT } from "${subworkflowsDir}/read_count/htseq" addParams(CONTAINER:"biocorecrg/htseq:30e9e9c", EXTRAPARS: progPars["counting"]["htseq"], OUTPUT:outputCounts, LABEL:'big_cpus')
@@ -236,7 +262,7 @@ include { GET_VERSION as BAMBU_VER } from "${subworkflowsDir}/assembly/bambu"
 include { ASSEMBLE as BAMBU_ASSEMBLE } from "${subworkflowsDir}/assembly/bambu" addParams(EXTRAPARS: progPars["discovery"]["bambu"], OUTPUT:outputAssembly, LABEL:'big_mem_cpus')
 
 include { GET_VERSION as ISOQUANT_VER } from "${subworkflowsDir}/assembly/isoquant"
-include { ASSEMBLE as ISOQUANT_ASSEMBLE } from "${subworkflowsDir}/assembly/isoquant" addParams(EXTRAPARS: progPars["discovery"]["isoquant"], OUTPUT:outputAssembly, LABEL:'big_mem_cpus', CONTAINER:'quay.io/biocontainers/isoquant:3.2.0--hdfd78af_0')
+include { ASSEMBLE as ISOQUANT_ASSEMBLE } from "${subworkflowsDir}/assembly/isoquant" addParams(EXTRAPARS: "--data_type nanopore  " + progPars["discovery"]["isoquant"], OUTPUT:outputAssembly, LABEL:'big_time_cpus', CONTAINER:'quay.io/biocontainers/isoquant:3.2.0--hdfd78af_0')
 
 include { REPORT as MULTIQC; GET_VERSION as MULTIQC_VER } from "${subworkflowsDir}/reporting/multiqc" addParams(EXTRAPARS: "-c ${config_report.getName()}", OUTPUT:outputMultiQC)
 include { concatenateFastQFiles} from "${local_modules}" addParams(OUTPUT:outputFastq)
@@ -258,8 +284,8 @@ workflow SEQFILTER {
     main:
     // Optional fastq filtering
     switch(params.filtering) {
-        case "nanofilt":
-            bc_fastq = NANOFILT_FILTER(raw_bc_fastq)
+        case "seqfilter":
+            bc_fastq = SEQKIT_FILTER(raw_bc_fastq)
             break;
         case "nanoq":
             bc_fastq = NANOQ_FILTER(raw_bc_fastq)
@@ -353,6 +379,7 @@ workflow ASSEMBLY {
 
     take:
         sorted_alns
+        aln_indexes
         reference
         annotation
 
@@ -465,8 +492,8 @@ workflow {
 		}
 
 		// FILTER BARCODES FOR FASTQ
-		if (params.barcodes != "") {
-                	barcodes_to_include = get_barcode_list(params.barcodes)
+		if (params.barcodes) {
+                barcodes_to_include = get_barcode_list(params.barcodes)
 				log.info "*********************************************************************"
 				log.info "*************** Selecting only the requested barcodes ***************"
 				log.info "*********************************************************************"
@@ -480,12 +507,21 @@ workflow {
 			// DEMULTI POD5. POD5 are not basecalled so they just need to be split
 			if (demulti_pod5_opt == "ON") {
 				grouped_pod5 = reshapeSamples(pod5_4_analysis)
-				if (params.barcodes == "") {
+				if (!params.barcodes) {
 					DEMULTI_POD5(bc_demux_stats, grouped_pod5)
 				} else {
-					// FILTER BARCODES FOR FAST5
-     				barcodes_file = channel.fromPath(params.barcodes, checkIfExists:true)
-					DEMULTI_POD5_FILTER(bc_demux_stats, grouped_pod5, barcodes_file)
+					// FILTER BARCODES FOR POD5
+                	my_barcodes = get_barcode_list(params.barcodes).map{
+                		id = it.split("---")[0]
+                		[id, it]
+                	}.collectFile { item ->
+        				[ "${item[0]}___barcodes.txt", item[1] + '\n' ]
+    				}.map {
+    					id = "${it.getSimpleName()}".split("___")[0]
+    					[id, it]
+    				}
+
+					DEMULTI_POD5_FILTER(bc_demux_stats, grouped_pod5, my_barcodes)
 				}
 			}
 		}
@@ -530,7 +566,9 @@ workflow {
       stats_aln = joinAlnStats(aln_stats.map{ it[1]}.collect())
       multiqc_data = multiqc_data.mix(stats_aln)
     // Perform NanoPlot on sorted bams
-       nanoplot_qcs = NANOPLOT_QC(sorted_alns)
+       nanoplot_qcs = NANOSTAT_QC(sorted_alns)
+       multiqc_data = multiqc_data.mix(nanoplot_qcs.map{ it[1]})
+
     }
 
     // Converting BAM to CRAM and
@@ -550,7 +588,7 @@ workflow {
 
     // REVISE THIS
     if (discovery != "NO") {
-	    ASSEMBLY(sorted_alns, reference, params.annotation)
+	    ASSEMBLY(sorted_alns, aln_indexes, reference, params.annotation)
 	}
 
     // Perform MULTIQC report
@@ -571,7 +609,7 @@ workflow.onComplete {
 
     def text = final_message("MOP4")
     println text
-    if (params.slackhook != "") {
+    if (params.slackhook) {
        notify_slack(text, params.slackhook)
     }
 }
@@ -580,7 +618,7 @@ workflow.onComplete {
 * Mail notification
 */
 
-if (params.email == "yourmail@yourdomain" || params.email == "") {
+if (params.email == "yourmail@yourdomain" || !params.email) {
     log.info 'Skipping the email\n'
 }
 else {
@@ -588,6 +626,6 @@ else {
 
     workflow.onComplete {
      def msg = final_message("MOP4")
-        sendMail(to: params.email, subject: "MOP4 - preprocess execution", body: msg, attach: "${outputMultiQC}/MoP3-pipeline_multiqc_report.html")
+        sendMail(to: params.email, subject: "MOP4 - preprocess execution", body: msg, attach: "${outputMultiQC}/MOP4-pipeline_multiqc_report.html")
     }
 }
