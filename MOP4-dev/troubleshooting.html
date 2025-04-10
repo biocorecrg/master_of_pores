@@ -85,7 +85,7 @@
 <span id="home-page-troubleshooting"></span><h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h1>
 <section id="failure-in-downloading-singularity-images">
 <h2>Failure in downloading singularity images<a class="headerlink" href="#failure-in-downloading-singularity-images" title="Link to this heading"></a></h2>
-<p>Sometimes we have problems in downloading the singularity images. You can pre-download them by using the script <strong>get_singularity.py</strong> in <strong>MOP4/BioNextflow/scripts</strong>. You need to inspect your pipeline and store the results as here:</p>
+<p>Sometimes we have problems in downloading the singularity images. You can pre-download them by using the script <strong>get_singularity.py</strong> in <strong>master_of_pores/BioNextflow/scripts</strong>. You need to inspect your pipeline and store the results as here:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow inspect -params-file params.yaml -profile slurm mop_preprocess.nf &gt; inspect.json</span>
 </pre></div>
 </div>
