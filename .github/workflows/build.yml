@@ -12,7 +12,7 @@ jobs:
   build:
     name: mop4 ci
     # This job runs on Linux
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     timeout-minutes: 90
     strategy:
       fail-fast: false

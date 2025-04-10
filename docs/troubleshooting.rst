@@ -10,7 +10,7 @@ Troubleshooting
 
 Failure in downloading singularity images
 ================================================================
-Sometimes we have problems in downloading the singularity images. You can pre-download them by using the script **get_singularity.py** in **MOP4/BioNextflow/scripts**. You need to inspect your pipeline and store the results as here:
+Sometimes we have problems in downloading the singularity images. You can pre-download them by using the script **get_singularity.py** in **master_of_pores/BioNextflow/scripts**. You need to inspect your pipeline and store the results as here:
 
 
 .. code-block:: console

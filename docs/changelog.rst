@@ -20,23 +20,6 @@ Removed mop_tail and added mop_dna and mop_utils
    * Dorado duplex is supported
    * Dorado-mod (i.e. with --emit-moves) is added 
 
-* mop_mod
-   * Removed Tombo, and nanocompore
-   * Replaced modphred with modkit
-   * Replaced nanopolish with f5C
-   * Added nanoRMS
-   * Added baseQ
-   * Added m6Anet
-
-* mop_tail
-   * the whole workflow is removed
-
-* mop_dna: new workflow for DNA variants
-   * Added clairS, clairS_TO and clair3 for SNPs
-   * Added sniffles for structural variants
-   * Added snpEff for annotation
-   * Added clinvar for further annotation
-
 * mop_utils: useful scripts for MOP
    * Added split_pod5.nf for splitting large pod5 files in smaller chunks
 
