@@ -188,6 +188,20 @@ The sample id is given by either the folder containing the fast5 files or the ba
 
    The naming convention of the different barcodes is decided by each tool, so **seqtagger** will produce **bc_1**, **bc_2**, etc. while guppy will produce **barcode01**, **barcode02**, etc.
 
+PolyA tail prediction
+=====================
+
+You can add the dorado parameters to predict polyA tail in the ``params.yaml`` file.
+
+.. code-block:: yaml
+
+   # Program params
+   progPars:
+     basecalling:
+       dorado: "sup --estimate-poly-a"
+       dorado-duplex: "sup --estimate-poly-a"
+       dorado-mod: "sup,m6A_DRACH --estimate-poly-a"
+
 
 Results
 ====================
