@@ -235,8 +235,8 @@ You will get this as output.
    
 .. Note:: 
    The latest versions of Nextflow show a future deprecation of `addParams()`. For now just ignore this warning.
-   .. code-block:: console
-      WARN: Include with `addParams()` is deprecated -- pass params as a workflow or process input instead
+.. code-block:: console
+   WARN: Include with `addParams()` is deprecated -- pass params as a workflow or process input instead
 
 
 
