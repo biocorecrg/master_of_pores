@@ -1,28 +1,23 @@
-name: CI
+name: mop4-CI
 # When this workflow is triggered
 on:
-  workflow_dispatch:
   push:
     paths-ignore:
-      - 'assets/**'
-      - '.github/workflows/**'
       - 'docs/**'
   pull_request:
     paths-ignore:
-      - 'assets/**'
-      - '.github/workflows/**'
       - 'docs/**'
 
 jobs:
   build:
-    name: mop3 ci
+    name: mop4 ci
     # This job runs on Linux
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
-        java_version: [11]
+        java_version: [21]
 
     steps:
       - name: Delete huge unnecessary tools folder
@@ -34,11 +29,10 @@ jobs:
         run: env | sort
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
          token: ${{ github.token }}
-         ref: ${{ github.ref }}
-         repository: biocorecrg/master_of_pores
+         repository: biocorecrg/MOP4
          fetch-depth: 1
          submodules: true
 
@@ -49,16 +43,11 @@ jobs:
          distribution: 'adopt'
          architecture: x64
 
-      - name: MOP3
+      - name: MOP4
         run: |
           curl -fsSL get.nextflow.io | bash
-          bash INSTALL.sh
           cd mop_preprocess
-          ../nextflow run mop_preprocess.nf -params-file params.f5.yaml -with-docker -profile ci
-          cd ../mop_mod
-          ../nextflow run mop_mod.nf -params-file params.yaml -with-docker -profile ci
-          cd ../mop_tail
-           ../nextflow run mop_tail.nf -with-docker  -params-file params.yaml -profile ci
+          ../nextflow run mop_preprocess.nf -params-file params.yaml -with-docker -profile ci
 
         env:
           NXF_ANSI_LOG: false
