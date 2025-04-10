@@ -1,7 +1,7 @@
 #step	tool	extrapars
 basecalling	dorado	"rna002_70bps_hac@v3"
 basecalling	guppy	""
-demultiplexing	seqtagger	"-k b100"
+demultiplexing	seqtagger	"-k b04_RNA002"
 demultiplexing	deeplexicon	""
 demultiplexing	guppy	""
 filtering	nanofilt	""
