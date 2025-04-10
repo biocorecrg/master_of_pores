@@ -26,12 +26,11 @@ About Master of Pores 4
 
 Master of Pores 4 is a collection of pipelines written in Nextflow DSL2 for the analysis of Nanopore data. It can handle reads from direct RNAseq, cDNAseq, DNAseq etc.
 
-The software is composed by four pipelines:
+Master of Pores is a pipeline written in Nextflow DSL2 for the analysis of Nanopore data. It can handle reads from direct RNAseq, cDNAseq, DNAseq etc.
 
-   - mop_preprocess: preprocessing of input data. Basecalling, demultiplexing, alignment, read counts, and more!
-   - mop_mod: detecting chemical modifications. It reads the output directly from mop_preprocess
-   - mop_tail: estimating polyA tail size. It reads the output directly from mop_preprocess
-   - mop_consensus: it generates a consensus from the predictions from mop_mod. It reads the output directly from mop_mod
+The package is currently composed of one pipeline, more will be soon released:
+
+- mop_preprocess: preprocessing of raw data
 
 The name is inspired by Metallica's `Master Of Puppets <https://www.youtube.com/watch?v=S7blkui3nQc>`_
 
