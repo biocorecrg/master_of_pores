@@ -165,7 +165,7 @@ switch(params.demultiplexing) {
 dorado_models = "${projectDir}/dorado_models/"
 
 // check GPU usage.
-if (params.GPU != "LOCAL" && params.GPU != "cuda11" && params.GPU != "cuda10" && params.GPU != "OFF" && params.GPU != "ON") exit 1, "Please specify cuda11, cuda10, ON or OFF if GPU processors are available. ON is legacy for cuda10"
+if (params.GPU != "LOCAL" && params.GPU != "cuda11" && params.GPU != "cuda10" && params.GPU != "OFF" && params.GPU != "ON") exit 1, "Please specify cuda11, cuda10, ON, LOCAL or OFF if GPU processors are available. ON is legacy for cuda10"
 
 def gpu = (params.GPU != 'OFF') ? 'ON' : 'OFF'
 gpu_bc = (params.GPU == 'LOCAL') ? 'LOCAL' : gpu
