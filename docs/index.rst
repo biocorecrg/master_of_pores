@@ -30,9 +30,10 @@ Contents:
    about
    install
    mop_preprocess
-    mop_utils
+   mop_utils
    reporting
    awsbatch
    changelog
    ci
    troubleshooting
+   tutorial
