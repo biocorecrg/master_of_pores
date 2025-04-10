@@ -238,48 +238,18 @@ You will get this as output.
 .. code-block:: console
    WARN: Include with `addParams()` is deprecated -- pass params as a workflow or process input instead
 
+The output folders will be in `outfolder` as indicated by the parameter `output`. Inside, you have the following list of directories:
 
+- alignment: sorted bam files and their indexes. 
+- assigned: tabular file with index id and assigned chromosome or transcript
+- counts: read counts per feature (transcript or gene)
+- cram_files: sorted, subsampled cram files and their indexes.  
+- report: multiq report
 
-Starting from pod5 (linux local)
+Starting from pod5 (linux or mac local)
 ======================
 
 
-Ciao
-  
-.. code-block:: console
-
-   nextflow run mop_preprocess.nf -with-singularity -params-file params.yaml > log.txt
-
-
-You can run the pipeline in the background by adding the nextflow parameter **-bg**:
-
-.. code-block:: console
-
-   nextflow run mop_preprocess.nf -params-file params.yaml -with-singularity -bg > log.txt
-
-You can change the parameters either by changing the yaml config file or by feeding the parameters via command line:
-
-.. code-block:: console
-
-   nextflow run mop_preprocess.nf -with-singularity -params-file params.yaml -bg --output test2 > log.txt
-
-
-Starting from pod5 (mac, local)
-======================
-
-The command line options for each tool used in the pipeline are stored within in the same yaml file with other parameters. The section is called **progPars**. Here is an example:
-
-.. literalinclude:: ../mop_preprocess/params.yaml
-   :language: yaml
-   :emphasize-lines: 44-65
-
-The second level indicates the processing step as **basecalling** or **demultiplexing** etc, while the third indicates the tool. Finally, you have the command specific command line between quotation marks.
-
-.. note::
-   You can indicate the models to be used for basecalling with dorado or dorardo-duplex as "sup,m6A_DRACH". The pipeline will try to download before and then to perform the basecalling. In case you want a specific model version you need to indicate the base simplex model as "rna002_70bps_hac@v3,pseU". You can see `here <https://github.com/nanoporetech/dorado?tab=readme-ov-file#dna-models>`_ the list of models and modifications.
-
-.. tip::
-   You don't need to specify the whole path for the models of seqtagger, just the name of the model will be enough
 
 
 
