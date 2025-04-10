@@ -19,7 +19,7 @@ To install the pipeline you need to download the repo:
 
 .. code-block:: console
 
-   git clone --depth 1 --recurse-submodules https://github.com/biocorecrg/MOP4.git
+   git clone --depth 1 --recurse-submodules https://github.com/biocorecrg/master_of_pores.git
 
 
 Testing
@@ -29,7 +29,7 @@ Testing
 
   cd mop_preprocess
 
-  nextflow run mop_preprocess.nf -params-file params.f5.yaml -with-singularity -bg -profile local > log
+  nextflow run mop_preprocess.nf -params-file params.pod5.yaml -with-singularity -bg -profile local > log
 
 .. tip::
 
