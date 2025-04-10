@@ -94,6 +94,6 @@ At this point, you can run the pipeline, indicating the profile m1mac in the com
 
 .. code-block:: console
 
-   nextflow run run mop_preprocess.nf -params-file params.f5.yaml -bg -with-docker -profile m1mac > log.txt 
+   nextflow run run mop_preprocess.nf -params-file params.pod5.yaml -bg -with-docker -profile m1mac > log.txt 
 
   
