@@ -15,7 +15,7 @@ granularity: 1
 barcodes: ""
 
 # Needed for fastq input
-#fastq: ""
+fastq: ""
 
 # Common
 reference: "${projectDir}/../anno/curlcake_constructs.fasta.gz"
