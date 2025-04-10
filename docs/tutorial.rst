@@ -84,10 +84,27 @@ Then there is a section of `Actions`. You can either specify the tool for that a
 - cram_conv: convertion of bam to cram
 - subsampling_cram: subsample the bam input for generating cram
 
-Then a new section is for specifying the `output` folder, and if you want to receive a mail or a slack message at the end of the execution. 
-You need a configured mail server for sending an email and a `Slack hook <https://api.slack.com/messaging/webhooks>`_ 
+Then a new section is for specifying the `output` folder, and if you want to receive a mail or a Slack message at the end of the execution. 
+You need a configured mail server for sending an `email ≤https://nextflow.io/docs/latest/notifications.html#mail-configuration>`_ and a `Slack hook <https://api.slack.com/messaging/webhooks>`_ 
 
-Starting from pod5 (linux local and HPC)
+Finally, there is a section about command line parameters for each tool used.
+
+.. code-block:: yaml
+
+  # Program params
+  ProgPars:
+  basecalling:
+    dorado: "sup"
+    dorado-duplex: "sup"
+    dorado-mod: "sup,m6A_DRACH"
+  demultiplexing:
+  ...
+
+# Program params
+
+
+
+Starting from pod5 (linux local)
 ======================
 
 
@@ -120,7 +137,7 @@ The command line options for each tool used in the pipeline are stored within in
    :language: yaml
    :emphasize-lines: 44-65
 
-The second level indicates the processing step as **basecalling** or **demultiplexing** etc, while the third indicates the tool. Finally you have the command specific command line between quotation marks.
+The second level indicates the processing step as **basecalling** or **demultiplexing** etc, while the third indicates the tool. Finally, you have the command specific command line between quotation marks.
 
 .. note::
    You can indicate the models to be used for basecalling with dorado or dorardo-duplex as "sup,m6A_DRACH". The pipeline will try to download before and then to perform the basecalling. In case you want a specific model version you need to indicate the base simplex model as "rna002_70bps_hac@v3,pseU". You can see `here <https://github.com/nanoporetech/dorado?tab=readme-ov-file#dna-models>`_ the list of models and modifications.
