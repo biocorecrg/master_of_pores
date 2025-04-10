@@ -35,10 +35,10 @@ Contents:
    mop_preprocess
    mop_mod
    mop_consensus
-   mop_tail
+   mop_dna
+   mop_utils
    reporting
    awsbatch
-   benchmark
    changelog
    ci
    troubleshooting
