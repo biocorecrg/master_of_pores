@@ -94,14 +94,14 @@
 </pre></div>
 </div>
 <p>To install the pipeline you need to download the repo:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone --depth 1 --recurse-submodules https://github.com/biocorecrg/MOP4.git</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone --depth 1 --recurse-submodules https://github.com/biocorecrg/master_of_pores.git</span>
 </pre></div>
 </div>
 <section id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h2>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd mop_preprocess</span>
 
-<span class="go">nextflow run mop_preprocess.nf -params-file params.f5.yaml -with-singularity -bg -profile local &gt; log</span>
+<span class="go">nextflow run mop_preprocess.nf -params-file params.pod5.yaml -with-singularity -bg -profile local &gt; log</span>
 </pre></div>
 </div>
 <div class="admonition tip">
