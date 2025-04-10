@@ -8,7 +8,6 @@ params.EXTRAPARS = ""
 // MODULES
 // MOP_PREPROCESS
 
-
 process extract_demultiplexed_fast5_readucks {
 
     tag "${ idfile }"

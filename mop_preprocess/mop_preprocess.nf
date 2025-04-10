@@ -187,7 +187,7 @@ include { checkInput; filterPerBarcodes; get_barcode_list; RNA2DNA; parseFinalSu
 def demulti_pod5_opt = homogenizeVals(demulti_pod5_opt)
 def basecall_label = (params.GPU != 'OFF' ? 'basecall_gpus' : 'big_cpus')
 
-if (demulti_pod5_opt == "ON") {
+if (demulti_pod5_opt == "ON" && params.pod5) {
 	log.info """${colors.green}DEMULTIPLEXING POD5${colors.reset}
 	"""
 }
