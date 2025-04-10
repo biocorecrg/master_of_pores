@@ -23,6 +23,8 @@ reference: "${projectDir}/../anno/yeast_rRNA_ref.fa.gz"
 ## Can be transcriptome / genome
 ref_type: "transcriptome"
 annotation: ""
+
+# Actions
 ## Can be nanoq / nanofilt
 filtering: "nanoq"
 ## Can be graphmap / graphmap2 / minimap2 / winnowmap / bwa / NO
@@ -34,6 +36,7 @@ discovery: "NO"
 ## Convert bam to cram
 cram_conv: "YES"
 subsampling_cram: 50
+
 ## Output and messaging
 slackhook: ""
 email: ""
