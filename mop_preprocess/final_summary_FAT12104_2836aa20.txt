@@ -1,0 +1,17 @@
+instrument=MN40194
+position=
+flow_cell_id=FAT12104
+sample_id=cDNA12104
+protocol_group_id=Nano3Pseq-Bacteria
+protocol=sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-DCS109
+protocol_run_id=ed70dea9-87ca-472a-8e4d-9f971b5eeccc
+acquisition_run_id=2836aa2020fcc8bc703144ad7edf048695fae26e
+started=2022-07-15T18:10:08.258110+02:00
+acquisition_stopped=2022-07-18T09:45:10.309970+02:00
+processing_stopped=2022-07-18T09:45:11.327982+02:00
+basecalling_enabled=0
+sequencing_summary_file=sequencing_summary_FAT12104_2836aa20.txt
+fast5_files_in_final_dest=34
+fast5_files_in_fallback=0
+fastq_files_in_final_dest=0
+fastq_files_in_fallback=0

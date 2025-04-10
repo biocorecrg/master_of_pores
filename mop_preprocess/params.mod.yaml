@@ -1,25 +1,25 @@
 # Parameters
 
 # Needed for pod5 input
-pod5: ""
+pod5: "../data/pod5/dMOD/**/*.pod5"
 ## Can be OFF / cuda10 / cuda11.
 GPU: "OFF"
 # Basecalling can be either NO, dorado, dorado-mod or dorado-duplex
-basecalling: "NO"
+basecalling: "dorado-mod"
 ## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)
 #demultiplexing: "seqtagger"
-demultiplexing: "dorado"
-demulti_pod5: "ON"
+demultiplexing: "NO"
+demulti_pod5: "NO"
 ### Number of fast5 basecalled per parallel job
 granularity: 1
 ### File with the list of accepted barcodes. It can be empty
 barcodes: ""
 
 # Needed for fastq input
-fastq: "${projectDir}/../data/fastq/*.fq.gz"
+fastq: ""
 
 # Common
-reference: "${projectDir}/../anno/yeast_rRNA_ref.fa.gz"
+reference: "${projectDir}/../anno/curlcake_constructs.fasta.gz"
 ## Can be transcriptome / genome
 ref_type: "transcriptome"
 annotation: ""
@@ -34,29 +34,30 @@ discovery: "NO"
 ## Convert bam to cram
 cram_conv: "YES"
 subsampling_cram: 50
-## Output and messaging
+## Output and notifications
 slackhook: ""
 email: ""
 output: "./outfolder/"
+
 
 # Program params
 progPars:
   basecalling:
     dorado: "sup"
-    dorado-duplex: "sup"
     dorado-mod: "sup,m6A_DRACH"
+    dorado-duplex: "sup"
   demultiplexing:
     seqtagger: "-k b100"
     dorado: ""
   filtering:
-    seqkit: ""
+    nanofilt: ""
     nanoq: ""
   mapping:
     graphmap: ""
     graphmap2: "-x rnaseq"
     minimap2: "-y -uf -ax splice -k14"
     bwa: ""
-    winnowmap: ""
+  winnowmap: ""
   counting:
     htseq: "-a 0"
     nanocount: ""

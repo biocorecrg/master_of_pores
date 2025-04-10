@@ -1,14 +1,13 @@
 # Parameters
 
 # Needed for pod5 input
-pod5: ""
+pod5: "../data/pod5/dMOD/**/*.pod5"
 ## Can be OFF / cuda10 / cuda11.
-GPU: "OFF"
+GPU: "cuda11"
 # Basecalling can be either NO, dorado, dorado-mod or dorado-duplex
-basecalling: "NO"
-## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)
-#demultiplexing: "seqtagger"
-demultiplexing: "dorado"
+basecalling: "dorado"
+## Demultiplexing can be either NO dorado (for DNA) / seqtagger (for RNA)
+demultiplexing: "NO"
 demulti_pod5: "ON"
 ### Number of fast5 basecalled per parallel job
 granularity: 1
@@ -16,10 +15,10 @@ granularity: 1
 barcodes: ""
 
 # Needed for fastq input
-fastq: "${projectDir}/../data/fastq/*.fq.gz"
+#fastq: ""
 
 # Common
-reference: "${projectDir}/../anno/yeast_rRNA_ref.fa.gz"
+reference: "${projectDir}/../anno/curlcake_constructs.fasta.gz"
 ## Can be transcriptome / genome
 ref_type: "transcriptome"
 annotation: ""
@@ -37,17 +36,17 @@ subsampling_cram: 50
 ## Output and messaging
 slackhook: ""
 email: ""
-output: "./outfolder/"
+output: "./outfolder_mod2"
 
 # Program params
 progPars:
   basecalling:
     dorado: "sup"
     dorado-duplex: "sup"
-    dorado-mod: "sup,m6A_DRACH"
+    dorado-mod: "sup,m6A_DRACH --estimate-poly-a"
   demultiplexing:
-    seqtagger: "-k b100"
-    dorado: ""
+    seqtagger: "-k b04_RNA004"
+    dorado: "--kit-name  EXP-NBD104"
   filtering:
     seqkit: ""
     nanoq: ""
@@ -62,3 +61,4 @@ progPars:
     nanocount: ""
   discovery:
     bambu: ""
+    isoquant: ""
