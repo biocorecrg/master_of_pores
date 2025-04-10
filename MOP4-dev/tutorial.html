@@ -159,6 +159,8 @@ If you are on a Mac you can only install <a class="reference external" href="htt
 <span class="c1">## Can be transcriptome / genome</span>
 <span class="nt">ref_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;transcriptome&quot;</span>
 <span class="nt">annotation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+
+<span class="c1"># Actions</span>
 <span class="c1">## Can be nanoq / nanofilt</span>
 <span class="nt">filtering</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nanoq&quot;</span>
 <span class="c1">## Can be graphmap / graphmap2 / minimap2 / winnowmap / bwa / NO</span>
@@ -170,7 +172,8 @@ If you are on a Mac you can only install <a class="reference external" href="htt
 <span class="c1">## Convert bam to cram</span>
 <span class="nt">cram_conv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;YES&quot;</span>
 <span class="nt">subsampling_cram</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
-<span class="c1">## Output and messaging</span>
+
+<span class="c1"># Output and messaging</span>
 <span class="nt">slackhook</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
 <span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
 <span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./outfolder/&quot;</span>
@@ -205,8 +208,23 @@ If you are on a Mac you can only install <a class="reference external" href="htt
 <span class="nt">fastq</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${projectDir}/../data/fastq/*.fq.gz&quot;</span>
 </pre></div>
 </div>
-<p>We then need to specify the reference sequence in FASTA format and whether this is a transcriptome or a genome. In case is a genome you need to pass also the annotation in GTF format.
-Then there is a section of <cite>Actions</cite>. You can either specify the tool for that action or turn it off using “NO” as a value.</p>
+<p>We then need to specify the reference sequence in FASTA format and whether this is a transcriptome or a genome. In case is a genome you need to pass also the annotation in GTF format.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Common</span>
+<span class="nt">reference</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${projectDir}/../anno/yeast_rRNA_ref.fa.gz&quot;</span>
+<span class="c1">## Can be transcriptome / genome</span>
+<span class="nt">ref_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;transcriptome&quot;</span>
+<span class="nt">annotation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Then there is a section of <cite>Actions</cite>. You can either specify the tool for that action or turn it off using “NO” as a value.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="c1"># Actions</span>
+<span class="c1">## Can be nanoq / nanofilt</span>
+<span class="nt">filtering</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nanoq&quot;</span>
+<span class="c1">## Can be graphmap / graphmap2 / minimap2 / winnowmap / bwa / NO</span>
+<span class="nt">mapping</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;minimap2&quot;</span>
+<span class="nn">...</span>
+</pre></div>
+</div>
 <ul class="simple">
 <li><p>filtering: modifying fastq</p></li>
 <li><p>mapping: aligning fastq</p></li>

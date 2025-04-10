@@ -77,7 +77,27 @@ The first part is for pod5 inputs, so we can ignore it. We can check the `# Need
   fastq: "${projectDir}/../data/fastq/*.fq.gz"
 
 We then need to specify the reference sequence in FASTA format and whether this is a transcriptome or a genome. In case is a genome you need to pass also the annotation in GTF format.
+
+.. code-block:: yaml
+
+   # Common
+   reference: "${projectDir}/../anno/yeast_rRNA_ref.fa.gz"
+   ## Can be transcriptome / genome
+   ref_type: "transcriptome"
+   annotation: ""
+
 Then there is a section of `Actions`. You can either specify the tool for that action or turn it off using "NO" as a value.
+
+
+
+.. code-block:: yaml
+
+    # Actions
+   ## Can be nanoq / nanofilt
+   filtering: "nanoq"
+   ## Can be graphmap / graphmap2 / minimap2 / winnowmap / bwa / NO
+   mapping: "minimap2"
+   ...
 
 - filtering: modifying fastq
 - mapping: aligning fastq
