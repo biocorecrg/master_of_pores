@@ -9,7 +9,7 @@ on:
       - 'docs/**'
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu latest
     steps:
     - id: deployment
       uses: sphinx-notes/pages@v3
@@ -27,9 +27,6 @@ jobs:
       with:
         ref: gh-pages
         path: gh-pages
-    - name: Copy file
-      run: |
-        cp ./assets/docs/index.html ./gh-pages/
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       with:
