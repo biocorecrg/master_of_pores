@@ -54,8 +54,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">TUTORIAL</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installing-the-tool-and-the-dependencies">Installing the tool and the dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#starting-from-fastq">Starting from fastq</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#starting-from-pod5-linux-local">Starting from pod5 (linux local)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#starting-from-pod5-mac-local">Starting from pod5 (mac, local)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-from-pod5-linux-or-mac-local">Starting from pod5 (linux or mac local)</a></li>
 </ul>
 </li>
 </ul>
@@ -360,100 +359,17 @@ You need a configured mail server for sending an <a class="reference external" h
 <p class="admonition-title">Note</p>
 <p>The latest versions of Nextflow show a future deprecation of <cite>addParams()</cite>. For now just ignore this warning.</p>
 </div>
+<p>The output folders will be in <cite>outfolder</cite> as indicated by the parameter <cite>output</cite>. Inside, you have the following list of directories:</p>
+<ul class="simple">
+<li><p>alignment: sorted bam files and their indexes.</p></li>
+<li><p>assigned: tabular file with index id and assigned chromosome or transcript</p></li>
+<li><p>counts: read counts per feature (transcript or gene)</p></li>
+<li><p>cram_files: sorted, subsampled cram files and their indexes.</p></li>
+<li><p>report: multiq report</p></li>
+</ul>
 </section>
-<section id="starting-from-pod5-linux-local">
-<h2>Starting from pod5 (linux local)<a class="headerlink" href="#starting-from-pod5-linux-local" title="Link to this heading"></a></h2>
-<p>Ciao</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -with-singularity -params-file params.yaml &gt; log.txt</span>
-</pre></div>
-</div>
-<p>You can run the pipeline in the background by adding the nextflow parameter <strong>-bg</strong>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -params-file params.yaml -with-singularity -bg &gt; log.txt</span>
-</pre></div>
-</div>
-<p>You can change the parameters either by changing the yaml config file or by feeding the parameters via command line:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -with-singularity -params-file params.yaml -bg --output test2 &gt; log.txt</span>
-</pre></div>
-</div>
-</section>
-<section id="starting-from-pod5-mac-local">
-<h2>Starting from pod5 (mac, local)<a class="headerlink" href="#starting-from-pod5-mac-local" title="Link to this heading"></a></h2>
-<p>The command line options for each tool used in the pipeline are stored within in the same yaml file with other parameters. The section is called <strong>progPars</strong>. Here is an example:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parameters</span>
-
-<span class="c1"># Needed for pod5 input</span>
-<span class="nt">pod5</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-<span class="c1">## Can be OFF / cuda10 / cuda11.</span>
-<span class="nt">GPU</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;OFF&quot;</span>
-<span class="c1"># Basecalling can be either NO, dorado, dorado-mod or dorado-duplex</span>
-<span class="nt">basecalling</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NO&quot;</span>
-<span class="c1">## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)</span>
-<span class="c1">#demultiplexing: &quot;seqtagger&quot;</span>
-<span class="nt">demultiplexing</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dorado&quot;</span>
-<span class="nt">demulti_pod5</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ON&quot;</span>
-<span class="c1">### Number of fast5 basecalled per parallel job</span>
-<span class="nt">granularity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="c1">### File with the list of accepted barcodes. It can be empty</span>
-<span class="nt">barcodes</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-
-<span class="c1"># Needed for fastq input</span>
-<span class="nt">fastq</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${projectDir}/../data/fastq/*.fq.gz&quot;</span>
-
-<span class="c1"># Common</span>
-<span class="nt">reference</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${projectDir}/../anno/yeast_rRNA_ref.fa.gz&quot;</span>
-<span class="c1">## Can be transcriptome / genome</span>
-<span class="nt">ref_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;transcriptome&quot;</span>
-<span class="nt">annotation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-<span class="c1">## Can be nanoq / nanofilt</span>
-<span class="nt">filtering</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nanoq&quot;</span>
-<span class="c1">## Can be graphmap / graphmap2 / minimap2 / winnowmap / bwa / NO</span>
-<span class="nt">mapping</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;minimap2&quot;</span>
-<span class="c1">## Can be nanocount for transcriptome / htseq for genome</span>
-<span class="nt">counting</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nanocount&quot;</span>
-<span class="c1">## Can be NO / bambu / isoquant</span>
-<span class="nt">discovery</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NO&quot;</span>
-<span class="c1">## Convert bam to cram</span>
-<span class="nt">cram_conv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;YES&quot;</span>
-<span class="nt">subsampling_cram</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
-<span class="c1">## Output and messaging</span>
-<span class="nt">slackhook</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-<span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-<span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./outfolder/&quot;</span>
-
-<span class="c1"># Program params</span>
-<span class="nt">progPars</span><span class="p">:</span>
-<span class="hll"><span class="w">  </span><span class="nt">basecalling</span><span class="p">:</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">dorado-duplex</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">dorado-mod</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup,m6A_DRACH&quot;</span>
-</span><span class="hll"><span class="w">  </span><span class="nt">demultiplexing</span><span class="p">:</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">seqtagger</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-k</span><span class="nv"> </span><span class="s">b100&quot;</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-</span><span class="hll"><span class="w">  </span><span class="nt">filtering</span><span class="p">:</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">seqkit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">nanoq</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-</span><span class="hll"><span class="w">  </span><span class="nt">mapping</span><span class="p">:</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">graphmap</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">graphmap2</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-x</span><span class="nv"> </span><span class="s">rnaseq&quot;</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">minimap2</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-y</span><span class="nv"> </span><span class="s">-uf</span><span class="nv"> </span><span class="s">-ax</span><span class="nv"> </span><span class="s">splice</span><span class="nv"> </span><span class="s">-k14&quot;</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">bwa</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">winnowmap</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-</span><span class="hll"><span class="w">  </span><span class="nt">counting</span><span class="p">:</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">htseq</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-a</span><span class="nv"> </span><span class="s">0&quot;</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">nanocount</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-</span><span class="hll"><span class="w">  </span><span class="nt">discovery</span><span class="p">:</span>
-</span><span class="hll"><span class="w">    </span><span class="nt">bambu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-</span></pre></div>
-</div>
-<p>The second level indicates the processing step as <strong>basecalling</strong> or <strong>demultiplexing</strong> etc, while the third indicates the tool. Finally, you have the command specific command line between quotation marks.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>You can indicate the models to be used for basecalling with dorado or dorardo-duplex as “sup,m6A_DRACH”. The pipeline will try to download before and then to perform the basecalling. In case you want a specific model version you need to indicate the base simplex model as “<a class="reference external" href="mailto:rna002_70bps_hac&#37;&#52;&#48;v3">rna002_70bps_hac<span>&#64;</span>v3</a>,pseU”. You can see <a class="reference external" href="https://github.com/nanoporetech/dorado?tab=readme-ov-file#dna-models">here</a> the list of models and modifications.</p>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>You don’t need to specify the whole path for the models of seqtagger, just the name of the model will be enough</p>
-</div>
+<section id="starting-from-pod5-linux-or-mac-local">
+<h2>Starting from pod5 (linux or mac local)<a class="headerlink" href="#starting-from-pod5-linux-or-mac-local" title="Link to this heading"></a></h2>
 </section>
 </section>
 
