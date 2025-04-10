@@ -9,7 +9,7 @@ Get Started
 
 Please install nextflow `Nextflow <https://www.nextflow.io/>`_ and either `Singularity <https://sylabs.io/>`_ or `Docker <https://www.docker.com/>`_ before.
 
-For installing Nextflow you need a POSIX compatible system (Linux, OS X, etc). It requires Bash 3.2 (or later) and Java 11 (or later, up to 17). Windows system is supported through WSL. For the installation of Nextflow just run:
+For installing Nextflow you need a POSIX compatible system (Linux, OS X, etc). It requires Bash 3.2 (or later) and Java 11 (or later, up to 23). Windows system is supported through WSL. For the installation of Nextflow just run:
 
 .. code-block:: console
 
