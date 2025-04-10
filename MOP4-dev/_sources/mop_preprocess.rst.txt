@@ -12,6 +12,7 @@ This pipeline takes as input the raw reads - single or multi - and it produces s
 It support the new pod5 format. The basecalling can be performed with dorado or dorado-duplex and the demultiplexing with either dorado or seqtagger. Basecalled fastq and pod5 files can be demultiplexed as well. You can restrict the number of barcodes by indicating a file with barcode list using the **barcodes** parameter.
 
 
+
 .. image:: ../img/flow_preproc2.png
   :width: 600
   :alt: mop_preprocess graph
