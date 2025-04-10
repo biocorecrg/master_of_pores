@@ -22,6 +22,8 @@ reference: "${projectDir}/../anno/curlcake_constructs.fasta.gz"
 ## Can be transcriptome / genome
 ref_type: "transcriptome"
 annotation: ""
+
+# Actions
 ## Can be nanoq / nanofilt
 filtering: "nanoq"
 ## Can be graphmap / graphmap2 / minimap2 / winnowmap / bwa / NO
@@ -33,7 +35,8 @@ discovery: "NO"
 ## Convert bam to cram
 cram_conv: "YES"
 subsampling_cram: 50
-## Output and messaging
+
+# Output and messaging
 slackhook: ""
 email: ""
 output: "./outfolder_mod2"

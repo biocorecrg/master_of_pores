@@ -37,7 +37,7 @@ discovery: "NO"
 cram_conv: "YES"
 subsampling_cram: 50
 
-## Output and messaging
+# Output and messaging
 slackhook: ""
 email: ""
 output: "./outfolder/"
