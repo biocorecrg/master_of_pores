@@ -54,7 +54,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">TUTORIAL</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installing-the-tool-and-the-dependencies">Installing the tool and the dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#starting-from-fastq">Starting from fastq</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#starting-from-pod5-linux-or-mac-local">Starting from pod5 (linux or mac local)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-from-pod5">Starting from pod5</a></li>
 </ul>
 </li>
 </ul>
@@ -85,7 +85,7 @@
              
   <section id="tutorial">
 <span id="id1"></span><h1>TUTORIAL<a class="headerlink" href="#tutorial" title="Link to this heading"></a></h1>
-<p>This basic tutorial will show you hot to install and run Master of Pores in different scenarios.</p>
+<p>This basic tutorial will show you how to install and run Master of Pores in different scenarios.</p>
 <section id="installing-the-tool-and-the-dependencies">
 <h2>Installing the tool and the dependencies<a class="headerlink" href="#installing-the-tool-and-the-dependencies" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -95,6 +95,7 @@
 <span class="go">curl -s https://get.nextflow.io | bash</span>
 </pre></div>
 </div>
+<p>You might want to place in <cite>/usr/local/bin</cite> or add the current folder in the <cite>$PATH</cite> variable.</p>
 <p>If you are on a Linux machine, you can install either <a class="reference external" href="https://www.docker.com/get-started/">Docker</a> or <a class="reference external" href="https://apptainer.org/docs/admin/main/installation.html">singularity / apptainer</a>.
 If you are on a Mac you can only install <a class="reference external" href="https://www.docker.com/get-started/">Docker</a>.</p>
 <div class="admonition tip">
@@ -367,9 +368,20 @@ You need a configured mail server for sending an <a class="reference external" h
 <li><p>cram_files: sorted, subsampled cram files and their indexes.</p></li>
 <li><p>report: multiq report</p></li>
 </ul>
+<p>The <cite>work</cite> folder, in which nextflow store all the intermediate files, will be in the same place. Since it can be huge you can also redirect elsewhere using the nextflow parameter <cite>-w</cite>.</p>
 </section>
-<section id="starting-from-pod5-linux-or-mac-local">
-<h2>Starting from pod5 (linux or mac local)<a class="headerlink" href="#starting-from-pod5-linux-or-mac-local" title="Link to this heading"></a></h2>
+<section id="starting-from-pod5">
+<h2>Starting from pod5<a class="headerlink" href="#starting-from-pod5" title="Link to this heading"></a></h2>
+<p>You can run the pipeline on Linux in local using docker or singularity as a container engine. We can use another params file for accessing the test dataset that is bundled in the GitHub repository. You can also send the execution in background using the nextflow parameter <cite>-bg</cite> and redirecting the output to a file.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -params-file params.pod5.yaml -with-docker -bg &gt; log.txt</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In case you are using a Mac with an Apple silicon chip you will need to install dorado manually from <a class="reference external" href="https://github.com/nanoporetech/dorado">here</a>.
+You can download the file that ends with osx-arm64, unzip it and place the dorado binary in <cite>/usr/local/bin/</cite> while the you must place <cite>default.metallib</cite> within <cite>/usr/local/lib/</cite>.
+At this point, you can run the pipeline, indicating the profile m1mac in the command line and setting the GPU parameter as “LOCAL”:</p>
+</div>
 </section>
 </section>
 

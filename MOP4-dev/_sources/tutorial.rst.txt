@@ -7,7 +7,7 @@ TUTORIAL
 .. autosummary::
    :toctree: generated
 
-This basic tutorial will show you hot to install and run Master of Pores in different scenarios.
+This basic tutorial will show you how to install and run Master of Pores in different scenarios.
   
 Installing the tool and the dependencies
 ======================
@@ -18,6 +18,8 @@ Installing the tool and the dependencies
 
    #Installing nextflow
    curl -s https://get.nextflow.io | bash
+
+You might want to place in `/usr/local/bin` or add the current folder in the `$PATH` variable.
 
 If you are on a Linux machine, you can install either `Docker <https://www.docker.com/get-started/>`_ or `singularity / apptainer <https://apptainer.org/docs/admin/main/installation.html>`_.
 If you are on a Mac you can only install `Docker <https://www.docker.com/get-started/>`_.
@@ -246,8 +248,188 @@ The output folders will be in `outfolder` as indicated by the parameter `output`
 - cram_files: sorted, subsampled cram files and their indexes.  
 - report: multiq report
 
-Starting from pod5 (linux or mac local)
+The `work` folder, in which nextflow store all the intermediate files, will be in the same place. Since it can be huge you can also redirect elsewhere using the nextflow parameter `-w`.
+
+Starting from pod5 
 ======================
+
+You can run the pipeline on Linux in local using docker or singularity as a container engine. We can use another params file for accessing the test dataset that is bundled in the GitHub repository. You can also send the execution in background using the nextflow parameter `-bg` and redirecting the output to a file.
+
+.. code-block:: console
+
+   nextflow run mop_preprocess.nf -params-file params.pod5.yaml -with-docker -bg > log.txt
+
+.. Note:: 
+   In case you are using a Mac with an Apple silicon chip you will need to install dorado manually from `here <https://github.com/nanoporetech/dorado>`_. 
+   You can download the file that ends with osx-arm64, unzip it and place the dorado binary in `/usr/local/bin/` while the you must place `default.metallib` within `/usr/local/lib/`.
+   At this point, you can run the pipeline, indicating the profile m1mac in the command line and setting the GPU parameter as "LOCAL":
+.. code-block:: console
+   nextflow run run mop_preprocess.nf -params-file params.pod.yaml -with-docker -profile m1mac --GPU LOCAL
+
+
+    N E X T F L O W   ~  version 25.02.3-edge
+   
+   Launching `mop_preprocess.nf` [maniac_coulomb] DSL2 - revision: 073068df45
+   
+   
+   ====================================================
+   ╔╦╗╔═╗╔═╗  ╔═╗┬─┐┌─┐┌─┐┬─┐┌─┐┌─┐┌─┐┌─┐┌─┐
+   ║║║║ ║╠═╝  ╠═╝├┬┘├┤ ├─┘├┬┘│ ││  ├┤ └─┐└─┐
+   ╩ ╩╚═╝╩    ╩  ┴└─└─┘┴  ┴└─└─┘└─┘└─┘└─┘└─┘
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣷⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⣿⣷⡒⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿⣿⣆⠙⡄⠀⠐⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣤⣤⣤⣤⣤⣤⣤⣤⠤⢄⡀⠀⠀⣿⣿⣿⣿⣿⣿⡆⠘⡄⠀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣿⣿⣿⣿⣿⣿⣿⣦⡈⠒⢄⢸⣿⣿⣿⣿⣿⣿⡀⠱⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣦⠀⠱⣿⣿⣿⣿⣿⣿⣇⠀⢃⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣿⣿⣿⣷⡄⣹⣿⣿⣿⣿⣿⣿⣶⣾⣿⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣶⣿⣭⣍⡉⠙⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡷⢂⣓⣶⣶⣶⣶⣤⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⠟⢀⣴⢿⣿⣿⣿⠟⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠤⠤⠙⣻⣿⣿⣿⣿⣿⣿⣾⣿⣿⡏⣠⠟⡉⣾⣿⣿⠋⡠⠊⣿⡟⣹⣿⢿⣿⣿⣿⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣶⣤⣭⣤⣼⣿⢛⣿⣿⣿⣿⣻⣿⣿⠇⠐⢀⣿⣿⡷⠋⠀⢠⣿⣺⣿⣿⢺⣿⣋⣉⣉⣩⣴⣶⣤⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠻⠿⣿⣿⣿⣇⢻⣿⣿⡿⠿⣿⣯⡀⠀⢸⣿⠋⢀⣠⣶⠿⠿⢿⡿⠈⣾⣿⣿⣿⣿⡿⠿⠛⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⢧⡸⣿⣿⣿⠀⠃⠻⠟⢦⢾⢣⠶⠿⠏⠀⠰⠀⣼⡇⣸⣿⣿⠟⠉⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣶⣽⣿⡟⠓⠒⠀⠀⡀⠀⠠⠤⠬⠉⠁⣰⣥⣾⣿⣿⣶⣶⣷⡶⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠹⠟⣿⣿⡄⠀⠀⠠⡇⠀⠀⠀⠀⠀⢠⡟⠛⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠋⠹⣷⣄⠀⠐⣊⣀⠀⠀⢀⡴⠁⠣⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣀⠤⠊⢁⡸⠀⣆⠹⣿⣧⣀⠀⠀⡠⠖⡑⠁⠀⠀⠀⠑⢄⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣦⣶⣿⣿⣟⣁⣤⣾⠟⠁⢀⣿⣆⠹⡆⠻⣿⠉⢀⠜⡰⠀⠀⠈⠑⢦⡀⠈⢾⠑⡾⠲⣄⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠖⠒⠚⠛⠛⠢⠽⢄⣘⣤⡎⠠⠿⠂⠀⠠⠴⠶⢉⡭⠃⢸⠃⠀⣿⣿⣿⠡⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⠀⡤⠶⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣋⠁⠀⠀⠀⠀⠀⢹⡇⠀⠀⠀⠀⠒⠢⣤⠔⠁⠀⢀⡏⠀⠀⢸⣿⣿⠀⢻⡟⠑⠢⢄⡀⠀⠀⠀⠀
+   ⠀⠀⠀⠀⢸⠀⠀⠀⡀⠉⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⣀⣀⡀⠀⢸⣷⡀⣀⣀⡠⠔⠊⠀⠀⢀⣠⡞⠀⠀⠀⢸⣿⡿⠀⠘⠀⠀⠀⠀⠈⠑⢤⠀⠀
+   ⠀⠀⢀⣴⣿⡀⠀⠀⡇⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣝⡛⠿⢿⣷⣦⣄⡀⠈⠉⠉⠁⠀⠀⠀⢀⣠⣴⣾⣿⡿⠁⠀⠀⠀⢸⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⡜⠀⠀
+   ⠀⢀⣾⣿⣿⡇⠀⢰⣷⠀⢀⠀⠀⢹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣦⣭⣍⣉⣉⠀⢀⣀⣤⣶⣾⣿⣿⣿⢿⠿⠁⠀⠀⠀⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⡰⠉⢦⠀
+   ⢀⣼⣿⣿⡿⢱⠀⢸⣿⡀⢸⣧⡀⠀⢿⣿⣿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡭⠖⠁⠀⡠⠂⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⠀⠀⢠⠃⠀⠈⣀
+   ⢸⣿⣿⣿⡇⠀⢧⢸⣿⣇⢸⣿⣷⡀⠈⣿⣿⣇⠈⠛⢿⣿⣿⣿⣿⣿⣿⠿⠿⠿⠿⠿⠿⠟⡻⠟⠉⠀⠀⡠⠊⠀⢠⠀⠀⠀⠀⠀⠀⠀⠀⣾⡄⠀⢠⣿⠔⠁⠀⢸
+   ⠈⣿⣿⣿⣷⡀⠀⢻⣿⣿⡜⣿⣿⣷⡀⠈⢿⣿⡄⠀⠀⠈⠛⠿⣿⣿⣿⣷⣶⣶⣶⡶⠖⠉⠀⣀⣤⡶⠋⠀⣠⣶⡏⠀⠀⠀⠀⠀⠀⠀⢰⣿⣧⣶⣿⣿⠖⡠⠖⠁
+   ⠀⣿⣿⣷⣌⡛⠶⣼⣿⣿⣷⣿⣿⣿⣿⡄⠈⢻⣷⠀⣄⡀⠀⠀⠀⠈⠉⠛⠛⠛⠁⣀⣤⣶⣾⠟⠋⠀⣠⣾⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⠷⠊⠀⢰⠀
+   ⢰⣿⣿⠀⠈⢉⡶⢿⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠙⢇⠈⢿⣶⣦⣤⣀⣀⣠⣤⣶⣿⣿⡿⠛⠁⢀⣤⣾⣿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⣸⣿⡿⠿⠋⠙⠒⠄⠀⠉⡄
+   ⣿⣿⡏⠀⠀⠁⠀⠀⠀⠉⠉⠙⢻⣿⣿⣿⣿⣷⡀⠀⠀⠀⠻⣿⣿⣿⣿⣿⠿⠿⠛⠁⠀⣀⣴⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀⢠⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰
+   ====================================================
+   BIOCORE@CRG Master of Pores 4. Preprocessing - N F  ~  version 4.0
+   ====================================================
+   
+   
+   Input
+   ----------------------------------------------------
+   pod5                      : ../data/pod5/**/*.pod5
+   fastq                     : null
+   
+   Reference
+   ----------------------------------------------------
+   reference                  : /Users/lcozzuto/ooo/master_of_pores/mop_preprocess/../anno/curlcake_constructs.fasta.gz
+   annotation                 : 
+   ref_type                   : transcriptome
+   
+   Output
+   ----------------------------------------------------
+   output                    : ./outfolder_mod2
+   email                     : 
+   slackhook                 : 
+   
+   Actions
+   ----------------------------------------------------
+   basecalling               : dorado
+   demultiplexing            : NO
+   demulti_pod5              : ON
+   filtering                 : nanoq
+   mapping                   : minimap2
+   counting                  : nanocount
+   discovery                 : NO
+   cram_conv                 : YES
+   subsampling_cram          : 50
+   
+   Advanced
+   ----------------------------------------------------
+   granularity               : 1
+   barcodes                  : 
+   GPU                       : LOCAL
+   
+   ====================================================
+   
+   
+   ----------------------CHECK TOOLS -----------------------------
+   basecalling : dorado
+   > demultiplexing will be skipped
+   mapping : minimap2
+   filtering : nanoq
+   counting : nanocount
+   > discovery will be skipped
+   --------------------------------------------------------------
+   WARN: Include with `addParams()` is deprecated -- pass params as a workflow or process input instead
+   Skipping the email
+   
+   executor >  local (14)
+   executor >  local (16)
+   [da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔
+   [2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔
+   executor >  local (17)
+   [da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔
+   [2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔
+   executor >  local (18)
+   [da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔
+   [2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔
+   [5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔
+   executor >  local (18)
+   [da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔
+   [2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔
+   [5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔
+   executor >  local (19)
+   [da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔
+   [2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔
+   [5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔
+   executor >  local (19)
+   [da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔
+   [2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔
+   [5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔
+   executor >  local (19)
+   [da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔
+   [2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔
+   [5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔
+   executor >  local (20)
+   [da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔
+   [2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔
+   [5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔
+   executor >  local (20)
+   [da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔
+   [2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔
+   [5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔
+   executor >  local (20)
+   [da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔
+   [2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔
+   [5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔
+   [1e/41594c] SEQFILTER:NANOQ_FILTER:filter (dRNA---1)          [100%] 1 of 1 ✔
+   [6b/9f2cec] MAPPING_MOP:ALIGN:MINIMAP2:map (dRNA---1)         [100%] 1 of 1 ✔
+   [-        ] SAMTOOLS_CAT:catAln_header                        -
+   [db/0d3349] SAMTOOLS_CAT:catAln (dRNA)                        [100%] 1 of 1 ✔
+   [01/ec2fc0] concatenateFastQFiles (dRNA)                      [100%] 1 of 1 ✔
+   [f1/c56fad] SAMTOOLS_SORT:sortAln (dRNA)                      [100%] 1 of 1 ✔
+   [bb/37958f] SAMTOOLS_INDEX:indexBam (dRNA)                    [100%] 1 of 1 ✔
+   [34/ac8db1] bam2stats (dRNA)                                  [100%] 1 of 1 ✔
+   [b0/7af917] joinAlnStats (joining aln stats)                  [100%] 1 of 1 ✔
+   [42/98cc8c] NANOSTAT_QC:nanoStat (dRNA)                       [100%] 1 of 1 ✔
+   [a9/9051bf] checkRef (Checking curlcake_constructs.fasta.gz)  [100%] 1 of 1 ✔
+   [ae/b42b2e] bam2Cram (dRNA)                                   [100%] 1 of 1 ✔
+   [3f/c2e02f] NANOQ_REPORT:report (dRNA)                        [100%] 1 of 1 ✔
+   [af/94a451] COUNTING:NANOCOUNT:nanoCount (dRNA)               [100%] 1 of 1 ✔
+   [81/8457fa] COUNTING:AssignReads (dRNA)                       [100%] 1 of 1 ✔
+   [41/7031e0] COUNTING:countStats (dRNA)                        [100%] 1 of 1 ✔
+   [36/c4e956] COUNTING:joinCountStats (joining count stats)     [100%] 1 of 1 ✔
+   [a0/dc0b50] MULTIQC:makeReport                                [100%] 1 of 1 ✔
+   ---------------------------------------------------
+               *Pipeline MOP4 completed!*             
+   ---------------------------------------------------
+   - Launched by `lcozzuto`
+   - Started at 2025-04-10 18:47:14
+   - Finished at 2025-04-10 18:48:07
+   - Time elapsed: 52.9s
+   - Execution status: OK
+   ```nextflow run mop_preprocess.nf -params-file params.pod.yaml -with-docker --GPU LOCAL -profile m1mac```
+   ---------------------------------------------------
+
 
 
 
