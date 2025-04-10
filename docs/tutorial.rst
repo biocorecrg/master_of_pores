@@ -85,7 +85,7 @@ Then there is a section of `Actions`. You can either specify the tool for that a
 - subsampling_cram: subsample the bam input for generating cram
 
 Then a new section is for specifying the `output` folder, and if you want to receive a mail or a Slack message at the end of the execution. 
-You need a configured mail server for sending an `email ≤https://nextflow.io/docs/latest/notifications.html#mail-configuration>`_ and a `Slack hook <https://api.slack.com/messaging/webhooks>`_ 
+You need a configured mail server for sending an `email <https://nextflow.io/docs/latest/notifications.html#mail-configuration>`_ and a `Slack hook <https://api.slack.com/messaging/webhooks>`_ 
 
 Finally, there is a section about command line parameters for each tool used.
 
