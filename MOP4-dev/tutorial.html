@@ -54,7 +54,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">TUTORIAL</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installing-the-tool-and-the-dependencies">Installing the tool and the dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#starting-from-fastq">Starting from fastq</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#starting-from-pod5-linux-local-and-hpc">Starting from pod5 (linux local and HPC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-from-pod5-linux-local">Starting from pod5 (linux local)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#starting-from-pod5-mac-local">Starting from pod5 (mac, local)</a></li>
 </ul>
 </li>
@@ -215,11 +215,23 @@ Then there is a section of <cite>Actions</cite>. You can either specify the tool
 <li><p>cram_conv: convertion of bam to cram</p></li>
 <li><p>subsampling_cram: subsample the bam input for generating cram</p></li>
 </ul>
-<p>Then a new section is for specifying the <cite>output</cite> folder, and if you want to receive a mail or a slack message at the end of the execution.
-You need a configured mail server for sending an email and a <a class="reference external" href="https://api.slack.com/messaging/webhooks">Slack hook</a></p>
+<p>Then a new section is for specifying the <cite>output</cite> folder, and if you want to receive a mail or a Slack message at the end of the execution.
+You need a configured mail server for sending an <a href="#id4"><span class="problematic" id="id5">`email ≤https://nextflow.io/docs/latest/notifications.html#mail-configuration&gt;`_</span></a> and a <a class="reference external" href="https://api.slack.com/messaging/webhooks">Slack hook</a></p>
+<p>Finally, there is a section about command line parameters for each tool used.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Program params</span>
+<span class="nt">ProgPars</span><span class="p">:</span>
+<span class="nt">basecalling</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
+<span class="w">  </span><span class="nt">dorado-duplex</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
+<span class="w">  </span><span class="nt">dorado-mod</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup,m6A_DRACH&quot;</span>
+<span class="nt">demultiplexing</span><span class="p">:</span>
+<span class="nn">...</span>
+</pre></div>
+</div>
+<p># Program params</p>
 </section>
-<section id="starting-from-pod5-linux-local-and-hpc">
-<h2>Starting from pod5 (linux local and HPC)<a class="headerlink" href="#starting-from-pod5-linux-local-and-hpc" title="Link to this heading"></a></h2>
+<section id="starting-from-pod5-linux-local">
+<h2>Starting from pod5 (linux local)<a class="headerlink" href="#starting-from-pod5-linux-local" title="Link to this heading"></a></h2>
 <p>Ciao</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -with-singularity -params-file params.yaml &gt; log.txt</span>
 </pre></div>
@@ -302,7 +314,7 @@ You need a configured mail server for sending an email and a <a class="reference
 </span><span class="hll"><span class="w">    </span><span class="nt">bambu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
 </span></pre></div>
 </div>
-<p>The second level indicates the processing step as <strong>basecalling</strong> or <strong>demultiplexing</strong> etc, while the third indicates the tool. Finally you have the command specific command line between quotation marks.</p>
+<p>The second level indicates the processing step as <strong>basecalling</strong> or <strong>demultiplexing</strong> etc, while the third indicates the tool. Finally, you have the command specific command line between quotation marks.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You can indicate the models to be used for basecalling with dorado or dorardo-duplex as “sup,m6A_DRACH”. The pipeline will try to download before and then to perform the basecalling. In case you want a specific model version you need to indicate the base simplex model as “<a class="reference external" href="mailto:rna002_70bps_hac&#37;&#52;&#48;v3">rna002_70bps_hac<span>&#64;</span>v3</a>,pseU”. You can see <a class="reference external" href="https://github.com/nanoporetech/dorado?tab=readme-ov-file#dna-models">here</a> the list of models and modifications.</p>
