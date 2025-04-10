@@ -257,7 +257,6 @@ You will get this as output.
    
 .. Note:: 
    The latest versions of Nextflow show a future deprecation of `addParams()`. For now just ignore this warning.
-.. code-block:: console
    WARN: Include with `addParams()` is deprecated -- pass params as a workflow or process input instead
 
 The output folders will be in `outfolder` as indicated by the parameter `output`. Inside, you have the following list of directories:
@@ -283,9 +282,10 @@ You can run the pipeline on Linux in local using docker or singularity as a cont
    In case you are using a Mac with an Apple silicon chip you will need to install dorado manually from `here <https://github.com/nanoporetech/dorado>`_. 
    You can download the file that ends with osx-arm64, unzip it and place the dorado binary in `/usr/local/bin/` while the you must place `default.metallib` within `/usr/local/lib/`.
    At this point, you can run the pipeline, indicating the profile m1mac in the command line and setting the GPU parameter as "LOCAL":
-.. code-block:: console
-   nextflow run run mop_preprocess.nf -params-file params.pod.yaml -with-docker -profile m1mac --GPU LOCAL
 
+.. code-block:: console
+
+   nextflow run run mop_preprocess.nf -params-file params.pod.yaml -with-docker -profile m1mac --GPU LOCAL
 
     N E X T F L O W   ~  version 25.02.3-edge
    

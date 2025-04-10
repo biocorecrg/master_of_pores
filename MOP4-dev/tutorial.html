@@ -376,7 +376,8 @@ You need a configured mail server for sending an <a class="reference external" h
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The latest versions of Nextflow show a future deprecation of <cite>addParams()</cite>. For now just ignore this warning.</p>
+<p>The latest versions of Nextflow show a future deprecation of <cite>addParams()</cite>. For now just ignore this warning.
+WARN: Include with <cite>addParams()</cite> is deprecated – pass params as a workflow or process input instead</p>
 </div>
 <p>The output folders will be in <cite>outfolder</cite> as indicated by the parameter <cite>output</cite>. Inside, you have the following list of directories:</p>
 <ul class="simple">
@@ -399,6 +400,172 @@ You need a configured mail server for sending an <a class="reference external" h
 <p>In case you are using a Mac with an Apple silicon chip you will need to install dorado manually from <a class="reference external" href="https://github.com/nanoporetech/dorado">here</a>.
 You can download the file that ends with osx-arm64, unzip it and place the dorado binary in <cite>/usr/local/bin/</cite> while the you must place <cite>default.metallib</cite> within <cite>/usr/local/lib/</cite>.
 At this point, you can run the pipeline, indicating the profile m1mac in the command line and setting the GPU parameter as “LOCAL”:</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run run mop_preprocess.nf -params-file params.pod.yaml -with-docker -profile m1mac --GPU LOCAL</span>
+
+<span class="go"> N E X T F L O W   ~  version 25.02.3-edge</span>
+
+<span class="go">Launching `mop_preprocess.nf` [maniac_coulomb] DSL2 - revision: 073068df45</span>
+
+
+<span class="go">====================================================</span>
+<span class="go">╔╦╗╔═╗╔═╗  ╔═╗┬─┐┌─┐┌─┐┬─┐┌─┐┌─┐┌─┐┌─┐┌─┐</span>
+<span class="go">║║║║ ║╠═╝  ╠═╝├┬┘├┤ ├─┘├┬┘│ ││  ├┤ └─┐└─┐</span>
+<span class="go">╩ ╩╚═╝╩    ╩  ┴└─└─┘┴  ┴└─└─┘└─┘└─┘└─┘└─┘</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣷⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⣿⣷⡒⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿⣿⣆⠙⡄⠀⠐⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣤⣤⣤⣤⣤⣤⣤⣤⠤⢄⡀⠀⠀⣿⣿⣿⣿⣿⣿⡆⠘⡄⠀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣿⣿⣿⣿⣿⣿⣿⣦⡈⠒⢄⢸⣿⣿⣿⣿⣿⣿⡀⠱⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣦⠀⠱⣿⣿⣿⣿⣿⣿⣇⠀⢃⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣿⣿⣿⣷⡄⣹⣿⣿⣿⣿⣿⣿⣶⣾⣿⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣶⣿⣭⣍⡉⠙⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡷⢂⣓⣶⣶⣶⣶⣤⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⠟⢀⣴⢿⣿⣿⣿⠟⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠤⠤⠙⣻⣿⣿⣿⣿⣿⣿⣾⣿⣿⡏⣠⠟⡉⣾⣿⣿⠋⡠⠊⣿⡟⣹⣿⢿⣿⣿⣿⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣶⣤⣭⣤⣼⣿⢛⣿⣿⣿⣿⣻⣿⣿⠇⠐⢀⣿⣿⡷⠋⠀⢠⣿⣺⣿⣿⢺⣿⣋⣉⣉⣩⣴⣶⣤⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠻⠿⣿⣿⣿⣇⢻⣿⣿⡿⠿⣿⣯⡀⠀⢸⣿⠋⢀⣠⣶⠿⠿⢿⡿⠈⣾⣿⣿⣿⣿⡿⠿⠛⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⢧⡸⣿⣿⣿⠀⠃⠻⠟⢦⢾⢣⠶⠿⠏⠀⠰⠀⣼⡇⣸⣿⣿⠟⠉⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣶⣽⣿⡟⠓⠒⠀⠀⡀⠀⠠⠤⠬⠉⠁⣰⣥⣾⣿⣿⣶⣶⣷⡶⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠹⠟⣿⣿⡄⠀⠀⠠⡇⠀⠀⠀⠀⠀⢠⡟⠛⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠋⠹⣷⣄⠀⠐⣊⣀⠀⠀⢀⡴⠁⠣⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣀⠤⠊⢁⡸⠀⣆⠹⣿⣧⣀⠀⠀⡠⠖⡑⠁⠀⠀⠀⠑⢄⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣦⣶⣿⣿⣟⣁⣤⣾⠟⠁⢀⣿⣆⠹⡆⠻⣿⠉⢀⠜⡰⠀⠀⠈⠑⢦⡀⠈⢾⠑⡾⠲⣄⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠖⠒⠚⠛⠛⠢⠽⢄⣘⣤⡎⠠⠿⠂⠀⠠⠴⠶⢉⡭⠃⢸⠃⠀⣿⣿⣿⠡⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⡤⠶⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣋⠁⠀⠀⠀⠀⠀⢹⡇⠀⠀⠀⠀⠒⠢⣤⠔⠁⠀⢀⡏⠀⠀⢸⣿⣿⠀⢻⡟⠑⠢⢄⡀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⢸⠀⠀⠀⡀⠉⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⣀⣀⡀⠀⢸⣷⡀⣀⣀⡠⠔⠊⠀⠀⢀⣠⡞⠀⠀⠀⢸⣿⡿⠀⠘⠀⠀⠀⠀⠈⠑⢤⠀⠀</span>
+<span class="go">⠀⠀⢀⣴⣿⡀⠀⠀⡇⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣝⡛⠿⢿⣷⣦⣄⡀⠈⠉⠉⠁⠀⠀⠀⢀⣠⣴⣾⣿⡿⠁⠀⠀⠀⢸⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⡜⠀⠀</span>
+<span class="go">⠀⢀⣾⣿⣿⡇⠀⢰⣷⠀⢀⠀⠀⢹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣦⣭⣍⣉⣉⠀⢀⣀⣤⣶⣾⣿⣿⣿⢿⠿⠁⠀⠀⠀⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⡰⠉⢦⠀</span>
+<span class="go">⢀⣼⣿⣿⡿⢱⠀⢸⣿⡀⢸⣧⡀⠀⢿⣿⣿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡭⠖⠁⠀⡠⠂⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⠀⠀⢠⠃⠀⠈⣀</span>
+<span class="go">⢸⣿⣿⣿⡇⠀⢧⢸⣿⣇⢸⣿⣷⡀⠈⣿⣿⣇⠈⠛⢿⣿⣿⣿⣿⣿⣿⠿⠿⠿⠿⠿⠿⠟⡻⠟⠉⠀⠀⡠⠊⠀⢠⠀⠀⠀⠀⠀⠀⠀⠀⣾⡄⠀⢠⣿⠔⠁⠀⢸</span>
+<span class="go">⠈⣿⣿⣿⣷⡀⠀⢻⣿⣿⡜⣿⣿⣷⡀⠈⢿⣿⡄⠀⠀⠈⠛⠿⣿⣿⣿⣷⣶⣶⣶⡶⠖⠉⠀⣀⣤⡶⠋⠀⣠⣶⡏⠀⠀⠀⠀⠀⠀⠀⢰⣿⣧⣶⣿⣿⠖⡠⠖⠁</span>
+<span class="go">⠀⣿⣿⣷⣌⡛⠶⣼⣿⣿⣷⣿⣿⣿⣿⡄⠈⢻⣷⠀⣄⡀⠀⠀⠀⠈⠉⠛⠛⠛⠁⣀⣤⣶⣾⠟⠋⠀⣠⣾⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⠷⠊⠀⢰⠀</span>
+<span class="go">⢰⣿⣿⠀⠈⢉⡶⢿⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠙⢇⠈⢿⣶⣦⣤⣀⣀⣠⣤⣶⣿⣿⡿⠛⠁⢀⣤⣾⣿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⣸⣿⡿⠿⠋⠙⠒⠄⠀⠉⡄</span>
+<span class="go">⣿⣿⡏⠀⠀⠁⠀⠀⠀⠉⠉⠙⢻⣿⣿⣿⣿⣷⡀⠀⠀⠀⠻⣿⣿⣿⣿⣿⠿⠿⠛⠁⠀⣀⣴⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀⢠⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰</span>
+<span class="go">====================================================</span>
+<span class="go">BIOCORE@CRG Master of Pores 4. Preprocessing - N F  ~  version 4.0</span>
+<span class="go">====================================================</span>
+
+
+<span class="go">Input</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">pod5                      : ../data/pod5/**/*.pod5</span>
+<span class="go">fastq                     : null</span>
+
+<span class="go">Reference</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">reference                  : /Users/lcozzuto/ooo/master_of_pores/mop_preprocess/../anno/curlcake_constructs.fasta.gz</span>
+<span class="go">annotation                 :</span>
+<span class="go">ref_type                   : transcriptome</span>
+
+<span class="go">Output</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">output                    : ./outfolder_mod2</span>
+<span class="go">email                     :</span>
+<span class="go">slackhook                 :</span>
+
+<span class="go">Actions</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">basecalling               : dorado</span>
+<span class="go">demultiplexing            : NO</span>
+<span class="go">demulti_pod5              : ON</span>
+<span class="go">filtering                 : nanoq</span>
+<span class="go">mapping                   : minimap2</span>
+<span class="go">counting                  : nanocount</span>
+<span class="go">discovery                 : NO</span>
+<span class="go">cram_conv                 : YES</span>
+<span class="go">subsampling_cram          : 50</span>
+
+<span class="go">Advanced</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">granularity               : 1</span>
+<span class="go">barcodes                  :</span>
+<span class="go">GPU                       : LOCAL</span>
+
+<span class="go">====================================================</span>
+
+
+<span class="go">----------------------CHECK TOOLS -----------------------------</span>
+<span class="go">basecalling : dorado</span>
+<span class="go">&gt; demultiplexing will be skipped</span>
+<span class="go">mapping : minimap2</span>
+<span class="go">filtering : nanoq</span>
+<span class="go">counting : nanocount</span>
+<span class="go">&gt; discovery will be skipped</span>
+<span class="go">--------------------------------------------------------------</span>
+<span class="go">WARN: Include with `addParams()` is deprecated -- pass params as a workflow or process input instead</span>
+<span class="go">Skipping the email</span>
+
+<span class="go">executor &gt;  local (14)</span>
+<span class="go">executor &gt;  local (16)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (17)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (18)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (18)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (19)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (19)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (19)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (20)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (20)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (20)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">[1e/41594c] SEQFILTER:NANOQ_FILTER:filter (dRNA---1)          [100%] 1 of 1 ✔</span>
+<span class="go">[6b/9f2cec] MAPPING_MOP:ALIGN:MINIMAP2:map (dRNA---1)         [100%] 1 of 1 ✔</span>
+<span class="go">[-        ] SAMTOOLS_CAT:catAln_header                        -</span>
+<span class="go">[db/0d3349] SAMTOOLS_CAT:catAln (dRNA)                        [100%] 1 of 1 ✔</span>
+<span class="go">[01/ec2fc0] concatenateFastQFiles (dRNA)                      [100%] 1 of 1 ✔</span>
+<span class="go">[f1/c56fad] SAMTOOLS_SORT:sortAln (dRNA)                      [100%] 1 of 1 ✔</span>
+<span class="go">[bb/37958f] SAMTOOLS_INDEX:indexBam (dRNA)                    [100%] 1 of 1 ✔</span>
+<span class="go">[34/ac8db1] bam2stats (dRNA)                                  [100%] 1 of 1 ✔</span>
+<span class="go">[b0/7af917] joinAlnStats (joining aln stats)                  [100%] 1 of 1 ✔</span>
+<span class="go">[42/98cc8c] NANOSTAT_QC:nanoStat (dRNA)                       [100%] 1 of 1 ✔</span>
+<span class="go">[a9/9051bf] checkRef (Checking curlcake_constructs.fasta.gz)  [100%] 1 of 1 ✔</span>
+<span class="go">[ae/b42b2e] bam2Cram (dRNA)                                   [100%] 1 of 1 ✔</span>
+<span class="go">[3f/c2e02f] NANOQ_REPORT:report (dRNA)                        [100%] 1 of 1 ✔</span>
+<span class="go">[af/94a451] COUNTING:NANOCOUNT:nanoCount (dRNA)               [100%] 1 of 1 ✔</span>
+<span class="go">[81/8457fa] COUNTING:AssignReads (dRNA)                       [100%] 1 of 1 ✔</span>
+<span class="go">[41/7031e0] COUNTING:countStats (dRNA)                        [100%] 1 of 1 ✔</span>
+<span class="go">[36/c4e956] COUNTING:joinCountStats (joining count stats)     [100%] 1 of 1 ✔</span>
+<span class="go">[a0/dc0b50] MULTIQC:makeReport                                [100%] 1 of 1 ✔</span>
+<span class="go">---------------------------------------------------</span>
+<span class="go">            *Pipeline MOP4 completed!*</span>
+<span class="go">---------------------------------------------------</span>
+<span class="go">- Launched by `lcozzuto`</span>
+<span class="go">- Started at 2025-04-10 18:47:14</span>
+<span class="go">- Finished at 2025-04-10 18:48:07</span>
+<span class="go">- Time elapsed: 52.9s</span>
+<span class="go">- Execution status: OK</span>
+<span class="go">```nextflow run mop_preprocess.nf -params-file params.pod.yaml -with-docker --GPU LOCAL -profile m1mac```</span>
+<span class="go">---------------------------------------------------</span>
+</pre></div>
 </div>
 </section>
 </section>
