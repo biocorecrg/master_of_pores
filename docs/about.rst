@@ -9,7 +9,7 @@ About Master of Pores 4
 
 
 .. |docker| image:: https://img.shields.io/badge/Docker-v20.10.8-blue
-.. |status| image:: https://github.com/biocorecrg/MOP4/actions/workflows/build.yml/badge.svg
+.. |status| image:: https://github.com/biocorecrg/master_of_pores/actions/workflows/build.yml/badge.svg
 .. |license| image:: https://img.shields.io/badge/License-MIT-yellow.svg
 .. |nver| image:: https://img.shields.io/badge/Nextflow-21.04.1-brightgreen
 .. |sing| image:: https://img.shields.io/badge/Singularity-v3.2.1-green.svg
