@@ -16,13 +16,7 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
-      - name: Upload docs folder
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: |
-            docs/MOP-fastq_report.html 
-
+        
       - name: Deploy docs with sphinx-notes/pages
         id: deployment
         uses: sphinx-notes/pages@v3
@@ -47,6 +41,12 @@ jobs:
           ref: gh-pages
           path: gh-pages
          
+      - name: Upload docs folder
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path:
+            'html_reports/'
+      
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
