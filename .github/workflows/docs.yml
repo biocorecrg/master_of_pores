@@ -43,8 +43,10 @@ jobs:
 
       - name: Upload docs folder
         uses: actions/upload-pages-artifact@v3
-        path: |
-            docs/MOP-fastq_report.html 
+        with:
+          path: |
+            docs/MOP-fastq_report.html
+            
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
