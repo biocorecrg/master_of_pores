@@ -43,8 +43,8 @@ jobs:
 
       - name: Copy report file(s)
         run: |
-          mkdir -p gh-pages
-          cp html_reports/MOP-fastq_report.html gh-pages/
+          mkdir -p gh-pages/MOP4-dev
+          cp html_reports/*.html gh-pages/MOP4-dev
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
