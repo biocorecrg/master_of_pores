@@ -650,8 +650,8 @@ At this point, you can run the pipeline, indicating the profile m1mac in the com
 For testing purposes, we can turn on dorado’s demultiplexing and specify the sequencing kit in the corresponding command line. We should also add –no-trim or in some cases we could generate an error.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">...</span>
 <span class="c1"># Basecalling can be either NO, dorado, dorado-mod or dorado-duplex</span>
-<span class="nt">basecalling</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dorado-mod&quot;</span>
-<span class="c1">#For emitting the move tables (with dorado-mod)</span>
+<span class="hll"><span class="nt">basecalling</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dorado&quot;</span>
+</span><span class="c1">#For emitting the move tables (with dorado-mod)</span>
 <span class="nt">emit_moves</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
 <span class="c1">## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)</span>
 <span class="hll"><span class="nt">demultiplexing</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dorado&quot;</span>
@@ -664,9 +664,35 @@ For testing purposes, we can turn on dorado’s demultiplexing and specify the s
 <span class="w">    </span><span class="nt">dorado-duplex</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
 <span class="w">  </span><span class="nt">demultiplexing</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">seqtagger</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-k</span><span class="nv"> </span><span class="s">b100&quot;</span>
-<span class="hll"><span class="w">    </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;--sequencing-kit</span><span class="nv"> </span><span class="s">EXP-NBD104</span><span class="nv"> </span><span class="s">--no-trim&quot;</span>
+<span class="hll"><span class="w">    </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;--kit-name</span><span class="nv"> </span><span class="s">SQK-NBD114-24</span><span class="nv"> </span><span class="s">--no-trim&quot;</span>
 </span></pre></div>
 </div>
+<p>Let’s execute with another params file</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -params-file params.dem.yaml -with-docker --GPU LOCAL -profile m1mac</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>As you can see now, there are other processes:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">...</span>
+<span class="go">[d8/abc719] Cached process &gt; checkRef (Checking curlcake_constructs.fasta.gz)</span>
+<span class="go">[18/b703f4] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:downloadModel (A---1)</span>
+<span class="go">[60/756667] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:baseCall (A---2)</span>
+<span class="go">[0d/523183] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:baseCall (A---1)</span>
+<span class="go">[e6/edceb4] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:baseCall (m6A---4)</span>
+<span class="go">[73/17451a] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:baseCall (m6A---3)</span>
+<span class="go">[34/a5f387] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:demultiPlex (A---2)</span>
+<span class="go">[05/abc0e8] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:demultiPlex (m6A---4)</span>
+<span class="go">[3c/13880e] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:demultiPlex (A---1)</span>
+<span class="go">[02/9bc23a] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:demultiPlex (m6A---3)</span>
+<span class="go">[4f/9eadf3] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:bam2Fastq (A---2.unclassified)</span>
+<span class="go">[b6/6bb2ba] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:bam2Fastq (m6A---4.unclassified)</span>
+<span class="go">[46/927fcd] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:bam2Fastq (A---1.unclassified)</span>
+<span class="go">[4d/372766] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:bam2Fastq (m6A---3.unclassified)</span>
+<span class="go">[7b/bc805e] Submitted process &gt; SEQFILTER:NANOQ_FILTER:filter (A---2.unclassified)</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>Of course, they will be classified as unclassified since there is no real demultiplexing here.</p>
 </section>
 </section>
 
