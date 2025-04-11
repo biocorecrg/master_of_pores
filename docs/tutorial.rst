@@ -350,7 +350,7 @@ You can run the pipeline on Linux in local using docker or singularity as a cont
    
    Output
    ----------------------------------------------------
-   output                    : ./outfolder_mod2
+   output                    : ./outfolder2
    email                     : 
    slackhook                 : 
    
@@ -454,12 +454,123 @@ You can run the pipeline on Linux in local using docker or singularity as a cont
    ```nextflow run mop_preprocess.nf -params-file params.pod.yaml -with-docker --GPU LOCAL -profile m1mac```
    ---------------------------------------------------
 
+
+As you can see, the first step of the pipeline allows for the download of the corresponding model, which is then used for the basecalling. In case you have a large number of pod5 files you might want to increase the `granularity` parameter to basecall this number of pod5 per job. 
+
+
 You can see the report `here <MOP-pod5_report.html>`_
 
+The output folders will be in `outfolder2` as indicated by the parameter `output`. Inside, you have the following list of directories:
+
+- alignment: sorted bam files and their indexes. 
+- assigned: tabular file with index id and assigned chromosome or transcript
+- counts: read counts per feature (transcript or gene)
+- cram_files: sorted, subsampled cram files and their indexes.
+- fastq_files: basecalled fastq files 
+- report: multiq report
+
+You can see the report `here <MOP-fastq_report.html>`_
+
+Checking for modifications
+======================
+For looking at chemical modifications, you can indicate to use "dorado-mod" as a basecalling method and the corresponding model in the command line as such:
+
+.. code-block:: yaml
+
+   ...
+   # Basecalling can be either NO, dorado, dorado-mod or dorado-duplex
+   basecalling: "dorado-mod"
+   ...
+   # Program params
+   ProgPars:
+      basecalling:
+         dorado: "sup"
+         dorado-mod: "sup,m6A_DRACH"
+
+you can use the params.mod.yaml file for using the other dataset that includes m6A modifications
+
+.. code-block:: console
+
+   nextflow run mop_preprocess.nf -params-file params.mod.yaml -with-docker --GPU LOCAL -profile m1mac 
+   ...
+
+If you go to the dorado_models folder you will see two models:
+
+.. code-block:: console
+
+   ls dorado_models/
+   README.txt   rna004_130bps_sup@v5.1.0   rna004_130bps_sup@v5.1.0_m6A_DRACH@v1
+   ...
+
+and in the output the bam file will contain tags for the modification: MM, base modifications / methylation and ML, base modification probabilities.
 
 
+.. code-block:: console
+
+   samtools view m6A_s.bam|head -n 5|cut -f 1,3,4,26,27
+   60325d6a-1862-401c-9d32-ac28760f559e	cc6m_2244_T7_ecorv	1	MN:i:2197	MM:Z:A+a?,7,1,7,20,14,14,26,9,8,8,41,17,34,14,22,4,37,3,27,4,1,1,14,6,14,16,3,2,1,6,11,8,19,2,13,27,6,38,3;
+   24af2109-0555-4af4-8093-d65c40e13b41	cc6m_2244_T7_ecorv	12	MN:i:2181	MM:Z:A+a?,10,11,3,25,4,20,4,61,33,0,15,15,1,24,4,6,4,7,14,21,3,25,3,4,16,15,13,3,2,2,1,6,19,9,6,2,12,1,31,33;
+   82061285-c7f3-4128-8fb6-b563513b933e	cc6m_2244_T7_ecorv	29	MM:Z:A+a?,11,7,4,14,5,19,3;	ML:B:C,254,53,137,0,7,52,8
+   bf686eab-7939-4069-a295-a6e0e92920f6	cc6m_2244_T7_ecorv	32	MM:Z:A+a?,9,0,9,4,13,3,19,3,6,15,17,24,41,28,12,66,8,8,2,1,4,8,29,3;	ML:B:C,36,0,4,0,18,0,0,0,0,12,44,220,6,0,0,183,1,0,0,11,1,5,5,3
+   88a9f00d-8193-428f-bf62-952ad7dca201	cc6m_2244_T7_ecorv	32	MM:Z:A+a?,9,0,9,4,14,3,19,3,6;	ML:B:C,0,37,44,35,0,0,0,1,139
 
 
+Checking for polyA tail
+======================
+You can search for polyA tails using dorado by adding the following parameter `--estimate-poly-a <https://github.com/nanoporetech/dorado?tab=readme-ov-file#polya-tail-estimation>`_
+
+.. code-block:: yaml
+
+   ...
+   # Basecalling can be either NO, dorado, dorado-mod or dorado-duplex
+   basecalling: "dorado-mod"
+   ...
+   # Program params
+   ProgPars:
+      basecalling:
+         dorado: "sup"
+         dorado-mod: "sup,m6A_DRACH --estimate-poly-a"
+
+.. code-block:: console
+
+   nextflow run mop_preprocess.nf -params-file params.tail.yaml -with-docker --GPU LOCAL -profile m1mac 
+   ...
+
+
+This will generate a bam file with a custom tag named `pt:i` with the predicted polyA tail length. See `here <https://github.com/nanoporetech/dorado?tab=readme-ov-file#polya-tail-estimation>`_ for more info. 
+
+.. code-block:: console
+
+   samtools view m6A_s.bam|head -n 2|cut -f 1,3,4,26,27,28
+   60325d6a-1862-401c-9d32-ac28760f559e	cc6m_2244_T7_ecorv	1	pt:i:12	MN:i:2197	MM:Z:A+a?,7,1,7,20,14,14,26,9,8,8,41,17,34,14,22,4,37,3,27,4,1,1,14,6,14,16,3,2,1,6,11,8,19,2,13,27,6,38,3;
+   24af2109-0555-4af4-8093-d65c40e13b41	cc6m_2244_T7_ecorv	12	pt:i:17	MN:i:2181	MM:Z:A+a?,10,11,3,25,4,20,4,61,33,0,15,15,1,24,4,6,4,7,14,21,3,25,3,4,16,15,13,3,2,2,1,6,19,9,6,2,12,1,31,33;
+
+Demultiplexing
+======================
+You can turn on the **demultiplexing** just by indicating the tool: dorado for DNA or seqtagger for RNA. Seqtagger requires an NVIDIA GPU. 
+For testing purposes, we can turn on dorado's demultiplexing and specify the sequencing kit in the corresponding command line. We should also add --no-trim or in some cases we could generate an error.
+
+.. code-block:: yaml
+   :emphasize-lines: 7,17
+
+   ...
+   # Basecalling can be either NO, dorado, dorado-mod or dorado-duplex
+   basecalling: "dorado-mod"
+   #For emitting the move tables (with dorado-mod)
+   emit_moves: ""
+   ## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)
+   demultiplexing: "dorado"
+   ...
+   # Program params
+   progPars:
+     basecalling:
+       dorado: "sup"
+       dorado-mod: "sup,m6A_DRACH"
+       dorado-duplex: "sup"
+     demultiplexing:
+       seqtagger: "-k b100"
+       dorado: "--sequencing-kit EXP-NBD104 --no-trim"
+    
 
 
 
