@@ -5,7 +5,7 @@ pod5: "${projectDir}/../data/dMOD/**/*.pod5"
 ## Can be OFF / cuda10 / cuda11.
 GPU: "cuda11"
 # Basecalling can be either NO, dorado, dorado-mod or dorado-duplex
-basecalling: "dorado"
+basecalling: "dorado-mod"
 ## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)
 #demultiplexing: "seqtagger"
 demultiplexing: "NO"
@@ -43,7 +43,7 @@ output: "./outfolder_mod/"
 # Program params
 progPars:
   basecalling:
-    dorado: "sup,m6A_DRACH"
+    dorado: "sup"
     dorado-mod: "sup,m6A_DRACH"
     dorado-duplex: "sup"
   demultiplexing:
