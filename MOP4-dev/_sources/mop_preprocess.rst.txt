@@ -132,7 +132,7 @@ The command line options for each tool used in the pipeline are stored within in
 
 .. literalinclude:: ../mop_preprocess/params.yaml
    :language: yaml
-   :emphasize-lines: 44-65
+   :emphasize-lines: 46-67
 
 The second level indicates the processing step as **basecalling** or **demultiplexing** etc, while the third indicates the tool. Finally you have the command specific command line between quotation marks.
 
