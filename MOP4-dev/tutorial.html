@@ -55,6 +55,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#installing-the-tool-and-the-dependencies">Installing the tool and the dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#starting-from-fastq">Starting from fastq</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#starting-from-pod5">Starting from pod5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-for-modifications">Checking for modifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-for-polya-tail">Checking for polyA tail</a></li>
 </ul>
 </li>
 </ul>
@@ -463,7 +465,7 @@ At this point, you can run the pipeline, indicating the profile m1mac in the com
 
 <span class="go">Output</span>
 <span class="go">----------------------------------------------------</span>
-<span class="go">output                    : ./outfolder_mod2</span>
+<span class="go">output                    : ./outfolder2</span>
 <span class="go">email                     :</span>
 <span class="go">slackhook                 :</span>
 
@@ -568,7 +570,73 @@ At this point, you can run the pipeline, indicating the profile m1mac in the com
 <span class="go">---------------------------------------------------</span>
 </pre></div>
 </div>
+<p>As you can see, the first step of the pipeline allows for the download of the corresponding model, which is then used for the basecalling. In case you have a large number of pod5 files you might want to increase the <cite>granularity</cite> parameter to basecall this number of pod5 per job.</p>
 <p>You can see the report <a class="reference external" href="MOP-pod5_report.html">here</a></p>
+<p>The output folders will be in <cite>outfolder2</cite> as indicated by the parameter <cite>output</cite>. Inside, you have the following list of directories:</p>
+<ul class="simple">
+<li><p>alignment: sorted bam files and their indexes.</p></li>
+<li><p>assigned: tabular file with index id and assigned chromosome or transcript</p></li>
+<li><p>counts: read counts per feature (transcript or gene)</p></li>
+<li><p>cram_files: sorted, subsampled cram files and their indexes.</p></li>
+<li><p>fastq_files: basecalled fastq files</p></li>
+<li><p>report: multiq report</p></li>
+</ul>
+<p>You can see the report <a class="reference external" href="MOP-fastq_report.html">here</a></p>
+</section>
+<section id="checking-for-modifications">
+<h2>Checking for modifications<a class="headerlink" href="#checking-for-modifications" title="Link to this heading"></a></h2>
+<p>For looking at chemical modifications, you can indicate to use “dorado-mod” as a basecalling method and the corresponding model in the command line as such:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">...</span>
+<span class="c1"># Basecalling can be either NO, dorado, dorado-mod or dorado-duplex</span>
+<span class="nt">basecalling</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dorado-mod&quot;</span>
+<span class="nn">...</span>
+<span class="c1"># Program params</span>
+<span class="nt">ProgPars</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">basecalling</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
+<span class="w">      </span><span class="nt">dorado-mod</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup,m6A_DRACH&quot;</span>
+</pre></div>
+</div>
+<p>you can use the params.mod.yaml file for using the other dataset that includes m6A modifications</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -params-file params.mod.yaml -with-docker --GPU LOCAL -profile m1mac</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>If you go to the dorado_models folder you will see two models:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ls dorado_models/</span>
+<span class="go">README.txt   rna004_130bps_sup@v5.1.0   rna004_130bps_sup@v5.1.0_m6A_DRACH@v1</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>and in the output the bam file will contain tags for the modification: MM, base modifications / methylation and ML, base modification probabilities.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">samtools view m6A_s.bam|head -n 5|cut -f 1,3,4,26,27</span>
+<span class="go">60325d6a-1862-401c-9d32-ac28760f559e cc6m_2244_T7_ecorv      1       MN:i:2197       MM:Z:A+a?,7,1,7,20,14,14,26,9,8,8,41,17,34,14,22,4,37,3,27,4,1,1,14,6,14,16,3,2,1,6,11,8,19,2,13,27,6,38,3;</span>
+<span class="go">24af2109-0555-4af4-8093-d65c40e13b41 cc6m_2244_T7_ecorv      12      MN:i:2181       MM:Z:A+a?,10,11,3,25,4,20,4,61,33,0,15,15,1,24,4,6,4,7,14,21,3,25,3,4,16,15,13,3,2,2,1,6,19,9,6,2,12,1,31,33;</span>
+<span class="go">82061285-c7f3-4128-8fb6-b563513b933e cc6m_2244_T7_ecorv      29      MM:Z:A+a?,11,7,4,14,5,19,3;     ML:B:C,254,53,137,0,7,52,8</span>
+<span class="go">bf686eab-7939-4069-a295-a6e0e92920f6 cc6m_2244_T7_ecorv      32      MM:Z:A+a?,9,0,9,4,13,3,19,3,6,15,17,24,41,28,12,66,8,8,2,1,4,8,29,3;    ML:B:C,36,0,4,0,18,0,0,0,0,12,44,220,6,0,0,183,1,0,0,11,1,5,5,3</span>
+<span class="go">88a9f00d-8193-428f-bf62-952ad7dca201 cc6m_2244_T7_ecorv      32      MM:Z:A+a?,9,0,9,4,14,3,19,3,6;  ML:B:C,0,37,44,35,0,0,0,1,139</span>
+</pre></div>
+</div>
+</section>
+<section id="checking-for-polya-tail">
+<h2>Checking for polyA tail<a class="headerlink" href="#checking-for-polya-tail" title="Link to this heading"></a></h2>
+<p>You can search for polyA tails using dorado by adding the following parameter <a class="reference external" href="https://github.com/nanoporetech/dorado?tab=readme-ov-file#polya-tail-estimation">–estimate-poly-a</a></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">...</span>
+<span class="c1"># Basecalling can be either NO, dorado, dorado-mod or dorado-duplex</span>
+<span class="nt">basecalling</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dorado-mod&quot;</span>
+<span class="nn">...</span>
+<span class="c1"># Program params</span>
+<span class="nt">ProgPars</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">basecalling</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
+<span class="w">      </span><span class="nt">dorado-mod</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup,m6A_DRACH</span><span class="nv"> </span><span class="s">--estimate-poly-a&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -params-file params.tail.yaml -with-docker --GPU LOCAL -profile m1mac</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>This will generate a bam file with a custom tag named <cite>pt:i</cite> with the predicted polyA tail length.</p>
 </section>
 </section>
 
