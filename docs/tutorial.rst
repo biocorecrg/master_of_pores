@@ -548,7 +548,7 @@ This will generate a bam file with a custom tag named `pt:i` with the predicted 
 Demultiplexing
 ======================
 You can turn on the **demultiplexing** just by indicating the tool: dorado for DNA or seqtagger for RNA. Seqtagger requires an NVIDIA GPU. 
-For testing purposes, we can turn on dorado's demultiplexing and specifying in the corresponding command line
+For testing purposes, we can turn on dorado's demultiplexing and specify the sequencing kit in the corresponding command line. We should also add --no-trim or in some cases we could generate an error.
 
 .. code-block:: yaml
    :emphasize-lines: 7,17
