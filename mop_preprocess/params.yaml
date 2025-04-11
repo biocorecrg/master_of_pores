@@ -57,7 +57,7 @@ progPars:
   mapping:
     graphmap: ""
     graphmap2: "-x rnaseq"
-    minimap2: "-y -uf -ax splice -k14"
+    minimap2: "-y -uf -k14"
     bwa: ""
     winnowmap: ""
   counting:
