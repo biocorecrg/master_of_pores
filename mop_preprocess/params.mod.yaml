@@ -5,7 +5,7 @@ pod5: "../data/pod5/dMOD/**/*.pod5"
 ## Can be OFF / cuda10 / cuda11.
 GPU: "OFF"
 # Basecalling can be either NO, dorado, dorado-mod or dorado-duplex
-basecalling: "dorado-mod"
+basecalling: "dorado"
 ## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)
 #demultiplexing: "seqtagger"
 demultiplexing: "NO"
