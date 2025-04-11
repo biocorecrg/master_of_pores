@@ -39,7 +39,7 @@ subsampling_cram: 50
 # Output and messaging
 slackhook: ""
 email: ""
-output: "./outfolder_mod2"
+output: "./outfolder2"
 
 # Program params
 progPars:
