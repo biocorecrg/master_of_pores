@@ -43,7 +43,7 @@ output: "./outfolder_mod/"
 # Program params
 progPars:
   basecalling:
-    dorado: "sup"
+    dorado: "sup,m6A_DRACH"
     dorado-mod: "sup,m6A_DRACH"
     dorado-duplex: "sup"
   demultiplexing:
@@ -55,7 +55,7 @@ progPars:
   mapping:
     graphmap: ""
     graphmap2: "-x rnaseq"
-    minimap2: "-y -uf -ax splice -k14"
+    minimap2: "-y -uf -k14"
     bwa: ""
   winnowmap: ""
   counting:

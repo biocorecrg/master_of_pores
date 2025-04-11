@@ -45,7 +45,7 @@ output: "./outfolder2"
 progPars:
   basecalling:
     dorado: "sup"
-    dorado-duplex: "sup"
+    dorado-duplex: "sup,m6A_DRACH"
     dorado-mod: "sup,m6A_DRACH --estimate-poly-a"
   demultiplexing:
     seqtagger: "-k b04_RNA004"
