@@ -452,6 +452,8 @@ You can run the pipeline on Linux in local using docker or singularity as a cont
    ```nextflow run mop_preprocess.nf -params-file params.pod.yaml -with-docker --GPU LOCAL -profile m1mac```
    ---------------------------------------------------
 
+You can see the report `here <MOP-pod5_report.html>`_
+
 
 
 
