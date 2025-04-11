@@ -647,7 +647,7 @@ At this point, you can run the pipeline, indicating the profile m1mac in the com
 <section id="demultiplexing">
 <h2>Demultiplexing<a class="headerlink" href="#demultiplexing" title="Link to this heading"></a></h2>
 <p>You can turn on the <strong>demultiplexing</strong> just by indicating the tool: dorado for DNA or seqtagger for RNA. Seqtagger requires an NVIDIA GPU.
-For testing purposes, we can turn on dorado’s demultiplexing and specifying in the corresponding command line</p>
+For testing purposes, we can turn on dorado’s demultiplexing and specify the sequencing kit in the corresponding command line. We should also add –no-trim or in some cases we could generate an error.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">...</span>
 <span class="c1"># Basecalling can be either NO, dorado, dorado-mod or dorado-duplex</span>
 <span class="nt">basecalling</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dorado-mod&quot;</span>
