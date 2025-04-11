@@ -4,6 +4,7 @@ on:
   push:
     paths-ignore:
       - 'docs/**'
+      - '.github/workflows/docs/**'
   pull_request:
     paths-ignore:
       - 'docs/**'
