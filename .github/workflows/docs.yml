@@ -17,6 +17,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Upload docs folder
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: |
+            docs/MOP-fastq_report.html 
+
       - name: Deploy docs with sphinx-notes/pages
         id: deployment
         uses: sphinx-notes/pages@v3
@@ -29,13 +35,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           destination_dir: ${{ github.ref_name }}
           publish_dir: ${{ steps.deployment.outputs.artifact }}
-
-      - name: Upload docs folder
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: |
-            docs/MOP-fastq_report.html 
-            
+        
       - name: Checkout default branch
         uses: actions/checkout@v4
         with:
