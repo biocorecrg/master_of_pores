@@ -40,12 +40,11 @@ jobs:
         with:
           ref: gh-pages
           path: gh-pages
-         
-      - name: Upload docs folder
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path:
-            'html_reports/'
+
+      - name: Copy report file(s)
+        run: |
+          mkdir -p gh-pages
+          cp html_reports/MOP-fastq_report.html gh-pages/
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
