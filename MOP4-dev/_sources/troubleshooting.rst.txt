@@ -10,7 +10,7 @@ Troubleshooting
 
 Failure in downloading singularity images
 ================================================================
-Sometimes we have problems in downloading the singularity images. You can pre-download them by using the script **get_singularity.py** in **master_of_pores/BioNextflow/scripts**. You need to inspect your pipeline and store the results as here:
+Sometimes we have problems in downloading the singularity images. You can pre-download them by using the script **get_singularity.py** in **MOP4/BioNextflow/scripts**. You need to inspect your pipeline and store the results as here:
 
 
 .. code-block:: console
@@ -24,7 +24,8 @@ Then you can feed the json file to **get_singularity.py** and indicate where to 
    python get_singularity.py -j inspect.json -c ./singularity_folder
 
 
-Memory failures in mop_preprocess and mop_mod
+Error with demultiplexing with Dorado
 ================================================================
 
-Sometimes FastQC, Epinano, or other tools can run out of memory because the input data contain low-quality reads. It is always a good idea to double-check it and eventually filter them per size / quality using either **nanoq** or **nanofilt**.
+When running dorado for demultiplexing you would need to add the option `--no-trim` or you could get errors. This is because of this `issue <https://github.com/nanoporetech/dorado/issues/539>`_:
+

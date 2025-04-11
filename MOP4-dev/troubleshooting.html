@@ -53,7 +53,7 @@
 <li class="toctree-l1"><a class="reference internal" href="ci.html">Continuous integration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Troubleshooting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#failure-in-downloading-singularity-images">Failure in downloading singularity images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#memory-failures-in-mop-preprocess-and-mop-mod">Memory failures in mop_preprocess and mop_mod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-with-demultiplexing-with-dorado">Error with demultiplexing with Dorado</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">TUTORIAL</a></li>
@@ -87,7 +87,7 @@
 <span id="home-page-troubleshooting"></span><h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h1>
 <section id="failure-in-downloading-singularity-images">
 <h2>Failure in downloading singularity images<a class="headerlink" href="#failure-in-downloading-singularity-images" title="Link to this heading"></a></h2>
-<p>Sometimes we have problems in downloading the singularity images. You can pre-download them by using the script <strong>get_singularity.py</strong> in <strong>master_of_pores/BioNextflow/scripts</strong>. You need to inspect your pipeline and store the results as here:</p>
+<p>Sometimes we have problems in downloading the singularity images. You can pre-download them by using the script <strong>get_singularity.py</strong> in <strong>MOP4/BioNextflow/scripts</strong>. You need to inspect your pipeline and store the results as here:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow inspect -params-file params.yaml -profile slurm mop_preprocess.nf &gt; inspect.json</span>
 </pre></div>
 </div>
@@ -96,9 +96,9 @@
 </pre></div>
 </div>
 </section>
-<section id="memory-failures-in-mop-preprocess-and-mop-mod">
-<h2>Memory failures in mop_preprocess and mop_mod<a class="headerlink" href="#memory-failures-in-mop-preprocess-and-mop-mod" title="Link to this heading"></a></h2>
-<p>Sometimes FastQC, Epinano, or other tools can run out of memory because the input data contain low-quality reads. It is always a good idea to double-check it and eventually filter them per size / quality using either <strong>nanoq</strong> or <strong>nanofilt</strong>.</p>
+<section id="error-with-demultiplexing-with-dorado">
+<h2>Error with demultiplexing with Dorado<a class="headerlink" href="#error-with-demultiplexing-with-dorado" title="Link to this heading"></a></h2>
+<p>When running dorado for demultiplexing you would need to add the option <cite>–no-trim</cite> or you could get errors. This is because of this <a class="reference external" href="https://github.com/nanoporetech/dorado/issues/539">issue</a>:</p>
 </section>
 </section>
 
