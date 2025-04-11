@@ -537,5 +537,40 @@ You can search for polyA tails using dorado by adding the following parameter `-
    ...
 
 
-This will generate a bam file with a custom tag named `pt:i` with the predicted polyA tail length.
+This will generate a bam file with a custom tag named `pt:i` with the predicted polyA tail length. See `here <https://github.com/nanoporetech/dorado?tab=readme-ov-file#polya-tail-estimation>`_ for more info. 
+
+.. code-block:: console
+
+   samtools view m6A_s.bam|head -n 2|cut -f 1,3,4,26,27,28
+   60325d6a-1862-401c-9d32-ac28760f559e	cc6m_2244_T7_ecorv	1	pt:i:12	MN:i:2197	MM:Z:A+a?,7,1,7,20,14,14,26,9,8,8,41,17,34,14,22,4,37,3,27,4,1,1,14,6,14,16,3,2,1,6,11,8,19,2,13,27,6,38,3;
+   24af2109-0555-4af4-8093-d65c40e13b41	cc6m_2244_T7_ecorv	12	pt:i:17	MN:i:2181	MM:Z:A+a?,10,11,3,25,4,20,4,61,33,0,15,15,1,24,4,6,4,7,14,21,3,25,3,4,16,15,13,3,2,2,1,6,19,9,6,2,12,1,31,33;
+
+Demultiplexing
+======================
+You can turn on the **demultiplexing** just by indicating the tool: dorado for DNA or seqtagger for RNA. Seqtagger requires an NVIDIA GPU. 
+For testing purposes, we can turn on dorado's demultiplexing and specifying in the corresponding command line
+
+.. code-block:: yaml
+   :emphasize-lines: 7,17
+
+   ...
+   # Basecalling can be either NO, dorado, dorado-mod or dorado-duplex
+   basecalling: "dorado-mod"
+   #For emitting the move tables (with dorado-mod)
+   emit_moves: ""
+   ## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)
+   demultiplexing: "dorado"
+   ...
+   # Program params
+   progPars:
+     basecalling:
+       dorado: "sup"
+       dorado-mod: "sup,m6A_DRACH"
+       dorado-duplex: "sup"
+     demultiplexing:
+       seqtagger: "-k b100"
+       dorado: "--sequencing-kit EXP-NBD104 --no-trim"
+    
+
+
 
