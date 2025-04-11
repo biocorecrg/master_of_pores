@@ -268,6 +268,8 @@ The output folders will be in `outfolder` as indicated by the parameter `output`
 - report: multiq report
 
 You can see the report `here <MOP-fastq_report.html>`_
+
+
 The `work` folder, in which nextflow store all the intermediate files, will be in the same place. Since it can be huge you can also redirect elsewhere using the nextflow parameter `-w`.
 
 
