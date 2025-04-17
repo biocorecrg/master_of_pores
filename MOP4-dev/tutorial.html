@@ -58,6 +58,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#checking-for-modifications">Checking for modifications</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#checking-for-polya-tail">Checking for polyA tail</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#demultiplexing">Demultiplexing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#alignment-and-feature-counts">Alignment and feature counts</a></li>
 </ul>
 </li>
 </ul>
@@ -693,6 +694,47 @@ For testing purposes, we can turn on dorado’s demultiplexing and specify the s
 </pre></div>
 </div>
 <p>Of course, they will be classified as unclassified since there is no real demultiplexing here.</p>
+</section>
+<section id="alignment-and-feature-counts">
+<h2>Alignment and feature counts<a class="headerlink" href="#alignment-and-feature-counts" title="Link to this heading"></a></h2>
+<p>MoP can run <strong>minimap2</strong>, <strong>graphmap</strong> and <strong>bwa</strong> as aligners. The first one is the choice by default, whereas <strong>graphmap</strong> is used with highly modified reads (e.g: rRNA) aligning to a transcriptome. <strong>Bwa</strong> is used to map short reads (e.g:tRNA) but its usage won’t be described in this tutorial.</p>
+<p><strong>Minimap2</strong> is the most widely used long-read aligner and it can be used in both spliced (reference type: genome) and unspliced (reference type: transcriptome) alignments. However, parameters must be changed accordingly. Recommended parameters are shown below:</p>
+<ul class="simple">
+<li><p><strong>Spliced</strong>: <em>-ax splice -uf -k14</em></p></li>
+<li><p><strong>Unspliced</strong>: <em>-ax map-ont</em></p></li>
+</ul>
+<p>The aligner of choice as well as its respective parameters should be included by the user in the params.file as shown below:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">## Can be graphmap / graphmap2 / minimap2 / winnowmap / bwa / NO</span>
+<span class="nt">mapping</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;minimap2&quot;</span>
+
+<span class="nn">...</span>
+
+<span class="w"> </span><span class="nt">mapping</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">graphmap</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">    </span><span class="nt">minimap2</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-ax</span><span class="nv"> </span><span class="s">splice</span><span class="nv"> </span><span class="s">-uf</span><span class="nv"> </span><span class="s">-k14&quot;</span>
+<span class="w">    </span><span class="nt">bwa</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Once the bams are generated, MoP can run either <strong>htseq-count</strong> or <strong>NanoCount</strong> to generate feature (genes or transcripts) counts. The choice between them is based on the type of reference used in the alignment:</p>
+<ul class="simple">
+<li><p>Genome reference: <strong>htseq-count</strong>. Additionally, MoP requires the input of an <strong>annotation file (gtf)</strong> to run this algorithm.</p></li>
+<li><p>Transcriptome reference: <strong>NanoCount</strong>. No additional files are required.</p></li>
+</ul>
+<p>As seen with the aligners, the software to be used, parameters and any required inputs must be included by the user in the params.file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">## Can be transcriptome / genome</span>
+<span class="nt">ref_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;transcriptome&quot;</span>
+<span class="nt">annotation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+
+<span class="c1">## Can be nanocount for transcriptome / htseq for genome</span>
+<span class="nt">counting</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nanocount&quot;</span>
+
+<span class="nn">...</span>
+
+<span class="nt">counting</span><span class="p">:</span>
+<span class="w"> </span><span class="nt">htseq</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-a</span><span class="nv"> </span><span class="s">0&quot;</span>
+<span class="w"> </span><span class="nt">nanocount</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
 </section>
 </section>
 
