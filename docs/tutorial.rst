@@ -602,7 +602,48 @@ As you can see now, there are other processes:
 
 Of course, they will be classified as unclassified since there is no real demultiplexing here.
 
+Alignment and feature counts
+======================
+MoP can run **minimap2**, **graphmap** and **bwa** as aligners. The first one is the choice by default, whereas **graphmap** is used with highly modified reads (e.g: rRNA) aligning to a transcriptome. **Bwa** is used to map short reads (e.g:tRNA) but its usage won't be described in this tutorial. 
+
+**Minimap2** is the most widely used long-read aligner and it can be used in both spliced (reference type: genome) and unspliced (reference type: transcriptome) alignments. However, parameters must be changed accordingly. Recommended parameters are shown below:
+
+- **Spliced**: *-ax splice -uf -k14*
+- **Unspliced**: *-ax map-ont*
+
+The aligner of choice as well as its respective parameters should be included by the user in the params.file as shown below:
+
+.. code-block:: yaml
+
+   ## Can be graphmap / graphmap2 / minimap2 / winnowmap / bwa / NO
+   mapping: "minimap2"
+
+   ...
+
+    mapping:
+       graphmap: ""
+       minimap2: "-ax splice -uf -k14"
+       bwa: ""
+
+Once the bams are generated, MoP can run either **htseq-count** or **NanoCount** to generate feature (genes or transcripts) counts. The choice between them is based on the type of reference used in the alignment:
+
+- Genome reference: **htseq-count**. Additionally, MoP requires the input of an **annotation file (gtf)** to run this algorithm. 
+- Transcriptome reference: **NanoCount**. No additional files are required. 
+
+As seen with the aligners, the software to be used, parameters and any required inputs must be included by the user in the params.file:
 
 
+.. code-block:: yaml
 
+   ## Can be transcriptome / genome
+   ref_type: "transcriptome"
+   annotation: ""
+   
+   ## Can be nanocount for transcriptome / htseq for genome
+   counting: "nanocount"
 
+   ...
+
+   counting:
+    htseq: "-a 0"
+    nanocount: ""
