@@ -200,8 +200,8 @@ You will get this as output.
    Actions
    ----------------------------------------------------
    basecalling               : NO
-   demultiplexing            : dorado
-   demulti_pod5              : ON
+   demultiplexing            : NO
+   demulti_pod5              : NO
    filtering                 : nanoq
    mapping                   : minimap2
    counting                  : nanocount
