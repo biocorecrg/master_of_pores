@@ -12,6 +12,7 @@ This basic tutorial will show you how to install and run Master of Pores in diff
 Installing the tool and the dependencies
 ======================
 
+
 - Install nextflow (see `here <https://www.nextflow.io/docs/latest/install.html>`_ for the full doc), java version >= 17 is required. 
                     
 .. code-block:: console
