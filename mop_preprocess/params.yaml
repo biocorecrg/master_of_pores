@@ -7,9 +7,11 @@ GPU: "OFF"
 # Basecalling can be either NO, dorado, dorado-mod or dorado-duplex
 basecalling: "NO"
 ## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)
-#demultiplexing: "seqtagger"
+#For emitting the move tables (with dorado-mod)
+emit_moves: ""
+## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)
 demultiplexing: "dorado"
-demulti_pod5: "ON"
+demulti_pod5: "OFF"
 ### Number of fast5 basecalled per parallel job
 granularity: 1
 ### File with the list of accepted barcodes. It can be empty
