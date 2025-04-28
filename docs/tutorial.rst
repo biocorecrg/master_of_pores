@@ -127,7 +127,7 @@ To run the pipeline, just type:
 
 .. code-block:: console
 
-   nextflow run mop_preprocess.nf -with-docker -params-file params.yaml
+   nextflow run mop_preprocess.nf -with-docker -params-file params.yaml -profile local
 
 You will get this as output. 
 
