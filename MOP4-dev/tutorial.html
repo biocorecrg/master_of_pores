@@ -147,9 +147,11 @@ If you are on a Mac you can only install <a class="reference external" href="htt
 <span class="c1"># Basecalling can be either NO, dorado, dorado-mod or dorado-duplex</span>
 <span class="nt">basecalling</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NO&quot;</span>
 <span class="c1">## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)</span>
-<span class="c1">#demultiplexing: &quot;seqtagger&quot;</span>
+<span class="c1">#For emitting the move tables (with dorado-mod)</span>
+<span class="nt">emit_moves</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="c1">## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)</span>
 <span class="nt">demultiplexing</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dorado&quot;</span>
-<span class="nt">demulti_pod5</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ON&quot;</span>
+<span class="nt">demulti_pod5</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;OFF&quot;</span>
 <span class="c1">### Number of fast5 basecalled per parallel job</span>
 <span class="nt">granularity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 <span class="c1">### File with the list of accepted barcodes. It can be empty</span>
