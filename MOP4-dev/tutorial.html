@@ -575,7 +575,6 @@ At this point, you can run the pipeline, indicating the profile m1mac in the com
 </pre></div>
 </div>
 <p>As you can see, the first step of the pipeline allows for the download of the corresponding model, which is then used for the basecalling. In case you have a large number of pod5 files you might want to increase the <cite>granularity</cite> parameter to basecall this number of pod5 per job.</p>
-<p>You can see the report <a class="reference external" href="MOP-pod5_report.html">here</a></p>
 <p>The output folders will be in <cite>outfolder2</cite> as indicated by the parameter <cite>output</cite>. Inside, you have the following list of directories:</p>
 <ul class="simple">
 <li><p>alignment: sorted bam files and their indexes.</p></li>
@@ -585,7 +584,7 @@ At this point, you can run the pipeline, indicating the profile m1mac in the com
 <li><p>fastq_files: basecalled fastq files</p></li>
 <li><p>report: multiq report</p></li>
 </ul>
-<p>You can see the report <a class="reference external" href="MOP-fastq_report.html">here</a></p>
+<p>You can see the report <a class="reference external" href="MOP-pod5_report.html">here</a></p>
 </section>
 <section id="checking-for-modifications">
 <h2>Checking for modifications<a class="headerlink" href="#checking-for-modifications" title="Link to this heading"></a></h2>
@@ -650,7 +649,11 @@ At this point, you can run the pipeline, indicating the profile m1mac in the com
 <section id="demultiplexing">
 <h2>Demultiplexing<a class="headerlink" href="#demultiplexing" title="Link to this heading"></a></h2>
 <p>You can turn on the <strong>demultiplexing</strong> just by indicating the tool: dorado for DNA or seqtagger for RNA. Seqtagger requires an NVIDIA GPU.
-For testing purposes, we can turn on dorado’s demultiplexing and specify the sequencing kit in the corresponding command line. We should also add –no-trim or in some cases we could generate an error.</p>
+For testing purposes, we can turn on dorado’s demultiplexing and specify the <a class="reference external" href="https://nanoporetech.com/document/chemistry-technical-document#barcoding-kits">sequencing kit</a> in the corresponding command line. We should also add –no-trim or in some cases we could generate an error.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The kit must be specified using “-” instead of a dot for the version: e.g. SQK-NBD114-24 instead of SQK-NBD114.24.</p>
+</div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">...</span>
 <span class="c1"># Basecalling can be either NO, dorado, dorado-mod or dorado-duplex</span>
 <span class="hll"><span class="nt">basecalling</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dorado&quot;</span>
