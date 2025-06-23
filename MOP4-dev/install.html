@@ -137,14 +137,14 @@
 <section id="running-on-slurm-hpc-by-submitting-the-nextflow-job">
 <h2>Running on slurm HPC by submitting the nextflow job<a class="headerlink" href="#running-on-slurm-hpc-by-submitting-the-nextflow-job" title="Link to this heading"></a></h2>
 <p>You can use the script <a href="#id1"><span class="problematic" id="id2">`</span></a>launch_nf.sh`for submitting the nextflow jobs as follows:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sbatch launch_nf.sh nextflow run run mop_preprocess.nf -params-file params.f5.yaml -ansi-log false -with-singularity -profile newcrg</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sbatch launch_nf.sh nextflow run mop_preprocess.nf -params-file params.f5.yaml -ansi-log false -with-singularity -profile newcrg</span>
 </pre></div>
 </div>
 </section>
 <section id="limiting-the-amount-of-temporary-space-needed-experimental">
 <h2>Limiting the amount of temporary space needed (experimental)<a class="headerlink" href="#limiting-the-amount-of-temporary-space-needed-experimental" title="Link to this heading"></a></h2>
 <p>A special profile named clean can be added to the one in use for using the novel <a class="reference external" href="https://github.com/bentsherman/nf-boost">nf-boost plugins</a>. You need Java version 21.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>launch_nf.sh<span class="w"> </span>nextflow<span class="w"> </span>run<span class="w"> </span>run<span class="w"> </span>mop_preprocess.nf<span class="w"> </span>-params-file<span class="w"> </span>params.f5.yaml<span class="w"> </span>-ansi-log<span class="w"> </span><span class="nb">false</span><span class="w"> </span>-with-singularity<span class="w"> </span>-profile<span class="w"> </span>newcrg,clean
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>launch_nf.sh<span class="w"> </span>nextflow<span class="w"> </span>run<span class="w"> </span>mop_preprocess.nf<span class="w"> </span>-params-file<span class="w"> </span>params.f5.yaml<span class="w"> </span>-ansi-log<span class="w"> </span><span class="nb">false</span><span class="w"> </span>-with-singularity<span class="w"> </span>-profile<span class="w"> </span>newcrg,clean
 </pre></div>
 </div>
 </section>
@@ -159,7 +159,7 @@ At this point, you can run the pipeline, indicating the profile m1mac in the com
 <span class="nn">...</span>
 </pre></div>
 </div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run run mop_preprocess.nf -params-file params.pod5.yaml -bg -with-docker -profile m1mac &gt; log.txt</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -params-file params.pod5.yaml -bg -with-docker -profile m1mac &gt; log.txt</span>
 </pre></div>
 </div>
 </section>

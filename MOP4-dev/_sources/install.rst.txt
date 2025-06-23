@@ -67,7 +67,7 @@ You can use the script `launch_nf.sh`for submitting the nextflow jobs as follows
 
 .. code-block:: console
 
-   sbatch launch_nf.sh nextflow run run mop_preprocess.nf -params-file params.f5.yaml -ansi-log false -with-singularity -profile newcrg 
+   sbatch launch_nf.sh nextflow run mop_preprocess.nf -params-file params.f5.yaml -ansi-log false -with-singularity -profile newcrg 
 
 Limiting the amount of temporary space needed (experimental)
 ===============
@@ -76,7 +76,7 @@ A special profile named clean can be added to the one in use for using the novel
 
 .. code-block:: bash
 
-   sbatch launch_nf.sh nextflow run run mop_preprocess.nf -params-file params.f5.yaml -ansi-log false -with-singularity -profile newcrg,clean
+   sbatch launch_nf.sh nextflow run mop_preprocess.nf -params-file params.f5.yaml -ansi-log false -with-singularity -profile newcrg,clean
 
 
 Running on M1/2/3/4 Mac OSX (experimental)
@@ -94,6 +94,6 @@ At this point, you can run the pipeline, indicating the profile m1mac in the com
 
 .. code-block:: console
 
-   nextflow run run mop_preprocess.nf -params-file params.pod5.yaml -bg -with-docker -profile m1mac > log.txt 
+   nextflow run mop_preprocess.nf -params-file params.pod5.yaml -bg -with-docker -profile m1mac > log.txt 
 
   
