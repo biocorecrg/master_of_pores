@@ -399,7 +399,7 @@ WARN: Include with <cite>addParams()</cite> is deprecated – pass params as a w
 <section id="starting-from-pod5">
 <h2>Starting from pod5<a class="headerlink" href="#starting-from-pod5" title="Link to this heading"></a></h2>
 <p>You can run the pipeline on Linux in local using docker or singularity as a container engine. We can use another params file for accessing the test dataset that is bundled in the GitHub repository. You can also send the execution in background using the nextflow parameter <cite>-bg</cite> and redirecting the output to a file.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -params-file params.pod5.yaml -with-docker -bg &gt; log.txt</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -params-file params.pod.yaml -with-docker -bg &gt; log.txt</span>
 </pre></div>
 </div>
 <div class="admonition note">

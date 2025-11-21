@@ -281,7 +281,7 @@ You can run the pipeline on Linux in local using docker or singularity as a cont
 
 .. code-block:: console
 
-   nextflow run mop_preprocess.nf -params-file params.pod5.yaml -with-docker -bg > log.txt
+   nextflow run mop_preprocess.nf -params-file params.pod.yaml -with-docker -bg > log.txt
 
 .. Note:: 
    In case you are using a Mac with an Apple silicon chip you will need to install dorado manually from `here <https://github.com/nanoporetech/dorado>`_. 
