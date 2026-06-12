@@ -52,4 +52,4 @@ jobs:
 
         env:
           NXF_ANSI_LOG: false
-          NXF_VER: 24.04.4
+          NXF_VER: 25.04.5

@@ -6,7 +6,7 @@ pod5: "../data/pod5/**/*.pod5"
 GPU: "cuda11"
 # Basecalling can be either NO, dorado, dorado-mod or dorado-duplex
 basecalling: "dorado"
-## Demultiplexing can be either NO dorado (for DNA) / seqtagger (for RNA)
+## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA) / seqtagger-trna (for tRNA)
 demultiplexing: "NO"
 demulti_pod5: "ON"
 ### Number of fast5 basecalled per parallel job
@@ -49,6 +49,7 @@ progPars:
     dorado-mod: "sup,m6A_DRACH --estimate-poly-a"
   demultiplexing:
     seqtagger: "-k b04_RNA004"
+    seqtagger-trna: "-k b07_RNA004_tRNA"
     dorado: "--kit-name  EXP-NBD104"
   filtering:
     seqkit: ""

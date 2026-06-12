@@ -7,6 +7,15 @@ CHANGELOG
 .. autosummary::
    :toctree: generated
 
+Version 4.1
+================
+
+* mop_preprocess
+   * Updated Nextflow version to 25.04.5.
+   * Added a stats file (MultiQC standard) with total number of reads, accepted reads, and percentages.
+   * Added Python container support for ADAPTIVE_SAMPLINGQC.
+   * Added support for tRNA demultiplexing with seqtagger-trna.
+
 Version 4.0
 ================
 Removed mop_tail and added mop_dna and mop_utils

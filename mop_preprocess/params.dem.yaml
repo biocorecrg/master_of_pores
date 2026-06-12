@@ -8,7 +8,7 @@ GPU: "cuda11"
 basecalling: "dorado"
 #For emitting the move tables (with dorado-mod)
 emit_moves: ""
-## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)
+## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA) / seqtagger-trna (for tRNA)
 demultiplexing: "dorado"
 ### For demultiplexing pod5 files
 demulti_pod5: "NO"
@@ -50,6 +50,7 @@ progPars:
     dorado-duplex: "sup"
   demultiplexing:
     seqtagger: "-k b100"
+    seqtagger-trna: "-k b07_RNA004_tRNA"
     dorado: "--sequencing-kit EXP-NBD104 --no-trim"
   filtering:
     nanofilt: ""

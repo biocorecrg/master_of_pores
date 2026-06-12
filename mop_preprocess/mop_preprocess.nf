@@ -10,7 +10,7 @@ nextflow.enable.dsl=2
  */
 
 // Pipeline version
-version = '4.0'
+version = '4.1'
 
 params.help            = false
 params.resume          = false
@@ -157,6 +157,9 @@ switch(params.demultiplexing) {
     case "seqtagger":
         demux_models = "${projectDir}/seqtagger_models/"
     break;
+    case "seqtagger-trna":
+        demux_models = "${projectDir}/seqtagger_tRNA_models/"
+    break;
     case "dorado":
         demux_models = "${projectDir}/seqtagger_models/"
     break;
@@ -228,11 +231,15 @@ checkTools(tools, params.progPars)
 progPars["basecalling"]["dorado-mod"] = progPars["basecalling"]["dorado-mod"] + " --emit-moves"
 
 def basecaller_pars = ["dorado" : progPars["basecalling"]["dorado"],  "dorado-duplex" : progPars["basecalling"]["dorado"], "dorado-mod" : progPars["basecalling"]["dorado-mod"] ]
-def demux_pars = [ "dorado" : progPars["basecalling"]["dorado"] + " " + progPars["demultiplexing"]["dorado"], "seqtagger":  progPars["demultiplexing"]["seqtagger"] ]
+def demux_pars = [ "dorado" : progPars["basecalling"]["dorado"] + " " + progPars["demultiplexing"]["dorado"], "seqtagger":  progPars["demultiplexing"]["seqtagger"], "seqtagger-trna":  progPars["demultiplexing"]["seqtagger-trna"] ]
 def mapping_pars = ["bwa": progPars["mapping"]["bwa"], "winnowmap": progPars["mapping"]["winnowmap"] + " -y",
 				"graphmap2": progPars["mapping"]["graphmap2"], "minimap2": progPars["mapping"]["minimap2"] + " -y --MD",
 				"graphmap": progPars["mapping"]["graphmap"]
 				]
+
+if (params.demultiplexing == "seqtagger-trna") {
+	dem_cont = "lpryszcz/seqtagger:1.1a"
+}
 
 // INCLUDE WORKFLOWS
 include { BASECALL } from "${workflowsDir}/basecaller" addParams(gpu: gpu_bc, output: output_bc, label: basecall_label, label2:'big_cpus', type:basecalling ,  extrapars: basecaller_pars[basecalling], models: dorado_models )
@@ -467,6 +474,7 @@ workflow {
 
             switch(params.demultiplexing) {
                 case "seqtagger":
+                case "seqtagger-trna":
                 	outbc = BASECALL(pod5_4_analysis)
                 	demux = DEMULTIPLEX(pod5_4_analysis, outbc.basecalled_fastq)
                 	demufq = demux.demultiplexed_fastq

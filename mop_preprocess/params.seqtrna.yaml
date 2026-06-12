@@ -5,10 +5,12 @@ pod5: "${projectDir}/../data/dMOD/**/*.pod5"
 ## Can be OFF / cuda10 / cuda11.
 GPU: "cuda11"
 # Basecalling can be either NO, dorado, dorado-mod or dorado-duplex
-basecalling: "dorado-mod"
+basecalling: "dorado"
+#For emitting the move tables (with dorado-mod)
+emit_moves: ""
 ## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA) / seqtagger-trna (for tRNA)
-#demultiplexing: "seqtagger"
-demultiplexing: "NO"
+demultiplexing: "seqtagger-trna"
+### For demultiplexing pod5 files
 demulti_pod5: "NO"
 ### Number of fast5 basecalled per parallel job
 granularity: 1
@@ -37,7 +39,7 @@ subsampling_cram: 50
 ## Output and notifications
 slackhook: ""
 email: ""
-output: "./outfolder_mod/"
+output: "./outfolder_dem/"
 
 
 # Program params
@@ -49,7 +51,7 @@ progPars:
   demultiplexing:
     seqtagger: "-k b100"
     seqtagger-trna: "-k b07_RNA004_tRNA"
-    dorado: ""
+    dorado: "--sequencing-kit EXP-NBD104 --no-trim"
   filtering:
     nanofilt: ""
     nanoq: ""

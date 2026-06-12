@@ -15,6 +15,7 @@ _term() {
 
 trap _term TERM
 
+export NXF_VER="25.04.5"
 export NXF_JVM_ARGS="-Xms2g -Xmx6g"
 
 "$@" & pid=$!
