@@ -1,0 +1,777 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TUTORIAL &mdash; MOP4  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+    <link rel="canonical" href="https://biocorecrg.github.io/MOP4/tutorial.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Troubleshooting" href="troubleshooting.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MOP4
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About Master of Pores 4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Get Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mop_preprocess.html">MOP_PREPROCESS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reporting.html">Resource reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ci.html">Continuous integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">TUTORIAL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-the-tool-and-the-dependencies">Installing the tool and the dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-from-fastq">Starting from fastq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-from-pod5">Starting from pod5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-for-modifications">Checking for modifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-for-polya-tail">Checking for polyA tail</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#demultiplexing">Demultiplexing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#alignment-and-feature-counts">Alignment and feature counts</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MOP4</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">TUTORIAL</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tutorial">
+<span id="id1"></span><h1>TUTORIAL<a class="headerlink" href="#tutorial" title="Link to this heading"></a></h1>
+<p>This basic tutorial will show you how to install and run Master of Pores in different scenarios.</p>
+<section id="installing-the-tool-and-the-dependencies">
+<h2>Installing the tool and the dependencies<a class="headerlink" href="#installing-the-tool-and-the-dependencies" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Install nextflow (see <a class="reference external" href="https://www.nextflow.io/docs/latest/install.html">here</a> for the full doc), java version &gt;= 17 is required.</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>Installing<span class="w"> </span>nextflow
+<span class="go">curl -s https://get.nextflow.io | bash</span>
+</pre></div>
+</div>
+<p>You might want to place in <cite>/usr/local/bin</cite> or add the current folder in the <cite>$PATH</cite> variable.</p>
+<p>If you are on a Linux machine, you can install either <a class="reference external" href="https://www.docker.com/get-started/">Docker</a> or <a class="reference external" href="https://apptainer.org/docs/admin/main/installation.html">singularity / apptainer</a>.
+If you are on a Mac you can only install <a class="reference external" href="https://www.docker.com/get-started/">Docker</a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>On Linux and in particular on HPC we suggest using singularity / apptainer</p>
+</div>
+<p>Let’s now install Master of Pores using <cite>git clone</cite></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone --depth 1 --recurse-submodules https://github.com/biocorecrg/master_of_pores.git</span>
+
+<span class="go">Cloning into &#39;master_of_pores&#39;...</span>
+<span class="go">remote: Enumerating objects: 96, done.</span>
+<span class="go">remote: Counting objects: 100% (96/96), done.</span>
+<span class="go">remote: Compressing objects: 100% (87/87), done.</span>
+<span class="go">remote: Total 96 (delta 12), reused 56 (delta 2), pack-reused 0 (from 0)</span>
+<span class="go">Receiving objects: 100% (96/96), 10.64 MiB | 14.68 MiB/s, done.</span>
+<span class="go">Resolving deltas: 100% (12/12), done.</span>
+<span class="go">Submodule &#39;BioNextflow&#39; (https://github.com/biocorecrg/BioNextflow) registered for path &#39;BioNextflow&#39;</span>
+<span class="go">Cloning into &#39;/Users/lcozzuto/ooo/master_of_pores/BioNextflow&#39;...</span>
+<span class="go">remote: Enumerating objects: 2763, done.</span>
+<span class="go">remote: Counting objects: 100% (250/250), done.</span>
+<span class="go">remote: Compressing objects: 100% (169/169), done.</span>
+<span class="go">remote: Total 2763 (delta 150), reused 163 (delta 81), pack-reused 2513 (from 2)</span>
+<span class="go">Receiving objects: 100% (2763/2763), 107.75 MiB | 10.21 MiB/s, done.</span>
+<span class="go">Resolving deltas: 100% (1774/1774), done.</span>
+<span class="go">Submodule path &#39;BioNextflow&#39;: checked out &#39;c70c28508dbc44c362cc77208130b24d0dbb2e78&#39;</span>
+</pre></div>
+</div>
+<p>This will download the pipeline and the required submodules.</p>
+</section>
+<section id="starting-from-fastq">
+<h2>Starting from fastq<a class="headerlink" href="#starting-from-fastq" title="Link to this heading"></a></h2>
+<p>The test dataset is bundled with the repository. We have two small compressed fastq samples:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd master_of_pores</span>
+<span class="go">ls data/fastq/</span>
+<span class="go">mod.fq.gz     wt.fq.gz</span>
+</pre></div>
+</div>
+<p>To analyze them, we need to go to the mop_preprocess folder and run the pipeline. All the required parameters for running the pipeline are in a yaml file. Let’s check the params.yaml</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parameters</span>
+
+<span class="c1"># Needed for pod5 input</span>
+<span class="nt">pod5</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="c1">## Can be OFF / cuda10 / cuda11.</span>
+<span class="nt">GPU</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;OFF&quot;</span>
+<span class="c1"># Basecalling can be either NO, dorado, dorado-mod or dorado-duplex</span>
+<span class="nt">basecalling</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NO&quot;</span>
+<span class="c1">## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA) / seqtagger-trna (for tRNA)</span>
+<span class="c1">#For emitting the move tables (with dorado-mod)</span>
+<span class="nt">emit_moves</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="c1">## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA) / seqtagger-trna (for tRNA)</span>
+<span class="nt">demultiplexing</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NO&quot;</span>
+<span class="nt">demulti_pod5</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;OFF&quot;</span>
+<span class="c1">### Number of fast5 basecalled per parallel job</span>
+<span class="nt">granularity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="c1">### File with the list of accepted barcodes. It can be empty</span>
+<span class="nt">barcodes</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+
+<span class="c1"># Needed for fastq input</span>
+<span class="nt">fastq</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${projectDir}/../data/fastq/*.fq.gz&quot;</span>
+
+<span class="c1"># Common</span>
+<span class="nt">reference</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${projectDir}/../anno/yeast_rRNA_ref.fa.gz&quot;</span>
+<span class="c1">## Can be transcriptome / genome</span>
+<span class="nt">ref_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;transcriptome&quot;</span>
+<span class="nt">annotation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+
+<span class="c1"># Actions</span>
+<span class="c1">## Can be nanoq / nanofilt</span>
+<span class="nt">filtering</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nanoq&quot;</span>
+<span class="c1">## Can be graphmap / graphmap2 / minimap2 / winnowmap / bwa / NO</span>
+<span class="nt">mapping</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;minimap2&quot;</span>
+<span class="c1">## Can be nanocount for transcriptome / htseq for genome</span>
+<span class="nt">counting</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nanocount&quot;</span>
+<span class="c1">## Can be NO / bambu / isoquant</span>
+<span class="nt">discovery</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NO&quot;</span>
+<span class="c1">## Convert bam to cram</span>
+<span class="nt">cram_conv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;YES&quot;</span>
+<span class="nt">subsampling_cram</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
+
+<span class="c1"># Output and messaging</span>
+<span class="nt">slackhook</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./outfolder/&quot;</span>
+
+<span class="c1"># Program params</span>
+<span class="nt">progPars</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">basecalling</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
+<span class="w">    </span><span class="nt">dorado-duplex</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
+<span class="w">    </span><span class="nt">dorado-mod</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup,m6A_DRACH&quot;</span>
+<span class="w">  </span><span class="nt">demultiplexing</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">seqtagger</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-k</span><span class="nv"> </span><span class="s">b100&quot;</span>
+<span class="w">    </span><span class="nt">seqtagger-trna</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-k</span><span class="nv"> </span><span class="s">b07_RNA004_tRNA&quot;</span>
+<span class="w">    </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">  </span><span class="nt">filtering</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">seqkit</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">    </span><span class="nt">nanoq</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">  </span><span class="nt">mapping</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">graphmap</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">    </span><span class="nt">graphmap2</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-x</span><span class="nv"> </span><span class="s">rnaseq&quot;</span>
+<span class="w">    </span><span class="nt">minimap2</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-y</span><span class="nv"> </span><span class="s">-uf</span><span class="nv"> </span><span class="s">-k14&quot;</span>
+<span class="w">    </span><span class="nt">bwa</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">    </span><span class="nt">winnowmap</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">  </span><span class="nt">counting</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">htseq</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-a</span><span class="nv"> </span><span class="s">0&quot;</span>
+<span class="w">    </span><span class="nt">nanocount</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">  </span><span class="nt">discovery</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">bambu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+<p>The first part is for pod5 inputs, so we can ignore it. We can check the <cite># Needed for fastq input</cite> part. The path of input fastq files is already specified:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Needed for fastq input</span>
+<span class="nt">fastq</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${projectDir}/../data/fastq/*.fq.gz&quot;</span>
+</pre></div>
+</div>
+<p>We then need to specify the reference sequence in FASTA format and whether this is a transcriptome or a genome. In case is a genome you need to pass also the annotation in GTF format.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Common</span>
+<span class="nt">reference</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${projectDir}/../anno/yeast_rRNA_ref.fa.gz&quot;</span>
+<span class="c1">## Can be transcriptome / genome</span>
+<span class="nt">ref_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;transcriptome&quot;</span>
+<span class="nt">annotation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Then there is a section of <cite>Actions</cite>. You can either specify the tool for that action or turn it off using “NO” as a value.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="c1"># Actions</span>
+<span class="c1">## Can be nanoq / nanofilt</span>
+<span class="nt">filtering</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nanoq&quot;</span>
+<span class="c1">## Can be graphmap / graphmap2 / minimap2 / winnowmap / bwa / NO</span>
+<span class="nt">mapping</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;minimap2&quot;</span>
+<span class="nn">...</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>filtering: modifying fastq</p></li>
+<li><p>mapping: aligning fastq</p></li>
+<li><p>counting: counting read tags</p></li>
+<li><p>discovery: transcriptome assembly</p></li>
+<li><p>cram_conv: convertion of bam to cram</p></li>
+<li><p>subsampling_cram: subsample the bam input for generating cram</p></li>
+</ul>
+<p>Then a new section is for specifying the <cite>output</cite> folder, and if you want to receive a mail or a Slack message at the end of the execution.
+You need a configured mail server for sending an <a class="reference external" href="https://nextflow.io/docs/latest/notifications.html#mail-configuration">email</a> and a <a class="reference external" href="https://api.slack.com/messaging/webhooks">Slack hook</a></p>
+<p>Finally, there is a section about command-line parameters for each tool used.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Program params</span>
+<span class="nt">ProgPars</span><span class="p">:</span>
+<span class="nt">basecalling</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
+<span class="w">  </span><span class="nt">dorado-duplex</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
+<span class="w">  </span><span class="nt">dorado-mod</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup,m6A_DRACH&quot;</span>
+<span class="nt">demultiplexing</span><span class="p">:</span>
+<span class="nn">...</span>
+</pre></div>
+</div>
+<p>To run the pipeline, just type:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -with-docker -params-file params.yaml -profile local</span>
+</pre></div>
+</div>
+<p>You will get this as output.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go"> N E X T F L O W   ~  version 25.02.3-edge</span>
+
+<span class="go">Launching `mop_preprocess.nf` [loving_hugle] DSL2 - revision: 3bc7696a53</span>
+
+
+
+<span class="go">====================================================</span>
+<span class="go">╔╦╗╔═╗╔═╗  ╔═╗┬─┐┌─┐┌─┐┬─┐┌─┐┌─┐┌─┐┌─┐┌─┐</span>
+<span class="go">║║║║ ║╠═╝  ╠═╝├┬┘├┤ ├─┘├┬┘│ ││  ├┤ └─┐└─┐</span>
+<span class="go">╩ ╩╚═╝╩    ╩  ┴└─└─┘┴  ┴└─└─┘└─┘└─┘└─┘└─┘</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣷⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⣿⣷⡒⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿⣿⣆⠙⡄⠀⠐⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣤⣤⣤⣤⣤⣤⣤⣤⠤⢄⡀⠀⠀⣿⣿⣿⣿⣿⣿⡆⠘⡄⠀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣿⣿⣿⣿⣿⣿⣿⣦⡈⠒⢄⢸⣿⣿⣿⣿⣿⣿⡀⠱⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣦⠀⠱⣿⣿⣿⣿⣿⣿⣇⠀⢃⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣿⣿⣿⣷⡄⣹⣿⣿⣿⣿⣿⣿⣶⣾⣿⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣶⣿⣭⣍⡉⠙⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡷⢂⣓⣶⣶⣶⣶⣤⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⠟⢀⣴⢿⣿⣿⣿⠟⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠤⠤⠙⣻⣿⣿⣿⣿⣿⣿⣾⣿⣿⡏⣠⠟⡉⣾⣿⣿⠋⡠⠊⣿⡟⣹⣿⢿⣿⣿⣿⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣶⣤⣭⣤⣼⣿⢛⣿⣿⣿⣿⣻⣿⣿⠇⠐⢀⣿⣿⡷⠋⠀⢠⣿⣺⣿⣿⢺⣿⣋⣉⣉⣩⣴⣶⣤⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠻⠿⣿⣿⣿⣇⢻⣿⣿⡿⠿⣿⣯⡀⠀⢸⣿⠋⢀⣠⣶⠿⠿⢿⡿⠈⣾⣿⣿⣿⣿⡿⠿⠛⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⢧⡸⣿⣿⣿⠀⠃⠻⠟⢦⢾⢣⠶⠿⠏⠀⠰⠀⣼⡇⣸⣿⣿⠟⠉⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣶⣽⣿⡟⠓⠒⠀⠀⡀⠀⠠⠤⠬⠉⠁⣰⣥⣾⣿⣿⣶⣶⣷⡶⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠹⠟⣿⣿⡄⠀⠀⠠⡇⠀⠀⠀⠀⠀⢠⡟⠛⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠋⠹⣷⣄⠀⠐⣊⣀⠀⠀⢀⡴⠁⠣⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣀⠤⠊⢁⡸⠀⣆⠹⣿⣧⣀⠀⠀⡠⠖⡑⠁⠀⠀⠀⠑⢄⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣦⣶⣿⣿⣟⣁⣤⣾⠟⠁⢀⣿⣆⠹⡆⠻⣿⠉⢀⠜⡰⠀⠀⠈⠑⢦⡀⠈⢾⠑⡾⠲⣄⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠖⠒⠚⠛⠛⠢⠽⢄⣘⣤⡎⠠⠿⠂⠀⠠⠴⠶⢉⡭⠃⢸⠃⠀⣿⣿⣿⠡⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⡤⠶⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣋⠁⠀⠀⠀⠀⠀⢹⡇⠀⠀⠀⠀⠒⠢⣤⠔⠁⠀⢀⡏⠀⠀⢸⣿⣿⠀⢻⡟⠑⠢⢄⡀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⢸⠀⠀⠀⡀⠉⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⣀⣀⡀⠀⢸⣷⡀⣀⣀⡠⠔⠊⠀⠀⢀⣠⡞⠀⠀⠀⢸⣿⡿⠀⠘⠀⠀⠀⠀⠈⠑⢤⠀⠀</span>
+<span class="go">⠀⠀⢀⣴⣿⡀⠀⠀⡇⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣝⡛⠿⢿⣷⣦⣄⡀⠈⠉⠉⠁⠀⠀⠀⢀⣠⣴⣾⣿⡿⠁⠀⠀⠀⢸⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⡜⠀⠀</span>
+<span class="go">⠀⢀⣾⣿⣿⡇⠀⢰⣷⠀⢀⠀⠀⢹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣦⣭⣍⣉⣉⠀⢀⣀⣤⣶⣾⣿⣿⣿⢿⠿⠁⠀⠀⠀⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⡰⠉⢦⠀</span>
+<span class="go">⢀⣼⣿⣿⡿⢱⠀⢸⣿⡀⢸⣧⡀⠀⢿⣿⣿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡭⠖⠁⠀⡠⠂⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⠀⠀⢠⠃⠀⠈⣀</span>
+<span class="go">⢸⣿⣿⣿⡇⠀⢧⢸⣿⣇⢸⣿⣷⡀⠈⣿⣿⣇⠈⠛⢿⣿⣿⣿⣿⣿⣿⠿⠿⠿⠿⠿⠿⠟⡻⠟⠉⠀⠀⡠⠊⠀⢠⠀⠀⠀⠀⠀⠀⠀⠀⣾⡄⠀⢠⣿⠔⠁⠀⢸</span>
+<span class="go">⠈⣿⣿⣿⣷⡀⠀⢻⣿⣿⡜⣿⣿⣷⡀⠈⢿⣿⡄⠀⠀⠈⠛⠿⣿⣿⣿⣷⣶⣶⣶⡶⠖⠉⠀⣀⣤⡶⠋⠀⣠⣶⡏⠀⠀⠀⠀⠀⠀⠀⢰⣿⣧⣶⣿⣿⠖⡠⠖⠁</span>
+<span class="go">⠀⣿⣿⣷⣌⡛⠶⣼⣿⣿⣷⣿⣿⣿⣿⡄⠈⢻⣷⠀⣄⡀⠀⠀⠀⠈⠉⠛⠛⠛⠁⣀⣤⣶⣾⠟⠋⠀⣠⣾⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⠷⠊⠀⢰⠀</span>
+<span class="go">⢰⣿⣿⠀⠈⢉⡶⢿⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠙⢇⠈⢿⣶⣦⣤⣀⣀⣠⣤⣶⣿⣿⡿⠛⠁⢀⣤⣾⣿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⣸⣿⡿⠿⠋⠙⠒⠄⠀⠉⡄</span>
+<span class="go">⣿⣿⡏⠀⠀⠁⠀⠀⠀⠉⠉⠙⢻⣿⣿⣿⣿⣷⡀⠀⠀⠀⠻⣿⣿⣿⣿⣿⠿⠿⠛⠁⠀⣀⣴⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀⢠⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰</span>
+<span class="go">====================================================</span>
+<span class="go">BIOCORE@CRG Master of Pores 4. Preprocessing - N F  ~  version 4.1</span>
+<span class="go">====================================================</span>
+
+
+<span class="go">Input</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">pod5                      :</span>
+<span class="go">fastq                     : /Users/lcozzuto/ooo/master_of_pores/mop_preprocess/../data/fastq/*.fq.gz</span>
+
+<span class="go">Reference</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">reference                  : /Users/lcozzuto/ooo/master_of_pores/mop_preprocess/../anno/yeast_rRNA_ref.fa.gz</span>
+<span class="go">annotation                 :</span>
+<span class="go">ref_type                   : transcriptome</span>
+
+<span class="go">Output</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">output                    : ./outfolder/</span>
+<span class="go">email                     :</span>
+<span class="go">slackhook                 :</span>
+
+<span class="go">Actions</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">basecalling               : NO</span>
+<span class="go">demultiplexing            : NO</span>
+<span class="go">demulti_pod5              : NO</span>
+<span class="go">filtering                 : nanoq</span>
+<span class="go">mapping                   : minimap2</span>
+<span class="go">counting                  : nanocount</span>
+<span class="go">discovery                 : NO</span>
+<span class="go">cram_conv                 : YES</span>
+<span class="go">subsampling_cram          : 50</span>
+
+<span class="go">Advanced</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">granularity               : 1</span>
+<span class="go">barcodes                  :</span>
+<span class="go">GPU                       : OFF</span>
+
+<span class="go">====================================================</span>
+
+
+<span class="go">----------------------CHECK TOOLS -----------------------------</span>
+<span class="go">&gt; basecalling will be skipped</span>
+<span class="go">&gt; demultiplexing will be skipped</span>
+<span class="go">mapping : minimap2</span>
+<span class="go">filtering : nanoq</span>
+<span class="go">counting : nanocount</span>
+<span class="go">&gt; discovery will be skipped</span>
+<span class="go">--------------------------------------------------------------</span>
+<span class="go">WARN: Include with `addParams()` is deprecated -- pass params as a workflow or process input instead</span>
+<span class="go">Skipping the email</span>
+
+<span class="go">executor &gt;  local (24)</span>
+<span class="go">[a3/c6f206] MAPPING_MOP:ALIGN:MINIMAP2:map (wt)           [100%] 2 of 2 ✔</span>
+<span class="go">[aa/f74040] SAMTOOLS_SORT:sortAln (mod)                   [100%] 2 of 2 ✔</span>
+<span class="go">[6d/8d015f] SAMTOOLS_INDEX:indexBam (mod)                 [100%] 2 of 2 ✔</span>
+<span class="go">[13/7306b7] bam2stats (mod)                               [100%] 2 of 2 ✔</span>
+<span class="go">[22/86891e] joinAlnStats (joining aln stats)              [100%] 1 of 1 ✔</span>
+<span class="go">[53/e313a4] NANOSTAT_QC:nanoStat (mod)                    [100%] 2 of 2 ✔</span>
+<span class="go">[e5/b3465a] checkRef (Checking yeast_rRNA_ref.fa.gz)      [100%] 1 of 1 ✔</span>
+<span class="go">[2c/328c32] bam2Cram (mod)                                [100%] 2 of 2 ✔</span>
+<span class="go">[91/58b424] NANOQ_REPORT:report (mod)                     [100%] 2 of 2 ✔</span>
+<span class="go">[d6/ad8c41] COUNTING:NANOCOUNT:nanoCount (mod)            [100%] 2 of 2 ✔</span>
+<span class="go">[24/7aa36d] COUNTING:AssignReads (mod)                    [100%] 2 of 2 ✔</span>
+<span class="go">[0f/5a98e2] COUNTING:countStats (mod)                     [100%] 2 of 2 ✔</span>
+<span class="go">[9e/fc64d5] COUNTING:joinCountStats (joining count stats) [100%] 1 of 1 ✔</span>
+<span class="go">[2f/23940b] MULTIQC:makeReport                            [100%] 1 of 1 ✔</span>
+<span class="go">---------------------------------------------------</span>
+<span class="go">            *Pipeline MOP4 completed!*</span>
+<span class="go">---------------------------------------------------</span>
+<span class="go">- Launched by `lcozzuto`</span>
+<span class="go">- Started at 2025-04-10 17:07:31</span>
+<span class="go">- Finished at 2025-04-10 17:07:47</span>
+<span class="go">- Time elapsed: 16.2s</span>
+<span class="go">- Execution status: OK</span>
+<span class="go">```nextflow run mop_preprocess.nf -with-docker -params-file params.yaml```</span>
+<span class="go">---------------------------------------------------</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The latest versions of Nextflow show a future deprecation of <cite>addParams()</cite>. For now just ignore this warning.
+WARN: Include with <cite>addParams()</cite> is deprecated – pass params as a workflow or process input instead</p>
+</div>
+<p>The output folders will be in <cite>outfolder</cite> as indicated by the parameter <cite>output</cite>. Inside, you have the following list of directories:</p>
+<ul class="simple">
+<li><p>alignment: sorted bam files and their indexes.</p></li>
+<li><p>assigned: tabular file with index id and assigned chromosome or transcript</p></li>
+<li><p>counts: read counts per feature (transcript or gene)</p></li>
+<li><p>cram_files: sorted, subsampled cram files and their indexes.</p></li>
+<li><p>report: multiq report</p></li>
+</ul>
+<p>You can see the report <a class="reference external" href="MOP-fastq_report.html">here</a></p>
+<p>The <cite>work</cite> folder, in which nextflow store all the intermediate files, will be in the same place. Since it can be huge you can also redirect elsewhere using the nextflow parameter <cite>-w</cite>.</p>
+</section>
+<section id="starting-from-pod5">
+<h2>Starting from pod5<a class="headerlink" href="#starting-from-pod5" title="Link to this heading"></a></h2>
+<p>You can run the pipeline on Linux in local using docker or singularity as a container engine. We can use another params file for accessing the test dataset that is bundled in the GitHub repository. You can also send the execution in background using the nextflow parameter <cite>-bg</cite> and redirecting the output to a file.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -params-file params.pod.yaml -with-docker -bg &gt; log.txt</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In case you are using a Mac with an Apple silicon chip you will need to install dorado manually from <a class="reference external" href="https://github.com/nanoporetech/dorado">here</a>.
+You can download the file that ends with osx-arm64, unzip it and place the dorado binary in <cite>/usr/local/bin/</cite> while the you must place <cite>default.metallib</cite> within <cite>/usr/local/lib/</cite>.
+At this point, you can run the pipeline, indicating the profile m1mac in the command line and setting the GPU parameter as “LOCAL”:</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run run mop_preprocess.nf -params-file params.pod.yaml -with-docker -profile m1mac --GPU LOCAL</span>
+
+<span class="go"> N E X T F L O W   ~  version 25.02.3-edge</span>
+
+<span class="go">Launching `mop_preprocess.nf` [maniac_coulomb] DSL2 - revision: 073068df45</span>
+
+
+<span class="go">====================================================</span>
+<span class="go">╔╦╗╔═╗╔═╗  ╔═╗┬─┐┌─┐┌─┐┬─┐┌─┐┌─┐┌─┐┌─┐┌─┐</span>
+<span class="go">║║║║ ║╠═╝  ╠═╝├┬┘├┤ ├─┘├┬┘│ ││  ├┤ └─┐└─┐</span>
+<span class="go">╩ ╩╚═╝╩    ╩  ┴└─└─┘┴  ┴└─└─┘└─┘└─┘└─┘└─┘</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣷⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⣿⣷⡒⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿⣿⣆⠙⡄⠀⠐⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣤⣤⣤⣤⣤⣤⣤⣤⠤⢄⡀⠀⠀⣿⣿⣿⣿⣿⣿⡆⠘⡄⠀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣿⣿⣿⣿⣿⣿⣿⣦⡈⠒⢄⢸⣿⣿⣿⣿⣿⣿⡀⠱⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣦⠀⠱⣿⣿⣿⣿⣿⣿⣇⠀⢃⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣿⣿⣿⣷⡄⣹⣿⣿⣿⣿⣿⣿⣶⣾⣿⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣶⣿⣭⣍⡉⠙⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡷⢂⣓⣶⣶⣶⣶⣤⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⠟⢀⣴⢿⣿⣿⣿⠟⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠤⠤⠙⣻⣿⣿⣿⣿⣿⣿⣾⣿⣿⡏⣠⠟⡉⣾⣿⣿⠋⡠⠊⣿⡟⣹⣿⢿⣿⣿⣿⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣶⣤⣭⣤⣼⣿⢛⣿⣿⣿⣿⣻⣿⣿⠇⠐⢀⣿⣿⡷⠋⠀⢠⣿⣺⣿⣿⢺⣿⣋⣉⣉⣩⣴⣶⣤⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠻⠿⣿⣿⣿⣇⢻⣿⣿⡿⠿⣿⣯⡀⠀⢸⣿⠋⢀⣠⣶⠿⠿⢿⡿⠈⣾⣿⣿⣿⣿⡿⠿⠛⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⢧⡸⣿⣿⣿⠀⠃⠻⠟⢦⢾⢣⠶⠿⠏⠀⠰⠀⣼⡇⣸⣿⣿⠟⠉⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣶⣽⣿⡟⠓⠒⠀⠀⡀⠀⠠⠤⠬⠉⠁⣰⣥⣾⣿⣿⣶⣶⣷⡶⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠹⠟⣿⣿⡄⠀⠀⠠⡇⠀⠀⠀⠀⠀⢠⡟⠛⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠋⠹⣷⣄⠀⠐⣊⣀⠀⠀⢀⡴⠁⠣⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣀⠤⠊⢁⡸⠀⣆⠹⣿⣧⣀⠀⠀⡠⠖⡑⠁⠀⠀⠀⠑⢄⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣦⣶⣿⣿⣟⣁⣤⣾⠟⠁⢀⣿⣆⠹⡆⠻⣿⠉⢀⠜⡰⠀⠀⠈⠑⢦⡀⠈⢾⠑⡾⠲⣄⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠖⠒⠚⠛⠛⠢⠽⢄⣘⣤⡎⠠⠿⠂⠀⠠⠴⠶⢉⡭⠃⢸⠃⠀⣿⣿⣿⠡⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⠀⡤⠶⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣋⠁⠀⠀⠀⠀⠀⢹⡇⠀⠀⠀⠀⠒⠢⣤⠔⠁⠀⢀⡏⠀⠀⢸⣿⣿⠀⢻⡟⠑⠢⢄⡀⠀⠀⠀⠀</span>
+<span class="go">⠀⠀⠀⠀⢸⠀⠀⠀⡀⠉⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⣀⣀⡀⠀⢸⣷⡀⣀⣀⡠⠔⠊⠀⠀⢀⣠⡞⠀⠀⠀⢸⣿⡿⠀⠘⠀⠀⠀⠀⠈⠑⢤⠀⠀</span>
+<span class="go">⠀⠀⢀⣴⣿⡀⠀⠀⡇⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣝⡛⠿⢿⣷⣦⣄⡀⠈⠉⠉⠁⠀⠀⠀⢀⣠⣴⣾⣿⡿⠁⠀⠀⠀⢸⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⡜⠀⠀</span>
+<span class="go">⠀⢀⣾⣿⣿⡇⠀⢰⣷⠀⢀⠀⠀⢹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣦⣭⣍⣉⣉⠀⢀⣀⣤⣶⣾⣿⣿⣿⢿⠿⠁⠀⠀⠀⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⡰⠉⢦⠀</span>
+<span class="go">⢀⣼⣿⣿⡿⢱⠀⢸⣿⡀⢸⣧⡀⠀⢿⣿⣿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡭⠖⠁⠀⡠⠂⠀⠀⠀⠀⠀⠀⠀⠀⢠⠀⠀⠀⢠⠃⠀⠈⣀</span>
+<span class="go">⢸⣿⣿⣿⡇⠀⢧⢸⣿⣇⢸⣿⣷⡀⠈⣿⣿⣇⠈⠛⢿⣿⣿⣿⣿⣿⣿⠿⠿⠿⠿⠿⠿⠟⡻⠟⠉⠀⠀⡠⠊⠀⢠⠀⠀⠀⠀⠀⠀⠀⠀⣾⡄⠀⢠⣿⠔⠁⠀⢸</span>
+<span class="go">⠈⣿⣿⣿⣷⡀⠀⢻⣿⣿⡜⣿⣿⣷⡀⠈⢿⣿⡄⠀⠀⠈⠛⠿⣿⣿⣿⣷⣶⣶⣶⡶⠖⠉⠀⣀⣤⡶⠋⠀⣠⣶⡏⠀⠀⠀⠀⠀⠀⠀⢰⣿⣧⣶⣿⣿⠖⡠⠖⠁</span>
+<span class="go">⠀⣿⣿⣷⣌⡛⠶⣼⣿⣿⣷⣿⣿⣿⣿⡄⠈⢻⣷⠀⣄⡀⠀⠀⠀⠈⠉⠛⠛⠛⠁⣀⣤⣶⣾⠟⠋⠀⣠⣾⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⠷⠊⠀⢰⠀</span>
+<span class="go">⢰⣿⣿⠀⠈⢉⡶⢿⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠙⢇⠈⢿⣶⣦⣤⣀⣀⣠⣤⣶⣿⣿⡿⠛⠁⢀⣤⣾⣿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⣸⣿⡿⠿⠋⠙⠒⠄⠀⠉⡄</span>
+<span class="go">⣿⣿⡏⠀⠀⠁⠀⠀⠀⠉⠉⠙⢻⣿⣿⣿⣿⣷⡀⠀⠀⠀⠻⣿⣿⣿⣿⣿⠿⠿⠛⠁⠀⣀⣴⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀⢠⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰</span>
+<span class="go">====================================================</span>
+<span class="go">BIOCORE@CRG Master of Pores 4. Preprocessing - N F  ~  version 4.1</span>
+<span class="go">====================================================</span>
+
+
+<span class="go">Input</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">pod5                      : ../data/pod5/**/*.pod5</span>
+<span class="go">fastq                     : null</span>
+
+<span class="go">Reference</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">reference                  : /Users/lcozzuto/ooo/master_of_pores/mop_preprocess/../anno/curlcake_constructs.fasta.gz</span>
+<span class="go">annotation                 :</span>
+<span class="go">ref_type                   : transcriptome</span>
+
+<span class="go">Output</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">output                    : ./outfolder2</span>
+<span class="go">email                     :</span>
+<span class="go">slackhook                 :</span>
+
+<span class="go">Actions</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">basecalling               : dorado</span>
+<span class="go">demultiplexing            : NO</span>
+<span class="go">demulti_pod5              : ON</span>
+<span class="go">filtering                 : nanoq</span>
+<span class="go">mapping                   : minimap2</span>
+<span class="go">counting                  : nanocount</span>
+<span class="go">discovery                 : NO</span>
+<span class="go">cram_conv                 : YES</span>
+<span class="go">subsampling_cram          : 50</span>
+
+<span class="go">Advanced</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">granularity               : 1</span>
+<span class="go">barcodes                  :</span>
+<span class="go">GPU                       : LOCAL</span>
+
+<span class="go">====================================================</span>
+
+
+<span class="go">----------------------CHECK TOOLS -----------------------------</span>
+<span class="go">basecalling : dorado</span>
+<span class="go">&gt; demultiplexing will be skipped</span>
+<span class="go">mapping : minimap2</span>
+<span class="go">filtering : nanoq</span>
+<span class="go">counting : nanocount</span>
+<span class="go">&gt; discovery will be skipped</span>
+<span class="go">--------------------------------------------------------------</span>
+<span class="go">WARN: Include with `addParams()` is deprecated -- pass params as a workflow or process input instead</span>
+<span class="go">Skipping the email</span>
+
+<span class="go">executor &gt;  local (14)</span>
+<span class="go">executor &gt;  local (16)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (17)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (18)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (18)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (19)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (19)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (19)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (20)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (20)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">executor &gt;  local (20)</span>
+<span class="go">[da/7934d0] BASECALL:DORADO_BASECALL:downloadModel (dRNA---1) [100%] 1 of 1 ✔</span>
+<span class="go">[2c/78f114] BASECALL:DORADO_BASECALL:baseCall (dRNA---1)      [100%] 1 of 1 ✔</span>
+<span class="go">[5e/f07f27] BASECALL:DORADO_BASECALL:bam2Fastq (dRNA---1)     [100%] 1 of 1 ✔</span>
+<span class="go">[1e/41594c] SEQFILTER:NANOQ_FILTER:filter (dRNA---1)          [100%] 1 of 1 ✔</span>
+<span class="go">[6b/9f2cec] MAPPING_MOP:ALIGN:MINIMAP2:map (dRNA---1)         [100%] 1 of 1 ✔</span>
+<span class="go">[-        ] SAMTOOLS_CAT:catAln_header                        -</span>
+<span class="go">[db/0d3349] SAMTOOLS_CAT:catAln (dRNA)                        [100%] 1 of 1 ✔</span>
+<span class="go">[01/ec2fc0] concatenateFastQFiles (dRNA)                      [100%] 1 of 1 ✔</span>
+<span class="go">[f1/c56fad] SAMTOOLS_SORT:sortAln (dRNA)                      [100%] 1 of 1 ✔</span>
+<span class="go">[bb/37958f] SAMTOOLS_INDEX:indexBam (dRNA)                    [100%] 1 of 1 ✔</span>
+<span class="go">[34/ac8db1] bam2stats (dRNA)                                  [100%] 1 of 1 ✔</span>
+<span class="go">[b0/7af917] joinAlnStats (joining aln stats)                  [100%] 1 of 1 ✔</span>
+<span class="go">[42/98cc8c] NANOSTAT_QC:nanoStat (dRNA)                       [100%] 1 of 1 ✔</span>
+<span class="go">[a9/9051bf] checkRef (Checking curlcake_constructs.fasta.gz)  [100%] 1 of 1 ✔</span>
+<span class="go">[ae/b42b2e] bam2Cram (dRNA)                                   [100%] 1 of 1 ✔</span>
+<span class="go">[3f/c2e02f] NANOQ_REPORT:report (dRNA)                        [100%] 1 of 1 ✔</span>
+<span class="go">[af/94a451] COUNTING:NANOCOUNT:nanoCount (dRNA)               [100%] 1 of 1 ✔</span>
+<span class="go">[81/8457fa] COUNTING:AssignReads (dRNA)                       [100%] 1 of 1 ✔</span>
+<span class="go">[41/7031e0] COUNTING:countStats (dRNA)                        [100%] 1 of 1 ✔</span>
+<span class="go">[36/c4e956] COUNTING:joinCountStats (joining count stats)     [100%] 1 of 1 ✔</span>
+<span class="go">[a0/dc0b50] MULTIQC:makeReport                                [100%] 1 of 1 ✔</span>
+<span class="go">---------------------------------------------------</span>
+<span class="go">            *Pipeline MOP4 completed!*</span>
+<span class="go">---------------------------------------------------</span>
+<span class="go">- Launched by `lcozzuto`</span>
+<span class="go">- Started at 2025-04-10 18:47:14</span>
+<span class="go">- Finished at 2025-04-10 18:48:07</span>
+<span class="go">- Time elapsed: 52.9s</span>
+<span class="go">- Execution status: OK</span>
+<span class="go">```nextflow run mop_preprocess.nf -params-file params.pod.yaml -with-docker --GPU LOCAL -profile m1mac```</span>
+<span class="go">---------------------------------------------------</span>
+</pre></div>
+</div>
+<p>As you can see, the first step of the pipeline allows for the download of the corresponding model, which is then used for the basecalling. In case you have a large number of pod5 files you might want to increase the <cite>granularity</cite> parameter to basecall this number of pod5 per job.</p>
+<p>The output folders will be in <cite>outfolder2</cite> as indicated by the parameter <cite>output</cite>. Inside, you have the following list of directories:</p>
+<ul class="simple">
+<li><p>alignment: sorted bam files and their indexes.</p></li>
+<li><p>assigned: tabular file with index id and assigned chromosome or transcript</p></li>
+<li><p>counts: read counts per feature (transcript or gene)</p></li>
+<li><p>cram_files: sorted, subsampled cram files and their indexes.</p></li>
+<li><p>fastq_files: basecalled fastq files</p></li>
+<li><p>report: multiq report</p></li>
+</ul>
+<p>You can see the report <a class="reference external" href="MOP-pod5_report.html">here</a></p>
+</section>
+<section id="checking-for-modifications">
+<h2>Checking for modifications<a class="headerlink" href="#checking-for-modifications" title="Link to this heading"></a></h2>
+<p>For looking at chemical modifications, you can indicate to use “dorado-mod” as a basecalling method and the corresponding model in the command line as such:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">...</span>
+<span class="c1"># Basecalling can be either NO, dorado, dorado-mod or dorado-duplex</span>
+<span class="nt">basecalling</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dorado-mod&quot;</span>
+<span class="nn">...</span>
+<span class="c1"># Program params</span>
+<span class="nt">ProgPars</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">basecalling</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
+<span class="w">      </span><span class="nt">dorado-mod</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup,m6A_DRACH&quot;</span>
+</pre></div>
+</div>
+<p>you can use the params.mod.yaml file for using the other dataset that includes m6A modifications</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -params-file params.mod.yaml -with-docker --GPU LOCAL -profile m1mac</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>If you go to the dorado_models folder you will see two models:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ls dorado_models/</span>
+<span class="go">README.txt   rna004_130bps_sup@v5.1.0   rna004_130bps_sup@v5.1.0_m6A_DRACH@v1</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>and in the output the bam file will contain tags for the modification: MM, base modifications / methylation and ML, base modification probabilities.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">samtools view m6A_s.bam|head -n 5|cut -f 1,3,4,26,27</span>
+<span class="go">60325d6a-1862-401c-9d32-ac28760f559e cc6m_2244_T7_ecorv      1       MN:i:2197       MM:Z:A+a?,7,1,7,20,14,14,26,9,8,8,41,17,34,14,22,4,37,3,27,4,1,1,14,6,14,16,3,2,1,6,11,8,19,2,13,27,6,38,3;</span>
+<span class="go">24af2109-0555-4af4-8093-d65c40e13b41 cc6m_2244_T7_ecorv      12      MN:i:2181       MM:Z:A+a?,10,11,3,25,4,20,4,61,33,0,15,15,1,24,4,6,4,7,14,21,3,25,3,4,16,15,13,3,2,2,1,6,19,9,6,2,12,1,31,33;</span>
+<span class="go">82061285-c7f3-4128-8fb6-b563513b933e cc6m_2244_T7_ecorv      29      MM:Z:A+a?,11,7,4,14,5,19,3;     ML:B:C,254,53,137,0,7,52,8</span>
+<span class="go">bf686eab-7939-4069-a295-a6e0e92920f6 cc6m_2244_T7_ecorv      32      MM:Z:A+a?,9,0,9,4,13,3,19,3,6,15,17,24,41,28,12,66,8,8,2,1,4,8,29,3;    ML:B:C,36,0,4,0,18,0,0,0,0,12,44,220,6,0,0,183,1,0,0,11,1,5,5,3</span>
+<span class="go">88a9f00d-8193-428f-bf62-952ad7dca201 cc6m_2244_T7_ecorv      32      MM:Z:A+a?,9,0,9,4,14,3,19,3,6;  ML:B:C,0,37,44,35,0,0,0,1,139</span>
+</pre></div>
+</div>
+</section>
+<section id="checking-for-polya-tail">
+<h2>Checking for polyA tail<a class="headerlink" href="#checking-for-polya-tail" title="Link to this heading"></a></h2>
+<p>You can search for polyA tails using dorado by adding the following parameter <a class="reference external" href="https://github.com/nanoporetech/dorado?tab=readme-ov-file#polya-tail-estimation">–estimate-poly-a</a></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">...</span>
+<span class="c1"># Basecalling can be either NO, dorado, dorado-mod or dorado-duplex</span>
+<span class="nt">basecalling</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dorado-mod&quot;</span>
+<span class="nn">...</span>
+<span class="c1"># Program params</span>
+<span class="nt">ProgPars</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">basecalling</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
+<span class="w">      </span><span class="nt">dorado-mod</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup,m6A_DRACH</span><span class="nv"> </span><span class="s">--estimate-poly-a&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -params-file params.tail.yaml -with-docker --GPU LOCAL -profile m1mac</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>This will generate a bam file with a custom tag named <cite>pt:i</cite> with the predicted polyA tail length. See <a class="reference external" href="https://github.com/nanoporetech/dorado?tab=readme-ov-file#polya-tail-estimation">here</a> for more info.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">samtools view m6A_s.bam|head -n 2|cut -f 1,3,4,26,27,28</span>
+<span class="go">60325d6a-1862-401c-9d32-ac28760f559e cc6m_2244_T7_ecorv      1       pt:i:12 MN:i:2197       MM:Z:A+a?,7,1,7,20,14,14,26,9,8,8,41,17,34,14,22,4,37,3,27,4,1,1,14,6,14,16,3,2,1,6,11,8,19,2,13,27,6,38,3;</span>
+<span class="go">24af2109-0555-4af4-8093-d65c40e13b41 cc6m_2244_T7_ecorv      12      pt:i:17 MN:i:2181       MM:Z:A+a?,10,11,3,25,4,20,4,61,33,0,15,15,1,24,4,6,4,7,14,21,3,25,3,4,16,15,13,3,2,2,1,6,19,9,6,2,12,1,31,33;</span>
+</pre></div>
+</div>
+</section>
+<section id="demultiplexing">
+<h2>Demultiplexing<a class="headerlink" href="#demultiplexing" title="Link to this heading"></a></h2>
+<p>You can turn on the <strong>demultiplexing</strong> just by indicating the tool: dorado for DNA or seqtagger for RNA. Seqtagger requires an NVIDIA GPU.
+For testing purposes, we can turn on dorado’s demultiplexing and specify the <a class="reference external" href="https://nanoporetech.com/document/chemistry-technical-document#barcoding-kits">sequencing kit</a> in the corresponding command line. We should also add –no-trim or in some cases we could generate an error.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The kit must be specified using “-” instead of a dot for the version: e.g. SQK-NBD114-24 instead of SQK-NBD114.24.</p>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">...</span>
+<span class="c1"># Basecalling can be either NO, dorado, dorado-mod or dorado-duplex</span>
+<span class="hll"><span class="nt">basecalling</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dorado&quot;</span>
+</span><span class="c1">#For emitting the move tables (with dorado-mod)</span>
+<span class="nt">emit_moves</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="c1">## Demultiplexing can be either dorado (for DNA) / seqtagger (for RNA)</span>
+<span class="hll"><span class="nt">demultiplexing</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dorado&quot;</span>
+</span><span class="nn">...</span>
+<span class="c1"># Program params</span>
+<span class="nt">progPars</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">basecalling</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
+<span class="w">    </span><span class="nt">dorado-mod</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup,m6A_DRACH&quot;</span>
+<span class="w">    </span><span class="nt">dorado-duplex</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sup&quot;</span>
+<span class="w">  </span><span class="nt">demultiplexing</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">seqtagger</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-k</span><span class="nv"> </span><span class="s">b100&quot;</span>
+<span class="hll"><span class="w">    </span><span class="nt">dorado</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;--kit-name</span><span class="nv"> </span><span class="s">SQK-NBD114-24</span><span class="nv"> </span><span class="s">--no-trim&quot;</span>
+</span></pre></div>
+</div>
+<p>Let’s execute with another params file</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">nextflow run mop_preprocess.nf -params-file params.dem.yaml -with-docker --GPU LOCAL -profile m1mac</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>As you can see now, there are other processes:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">...</span>
+<span class="go">[d8/abc719] Cached process &gt; checkRef (Checking curlcake_constructs.fasta.gz)</span>
+<span class="go">[18/b703f4] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:downloadModel (A---1)</span>
+<span class="go">[60/756667] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:baseCall (A---2)</span>
+<span class="go">[0d/523183] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:baseCall (A---1)</span>
+<span class="go">[e6/edceb4] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:baseCall (m6A---4)</span>
+<span class="go">[73/17451a] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:baseCall (m6A---3)</span>
+<span class="go">[34/a5f387] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:demultiPlex (A---2)</span>
+<span class="go">[05/abc0e8] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:demultiPlex (m6A---4)</span>
+<span class="go">[3c/13880e] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:demultiPlex (A---1)</span>
+<span class="go">[02/9bc23a] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:demultiPlex (m6A---3)</span>
+<span class="go">[4f/9eadf3] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:bam2Fastq (A---2.unclassified)</span>
+<span class="go">[b6/6bb2ba] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:bam2Fastq (m6A---4.unclassified)</span>
+<span class="go">[46/927fcd] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:bam2Fastq (A---1.unclassified)</span>
+<span class="go">[4d/372766] Submitted process &gt; BASECALL_DEMULTIPLEX:DORADO_BASECALL_DEMULTI:bam2Fastq (m6A---3.unclassified)</span>
+<span class="go">[7b/bc805e] Submitted process &gt; SEQFILTER:NANOQ_FILTER:filter (A---2.unclassified)</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>Of course, they will be classified as unclassified since there is no real demultiplexing here.</p>
+</section>
+<section id="alignment-and-feature-counts">
+<h2>Alignment and feature counts<a class="headerlink" href="#alignment-and-feature-counts" title="Link to this heading"></a></h2>
+<p>MoP can run <strong>minimap2</strong>, <strong>graphmap</strong> and <strong>bwa</strong> as aligners. The first one is the choice by default, whereas <strong>graphmap</strong> is used with highly modified reads (e.g: rRNA) aligning to a transcriptome. <strong>Bwa</strong> is used to map short reads (e.g:tRNA) but its usage won’t be described in this tutorial.</p>
+<p><strong>Minimap2</strong> is the most widely used long-read aligner and it can be used in both spliced (reference type: genome) and unspliced (reference type: transcriptome) alignments. However, parameters must be changed accordingly. Recommended parameters are shown below:</p>
+<ul class="simple">
+<li><p><strong>Spliced</strong>: <em>-ax splice -uf -k14</em></p></li>
+<li><p><strong>Unspliced</strong>: <em>-ax map-ont</em></p></li>
+</ul>
+<p>The aligner of choice as well as its respective parameters should be included by the user in the params.file as shown below:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">## Can be graphmap / graphmap2 / minimap2 / winnowmap / bwa / NO</span>
+<span class="nt">mapping</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;minimap2&quot;</span>
+
+<span class="nn">...</span>
+
+<span class="w"> </span><span class="nt">mapping</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">graphmap</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">    </span><span class="nt">minimap2</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-ax</span><span class="nv"> </span><span class="s">splice</span><span class="nv"> </span><span class="s">-uf</span><span class="nv"> </span><span class="s">-k14&quot;</span>
+<span class="w">    </span><span class="nt">bwa</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Once the bams are generated, MoP can run either <strong>htseq-count</strong> or <strong>NanoCount</strong> to generate feature (genes or transcripts) counts. The choice between them is based on the type of reference used in the alignment:</p>
+<ul class="simple">
+<li><p>Genome reference: <strong>htseq-count</strong>. Additionally, MoP requires the input of an <strong>annotation file (gtf)</strong> to run this algorithm.</p></li>
+<li><p>Transcriptome reference: <strong>NanoCount</strong>. No additional files are required.</p></li>
+</ul>
+<p>As seen with the aligners, the software to be used, parameters and any required inputs must be included by the user in the params.file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">## Can be transcriptome / genome</span>
+<span class="nt">ref_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;transcriptome&quot;</span>
+<span class="nt">annotation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+
+<span class="c1">## Can be nanocount for transcriptome / htseq for genome</span>
+<span class="nt">counting</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nanocount&quot;</span>
+
+<span class="nn">...</span>
+
+<span class="nt">counting</span><span class="p">:</span>
+<span class="w"> </span><span class="nt">htseq</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;-a</span><span class="nv"> </span><span class="s">0&quot;</span>
+<span class="w"> </span><span class="nt">nanocount</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="troubleshooting.html" class="btn btn-neutral float-left" title="Troubleshooting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
