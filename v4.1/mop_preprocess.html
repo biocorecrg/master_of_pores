@@ -91,7 +91,16 @@
   <section id="mop-preprocess">
 <span id="home-page-moprepr"></span><h1>MOP_PREPROCESS<a class="headerlink" href="#mop-preprocess" title="Link to this heading"></a></h1>
 <p>This pipeline takes as input the raw reads - single or multi - and it produces several outputs (basecalled pod5, sequences in fastq format, aligned reads in BAM format etc). The pre-processing pipeline can perform base-calling, demultiplexing (optional), filtering, quality control, mapping to a reference (either a genome or a transcriptome), feature counting, discovery of novel transcripts, and it generates a final report with the performance and results of each of the steps performed.</p>
-<p>It support the new pod5 format. The basecalling can be performed with dorado or dorado-duplex and the demultiplexing with either dorado or seqtagger. Basecalled fastq and pod5 files can be demultiplexed as well. You can restrict the number of barcodes by indicating a file with barcode list using the <strong>barcodes</strong> parameter.</p>
+<p>In <strong>MOP 4.1</strong>, the pipeline requires Nextflow version <strong>25.04.5</strong> or later. It supports the new pod5 format. The basecalling can be performed with dorado or dorado-duplex and the demultiplexing with dorado, seqtagger, or <strong>seqtagger-trna</strong> (specifically for tRNA demultiplexing). Basecalled fastq and pod5 files can be demultiplexed as well. You can restrict the number of barcodes by indicating a file with barcode list using the <strong>barcodes</strong> parameter.</p>
+<dl class="simple">
+<dt>Key features introduced in MOP 4.1:</dt><dd><ul class="simple">
+<li><p><strong>tRNA Demultiplexing</strong>: Added support for tRNA demultiplexing using the <cite>seqtagger-trna</cite> option.</p></li>
+<li><p><strong>MultiQC Stats File</strong>: Generates a standard stats file listing the total number of reads, accepted reads, and percentages.</p></li>
+<li><p><strong>Python container support</strong>: Included for ADAPTIVE_SAMPLINGQC.</p></li>
+<li><p><strong>Nextflow 25.04.5</strong>: Updated standard runtime environment.</p></li>
+</ul>
+</dd>
+</dl>
 <a class="reference internal image-reference" href="_images/flow_preproc2.png"><img alt="mop_preprocess graph" src="_images/flow_preproc2.png" width="600" />
 </a>
 <section id="input-parameters">
