@@ -9,7 +9,14 @@ MOP_PREPROCESS
 
 This pipeline takes as input the raw reads - single or multi - and it produces several outputs (basecalled pod5, sequences in fastq format, aligned reads in BAM format etc). The pre-processing pipeline can perform base-calling, demultiplexing (optional), filtering, quality control, mapping to a reference (either a genome or a transcriptome), feature counting, discovery of novel transcripts, and it generates a final report with the performance and results of each of the steps performed.
 
-It support the new pod5 format. The basecalling can be performed with dorado or dorado-duplex and the demultiplexing with either dorado or seqtagger. Basecalled fastq and pod5 files can be demultiplexed as well. You can restrict the number of barcodes by indicating a file with barcode list using the **barcodes** parameter.
+In **MOP 4.1**, the pipeline requires Nextflow version **25.04.5** or later. It supports the new pod5 format. The basecalling can be performed with dorado or dorado-duplex and the demultiplexing with dorado, seqtagger, or **seqtagger-trna** (specifically for tRNA demultiplexing). Basecalled fastq and pod5 files can be demultiplexed as well. You can restrict the number of barcodes by indicating a file with barcode list using the **barcodes** parameter.
+
+Key features introduced in MOP 4.1:
+   * **tRNA Demultiplexing**: Added support for tRNA demultiplexing using the `seqtagger-trna` option.
+   * **MultiQC Stats File**: Generates a standard stats file listing the total number of reads, accepted reads, and percentages.
+   * **Python container support**: Included for ADAPTIVE_SAMPLINGQC.
+   * **Nextflow 25.04.5**: Updated standard runtime environment.
+
 
 
 

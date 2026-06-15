@@ -44,8 +44,14 @@ jobs:
 
       - name: Copy report file(s)
         run: |
-          mkdir -p gh-pages/MOP4-dev
-          cp html_reports/*.html gh-pages/MOP4-dev
+          mkdir -p gh-pages/${{ github.ref_name }}
+          cp html_reports/*.html gh-pages/${{ github.ref_name }}/
+      
+      - name: Deploy Homepage Website
+        run: |
+          if [ -f gh-pages-index.html ]; then
+            cp gh-pages-index.html gh-pages/index.html
+          fi
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
