@@ -1,4 +1,4 @@
-# MoP4 - Master of Pores 4
+# MoP4 - Master of Pores 4.1
 [![Docker Build Status](https://img.shields.io/docker/automated/biocorecrg/nanopore.svg)](https://cloud.docker.com/u/biocorecrg/repository/docker/biocorecrg/nanopore/builds)
 [![mop4-CI](https://github.com/biocorecrg/master_of_pores/actions/workflows/build.yml/badge.svg)](https://github.com/biocorecrg/master_of_pores/actions/workflows/build.yml)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Nextflow version](https://img.shields.io/badge/Nextflow-25.04.5-brightgreen)](https://www.nextflow.io/)
