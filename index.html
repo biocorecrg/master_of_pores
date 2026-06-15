@@ -1,16 +1,344 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
-
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master of Pores (MOP4) - Documentation Hub</title>
+  <meta name="description" content="Portal for Master of Pores (MOP4) documentation. Select version 4.0 or 4.1 to view the user guides.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #060913;
+      --bg-card: rgba(15, 23, 42, 0.65);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(0, 242, 254, 0.4);
+      --text-main: #cbd5e1;
+      --text-light: #f8fafc;
+      --text-muted: #64748b;
+      --color-primary-start: #00f2fe;
+      --color-primary-end: #4facfe;
+      --glow-primary: rgba(0, 242, 254, 0.15);
+      --shadow-main: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-  <meta http-equiv="refresh" content="0; url=./MOP3/" />
-  <title>Welcome to the documentation of Master Of Pores</title>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+    }
+
+    /* Background Gradients */
+    .bg-gradient {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background: 
+        radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.04) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(157, 78, 221, 0.04) 0%, transparent 45%);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Logo Group */
+    .logo-group {
+      position: relative;
+      display: flex;
+      align-items: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .logo-glow {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: radial-gradient(circle, var(--color-primary-start) 0%, transparent 70%);
+      filter: blur(6px);
+      opacity: 0.7;
+      left: -12px;
+      z-index: -1;
+      animation: pulse 3s infinite ease-in-out;
+    }
+
+    .logo-text {
+      color: var(--text-light);
+      letter-spacing: -0.5px;
+    }
+
+    .logo-accent {
+      background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-left: 0.3rem;
+      font-weight: 900;
+    }
+
+    /* Main Title */
+    .title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.15;
+      text-align: center;
+      color: var(--text-light);
+      margin-bottom: 1rem;
+      letter-spacing: -1px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--color-primary-start) 10%, var(--color-primary-end) 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      text-align: center;
+      margin-bottom: 4rem;
+      font-weight: 300;
+    }
+
+    /* Card Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: var(--shadow-main);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition-smooth);
+    }
+
+    .card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 12px 40px var(--glow-primary);
+      transform: translateY(-5px);
+    }
+
+    .card-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .card-version {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      background: rgba(0, 242, 254, 0.15);
+      color: var(--color-primary-start);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+    }
+
+    .card-desc {
+      color: var(--text-main);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      flex-grow: 1;
+    }
+
+    .card-features {
+      list-style: none;
+      margin-bottom: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .card-features li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-features li::before {
+      content: "✓";
+      color: var(--color-primary-start);
+      font-weight: bold;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.8rem 1.6rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      text-decoration: none;
+      font-size: 1rem;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
+      color: #040815;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+      box-shadow: 0 8px 20px rgba(0, 242, 254, 0.3);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-light);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-light);
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border-color);
+      padding: 2rem 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      width: 100%;
+      text-align: center;
+      background: rgba(5, 8, 18, 0.4);
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.7;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.9;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .title {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
 </head>
-
 <body>
-  Redirecting...
-</body>
+  <div class="bg-gradient"></div>
 
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo-group">
+      <div class="logo-glow"></div>
+      <span class="logo-text">Master of Pores <span class="logo-accent">MOP4</span></span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="title">Documentation <span class="gradient-text">Version Hub</span></h1>
+    <p class="subtitle">Select your pipeline release version below to browse setup guides, troubleshooting articles, and complete tutorials.</p>
+
+    <!-- Version selector cards -->
+    <div class="grid">
+      <!-- MOP 4.1 Card -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <h2 class="card-version">MOP 4.1 <span class="badge">Latest</span></h2>
+          </div>
+          <p class="card-desc">Modern release built for Nextflow 25.04.5. Featuring container support for tRNA demultiplexing and MultiQC statistics files.</p>
+          <ul class="card-features">
+            <li>tRNA Demultiplexing (seqtagger-trna)</li>
+            <li>MultiQC standard stats file output</li>
+            <li>Nextflow v25.04.5 environment</li>
+            <li>Adaptive Sampling QC container support</li>
+          </ul>
+        </div>
+        <a href="./MOP4_1/" class="btn btn-primary">Browse MOP 4.1 Docs</a>
+      </div>
+
+      <!-- MOP 4.0 Card -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <h2 class="card-version">MOP 4.0</h2>
+          </div>
+          <p class="card-desc">Stable release introducing native POD5 support and Dorado basecalling, deprecating legacy Guppy and Deeplexicon engines.</p>
+          <ul class="card-features">
+            <li>Native POD5 file inputs</li>
+            <li>Dorado basecalling (duplex, moves)</li>
+            <li>Dorado barcode demultiplexing</li>
+            <li>Modular Nextflow DSL2 refactor</li>
+          </ul>
+        </div>
+        <!-- Note: MOP 4.0 docs are historically deployed as MOP4.0 or master depending on user branches -->
+        <a href="./MOP4_0/" class="btn btn-secondary">Browse MOP 4.0 Docs</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2026 Master of Pores Development Team. CRG Barcelona.</p>
+  </footer>
+</body>
 </html>
