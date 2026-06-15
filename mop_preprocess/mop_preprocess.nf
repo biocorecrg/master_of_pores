@@ -237,13 +237,14 @@ def mapping_pars = ["bwa": progPars["mapping"]["bwa"], "winnowmap": progPars["ma
 				"graphmap": progPars["mapping"]["graphmap"]
 				]
 
+def dem_cont = ""
 if (params.demultiplexing == "seqtagger-trna") {
 	dem_cont = "lpryszcz/seqtagger:1.1a"
 }
 
 // INCLUDE WORKFLOWS
 include { BASECALL } from "${workflowsDir}/basecaller" addParams(gpu: gpu_bc, output: output_bc, label: basecall_label, label2:'big_cpus', type:basecalling ,  extrapars: basecaller_pars[basecalling], models: dorado_models )
-include { DEMULTIPLEX } from "${workflowsDir}/demultiplexer.nf" addParams(gpu: gpu, output: output_bc, label: basecall_label, type:params.demultiplexing , extrapars: demux_pars[params.demultiplexing], models: demux_models )
+include { DEMULTIPLEX } from "${workflowsDir}/demultiplexer.nf" addParams(container: dem_cont, gpu: gpu, output: output_bc, label: basecall_label, type:params.demultiplexing , extrapars: demux_pars[params.demultiplexing], models: demux_models )
 include { BASECALL_DEMULTIPLEX } from "${workflowsDir}/basecaller_demultiplexer.nf" addParams(gpu: gpu_bc, output: output_bc, label: basecall_label, label2:'big_cpus', type:params.demultiplexing , extrapars: demux_pars[params.demultiplexing], models: dorado_models  )
 
 //big_cpus_retry
